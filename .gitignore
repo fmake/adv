@@ -1,2 +1,6 @@
+.*
+~*
 template/cache/*
 images/*
+!.gitignore
+!*.example
