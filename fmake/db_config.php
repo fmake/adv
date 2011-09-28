@@ -8,7 +8,7 @@
 						$_SERVER["PHP_SELF"],
 						"root",//пользователь
 						"sqlroot",//пароль
-						"onlite",//имя базы 
+						"adv",//имя базы 
 						"localhost",//сервер
 						"",
 						"utf8",//кодировка
