@@ -145,7 +145,7 @@ class fmakeCore extends fmakeWhereSelector{
 			}
 			
 			foreach($this->filds as $fild){
-				if(!isset($this->params[$fild]) || $fild == 'id') continue; 
+				if(!isset($this->params[$fild]) || $fild == $this -> idField) continue; 
 				$insert -> addFild("`".$fild."`", $this->params[$fild]);
 			}
 			
@@ -181,7 +181,7 @@ class fmakeCore extends fmakeWhereSelector{
 
 		foreach($this->filds as $fild)
 		{
-			if(!isset($this->params[$fild]) || $fild == 'id') continue; 
+			if(!isset($this->params[$fild]) || $fild == $this -> idField) continue; 
 			$update =  $this->dataBase->UpdateDB( __LINE__);
 			$update	-> addTable($this->table) -> addFild("`".$fild."`", $this->params[$fild]) -> addWhere("{$this->idField}='".$this->id."'") -> queryDB();
 		}
@@ -208,7 +208,7 @@ class fmakeCore extends fmakeWhereSelector{
 	{
 		$update = $this->dataBase->UpdateDB( __LINE__);			
 		$update	-> addTable($this->table) -> addFild("`index`", '0') -> queryDB();
-		$update	-> addTable($this->table) -> addFild("`index`", '1') -> addWhere("`id` = '".$this->id."'") -> queryDB();
+		$update	-> addTable($this->table) -> addFild("`index`", '1') -> addWhere("`{$this -> idField}` = '".$this->id."'") -> queryDB();
 	}
 	/**
 	 * 
@@ -235,7 +235,7 @@ class fmakeCore extends fmakeWhereSelector{
 		if($arr)
 		{
 			$update = $this->dataBase->UpdateDB( __LINE__);
-			$update	-> addTable($this->table) -> addFild("`position`", $order) -> addWhere("`".$this->idField."` = '".$arr['id']."'") -> queryDB();
+			$update	-> addTable($this->table) -> addFild("`position`", $order) -> addWhere("`".$this->idField."` = '".$arr[$this->idField]."'") -> queryDB();
 			$update	-> addTable($this->table) -> addFild("`position`", $arr['position']) -> addWhere("`".$this->idField."` = '".$this->id."'") -> queryDB();
 		}
 	}
@@ -253,8 +253,8 @@ class fmakeCore extends fmakeWhereSelector{
 		if($arr){
 			
 			$update = $this->dataBase->UpdateDB( __LINE__);			
-			$update	-> addTable($this->table) -> addFild("`position`", $order) -> addWhere("`id` = '".$arr['id']."'") -> queryDB();
-			$update	-> addTable($this->table) -> addFild("`position`", $arr['position']) -> addWhere("`id` = '".$this->id."'") -> queryDB();
+			$update	-> addTable($this->table) -> addFild("`position`", $order) -> addWhere("`{$this->idField}` = '".$arr[$this->idField]."'") -> queryDB();
+			$update	-> addTable($this->table) -> addFild("`position`", $arr['position']) -> addWhere("`{$this->idField}` = '".$this->id."'") -> queryDB();
 			
 		}
 	}
@@ -265,7 +265,7 @@ class fmakeCore extends fmakeWhereSelector{
 	function active() {
 		
 		$update = $this->dataBase->UpdateDB( __LINE__);	
-		$update	-> addTable($this->table)	-> addFild("active", "NOT(active)", false) -> addWhere("id='".$this->id."'") -> queryDB();
+		$update	-> addTable($this->table)	-> addFild("active", "NOT(active)", false) -> addWhere("{$this->idField}='".$this->id."'") -> queryDB();
 		
 	}
 	/**

@@ -11,7 +11,7 @@
 	
 	require 'db_config.php';
 	// лог запросов
-	$log = new dataBaseController_logFile(ROOT."/template/cache/sql.html", false);	
+	$log = new dataBaseController_logFile(ROOT."/template/cache/sql.html", true);	
 	$dataBase -> addLog($log);			
 	// делаем коннект к базе данных
 	$dataBase->connect(__LINE__);

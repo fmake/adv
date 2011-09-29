@@ -9,12 +9,16 @@ session_start();
 
 require('./fmake/FController.php');
 
+
+
 $modul = new fmakeSiteModule();
-$modul->getPage($request -> getEscape('modul') ,$twig);
+include 'checklogin.php';
+$modul->getPage($request -> getEscape('modul'),$user->role ,$twig);
 $globalTemplateParam->set('modul',$modul);
 
+
 //добавляем каталог к основным модулям
-$menu = $modul->getAllForMenu(0, true,$q=false,$flag=true,true);
+$menu = $modul->getAllForMenu(0, true,$q=false,$flag=true,true,$user->role);
 $globalTemplateParam->set('menu',$menu);	
 $modul->template = "base/main.tpl";
 if($modul->file){
