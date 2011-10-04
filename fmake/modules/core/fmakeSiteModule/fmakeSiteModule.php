@@ -82,7 +82,7 @@ class fmakeSiteModule extends fmakeCore{
 		
 	function getAllAsTree($parent = 0, $level = 0, $active = false, $inmenu = false){
 			$level++;
-			$items = $this -> _getChilds($parent, $active, $inmenu);
+			$items = $this -> getChilds($parent, $active, $inmenu);
 			//printAr($items);
 				if($items){
 					foreach ($items as $item){
