@@ -83,14 +83,11 @@ class fmakeSiteModule extends fmakeCore{
 	function getAllAsTree($parent = 0, $level = 0, $active = false, $inmenu = false){
 			$level++;
 			$items = $this -> getChilds($parent, $active, $inmenu);
-			//printAr($items);
 				if($items){
 					foreach ($items as $item){
-						//if($item['id'] == 2 || $item['id'] == 3 || $item['id'] == 4 || $item['id'] == 6) continue;
-						if($item['delete_security']) continue;
 						$item['level'] = $level;
 						$this->tree[] = $item;
-						$this->getAllAsTree($item['id'], $level, $active, $inmenu);
+						$this->getAllAsTree($item[$this->idField], $level, $active, $inmenu);
 					}
 				}
 		return $this->tree;

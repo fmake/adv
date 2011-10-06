@@ -40,3 +40,6 @@ if (!$user->isLogined())
 	$template->display($globalTemplateParam->get());
 	exit();
 }
+
+$globalTemplateParam->set('user',$user);
+
