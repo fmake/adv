@@ -10,7 +10,7 @@
 	{parent()}
 [[endblock]]
 
-[[block right]]
+[[block content]]
 	
 	<div id="main-container" class="tab-content">
 		<h1>{modul.caption}</h1>
@@ -50,7 +50,7 @@
 						</td>
 						<td>
 							<a href="/{request.parents}/{request.modul}?action=edit&id={item[itemObj.idField]}" class="link-icon" ><img src="/images/edit-icon.gif" alt="" /></a>
-							<a href="/{request.parents}/{request.modul}?action=edit&id={item[itemObj.idField]}" class="link-icon" ><img src="/images/delete-icon.gif" alt="" /></a>
+							<a href="/{request.parents}/{request.modul}?action=delete&id={item[itemObj.idField]}" class="link-icon" ><img src="/images/delete-icon.gif" alt="" /></a>
 						</td>
 					</tr>
 				[[ endfor ]]

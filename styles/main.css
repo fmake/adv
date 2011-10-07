@@ -17,8 +17,6 @@ i { font-style: normal; }
 
 input, button { overflow: visible; }
 input, button, select { vertical-align: middle; }
-textarea { vertical-align: top; height: 72px; font: 12px/14px 'Arial'; color: #555; padding: 1px 2px; border-width: 1px; }
-select { font: 12px/18px 'Arial'; color: #555; border-width: 1px; }
 select option { font: 12px/18px 'Verdana'; color: #555; }
 input.text { font: 12px/14px 'Arial'; color: #555; padding: 1px 2px; border: 1px #808080 solid; }
 input.radio { }
@@ -145,6 +143,8 @@ h3 { font: 14px/20px 'Arial'; color: #000000;}
 	{padding: 0 0 0 15px;}
 #wrapper  #right
 	{position:static;margin:0 0 0 230px;padding: 15px;}
+#wrapper #center
+	{position:static;margin:0 0 0 0px;padding: 15px;}
 
 #wrapper #tabs
 	{height: 28px;padding: 0 0 0 10px;}
@@ -176,7 +176,17 @@ button.green div div
 #wrapper .edit-table tbody td .link-icon
 	{margin: 0 5px 0 0;}
 
+.edit-item TD
+	{padding: 2px 10px;vertical-align: middle;}
+.edit-item .answer-icon
+	{cursor: help;}
+.edit-item .table-caption
+	{font-weight: bold;color: #555;}
 
+.edit-item select.inputBox, .edit-item input, .edit-item textarea
+	{width: 300px; padding: 3px 3px 2px 2px;color: #555;}
+.edit-item select.inputBox
+	{border: 1px solid #C3C3C3 !important;margin-right: 4px;}
 
 /*-----------------FOOTER------------------------------*/
 .subfooter-mini

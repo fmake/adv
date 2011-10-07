@@ -28,7 +28,7 @@
 						[[ endblock ]]
 					</div>
 					<div id="right">
-					[[ block right ]]
+					[[ block content ]]
 						<div id="tabs">			
 							<div class="item">Новости</div>
 							<div class="item active">Заметки безопасности</div>
