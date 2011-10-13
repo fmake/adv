@@ -188,7 +188,7 @@ class fmakeSiteModule extends fmakeCore{
 		if($arr)
 		{
 			$update = $this->dataBase->UpdateDB( __LINE__);
-			$update	-> addTable($this->table) -> addFild("`position`", $order['position']) -> addWhere("`".$this->idField."` = '".$arr['id']."'") -> queryDB();
+			$update	-> addTable($this->table) -> addFild("`position`", $order['position']) -> addWhere("`".$this->idField."` = '".$arr[$this->idField]."'") -> queryDB();
 			$update	-> addTable($this->table) -> addFild("`position`", $arr['position']) -> addWhere("`".$this->idField."` = '".$this->id."'") -> queryDB();
 		}
 	}
@@ -203,8 +203,8 @@ class fmakeSiteModule extends fmakeCore{
 		if($arr){
 			
 			$update = $this->dataBase->UpdateDB( __LINE__);			
-			$update	-> addTable($this->table) -> addFild("`position`", $order['position']) -> addWhere("`id` = '".$arr['id']."'") -> queryDB();
-			$update	-> addTable($this->table) -> addFild("`position`", $arr['position']) -> addWhere("`id` = '".$this->id."'") -> queryDB();
+			$update	-> addTable($this->table) -> addFild("`position`", $order['position']) -> addWhere("`".$this->idField."` = '".$arr[$this->idField]."'") -> queryDB();
+			$update	-> addTable($this->table) -> addFild("`position`", $arr['position']) -> addWhere("`".$this->idField."` = '".$this->id."'") -> queryDB();
 			
 		}
 	}

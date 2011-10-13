@@ -25,6 +25,12 @@
 	}
 }
 
+function action_redir($url){
+	header("HTTP/1.1 301 Moved Permanently");
+	header("Location: {$url}");
+	exit();
+}
+
 	function HttpError($code){
 	static $http = array (
 		100 => "HTTP/1.1 100 Continue",

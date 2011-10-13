@@ -1,4 +1,4 @@
-<?
+<?php
 header('Content-type: text/html; charset=utf-8'); 
 setlocale(LC_ALL, 'ru_RU.UTF-8');
 mb_internal_encoding('UTF-8');
@@ -16,15 +16,13 @@ include 'checklogin.php';
 $modul->getPage($request -> getEscape('modul'),$user->role ,$twig);
 $globalTemplateParam->set('modul',$modul);
 
-
-//добавляем каталог к основным модулям
-$menu = $modul->getAllForMenu(0, true,$q=false,$flag=true,true,$user->role);
-$globalTemplateParam->set('menu',$menu);
 $modul->template = "base/main.tpl";
 if($modul->file){
-	include($modul->file.".php");
-} 
+	include($modul->file);
+}
 
+$menu = $modul->getAllForMenu(0, true,$q=false,$flag=true,true,$user->role);
+$globalTemplateParam->set('menu',$menu);
 
 $template = $twig->loadTemplate($modul->template);
 $template->display($globalTemplateParam->get());

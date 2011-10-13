@@ -71,6 +71,7 @@ class fmakeSiteModule_users extends fmakeCore{
 
 	public function load()
 	{
+		
 		$this->id = $_SESSION[$this->type]['id'];
 		$this->login = $_SESSION[$this->type]['login'];
 		$this->role = $_SESSION[$this->type]['role'];

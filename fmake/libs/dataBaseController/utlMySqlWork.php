@@ -58,7 +58,7 @@ class utlMySqlWork
 	{  
 		$this->Connection_id = mysql_connect($this->HostName.":".$this->Port,$this->UserName,$this->Password);
 		$this->checkError("Connect to ".$this->HostName,$Line);
-		$this->query("SET CHARACTER SET ".$this->DbCharSet,$Line);
+		$this->query("SET NAMES ".$this->DbCharSet,$Line);
 		mysql_select_db($this->DatabaseName,$this->Connection_id);
 		$this->checkError("Select ".$this->DatabaseName,$Line);
 	}

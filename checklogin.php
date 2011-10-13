@@ -15,7 +15,7 @@ if ($request->action=="logout")
 	exit();
 }else if ($request->action=="Login"){
 	if ($row = $user->login($request->login, $request->password)){
-		$user->setLogin($row['id'], $row['login'], $row['role'], $row['name']);
+		$user->setLogin($row[$user -> idField], $row['login'], $row['role'], $row['name']);
 		if($_REQUEST['save']){
 			setcookie("clogin",$row['login'],time()+3600*24*60,"/");
 			setcookie("cpassword",md5($request->password),time()+3600*24*60,"/");
@@ -27,7 +27,7 @@ if ($request->action=="logout")
 }else if($_COOKIE['clogin']){
 	if ($row = $user->login($_COOKIE['clogin'], $_COOKIE['cpassword'],true)) 
 	{
-		$user->setLogin($row['id'], $row['login'], $row['role'], $row['name']);
+		$user->setLogin($row[$user -> idField], $row['login'], $row['role'], $row['name']);
 		setcookie("clogin",$row['login'],time()+3600*24*60,"/");
 		setcookie("cpassword",$_COOKIE['cpassword'],time()+3600*24*60,"/");
 	}

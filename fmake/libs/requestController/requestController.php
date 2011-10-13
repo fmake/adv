@@ -19,6 +19,10 @@ class requestController{
 		return mysql_real_escape_string($_REQUEST[$key]);
 	}
 	
+	function getEscapeVal($val){
+		return mysql_real_escape_string($val);
+	}
+	
 	function getFilterEscape($name){
 		return mysql_real_escape_string($_REQUEST[$this -> filter][$name]);
 	}	
