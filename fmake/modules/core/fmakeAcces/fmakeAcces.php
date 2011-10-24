@@ -26,6 +26,17 @@
 			
 		}
 		
+		function setByModulRoleId($idModul,$idRole){
+			
+			$item = $this -> getWhere(array("id_modul = {$idModul}","id_role = {$idRole}") );
+			if($item[0]){
+				return;
+			}
+			$this->addParam("id_modul" , $idModul);
+			$this->addParam("id_role" , $idRole);
+			$this->newItem();
+		}
+		
 		function arraySimple($arr,$key){
 			for($i=0;$i<count($arr);$i++){
 				$arr[$i] = $arr[$i][$key];

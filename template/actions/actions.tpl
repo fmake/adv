@@ -6,12 +6,10 @@
 		[[set img = 'published.gif' ]]
 	[[else]]	
 		[[set img = 'notpublished.gif' ]]
-	[[endif]]	
-	
+	[[endif]]
 	[[ set link ]]
 	 	{action_url}?id={item[itemObj.idField]}&action=showlink
 	[[ endset ]]
-	
 	{forms.action(link, img)}
 [[endif]]
 
@@ -21,11 +19,9 @@
 	[[else]]	
 		[[set img = 'notpublished.gif' ]]
 	[[endif]]	
-	
 	[[ set link ]]
 	 	{action_url}?id={item[itemObj.idField]}&action=inmenu
 	[[ endset ]]
-	
 	{forms.action(link, img)}
 [[endif]]
 [[if 'populyar'  in  actions ]]

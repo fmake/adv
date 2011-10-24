@@ -1,4 +1,4 @@
-<?
+<?php
 	session_start();
 	
 	require('libs/FController.php');
@@ -6,4 +6,3 @@
 	$obj = new utlPicture();
 	$obj->genPic();
 	$_SESSION['code'] = md5($obj->getLine());
-?>

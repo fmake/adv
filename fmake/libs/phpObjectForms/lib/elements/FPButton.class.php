@@ -67,7 +67,7 @@
                 );
                 foreach ($formElements as $element)
                     if ((isInstanceOf($element, "FPTextField") || isInstanceOf($element, "FPPassword"))
-                            && $element->getName())
+                            && $element->getName() && $element -> isRequired())
                         $this->_append(
                             $funcName."Element(".
                                 $element->getValidRE().','.

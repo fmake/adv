@@ -30,6 +30,7 @@
 		                "title" => 'Имя пользователя',
 		                "size" => 25,
 		                "wrapper" => &$leftWrapper,
+          				"valid_RE" => FP_VALID_EMAIL,
 		 				"value" => $context['item']['login'],
           				"comment" => 'используется для входа в систему ',
           				"value" => $context['user'] -> login,
@@ -177,14 +178,10 @@
 	$xajax = new xajax($action_url);
 	$xajax->configure('javascript URI','/fmake/libs/xajax/');
 	$xajax->register(XAJAX_FUNCTION,"checkStatus");
-	$xajax->processRequest();
-	
-	
-	
-	
-	
-	
+	$xajax->processRequest();	
 	$globalTemplateParam->set('xajax',$xajax);
+	
+	
 	switch ($request -> action){
 		case 'update':
 			$myForm = initMainForm($itemObj,$mainFormParam -> get());

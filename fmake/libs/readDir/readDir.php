@@ -35,6 +35,36 @@
 		return $this->files;
 	}
 	
+	function listingAll($dir,$level = 0,$addValue = "")
+	{
+		$level++;
+		$curdir = opendir($dir);
+		while (false !== ($file = readdir($curdir)))
+		if ($file != "." && $file != "..")
+		{
+			if( is_dir($dir."/".$file) ){
+				$this->files[] = array('level' => $level, 'file' => $file."/", value => $file);
+				$this -> listingAll($dir."/".$file,$level,$addValue.$file."/");
+			}else
+				$this->files[] = array('level' => $level, 'file' => $file, 'value' => $addValue.$file);
+
+		}
+		return $this->files;
+	}
+	
+	function getAllAsTree($parent = 0, $level = 0, $active = false, $inmenu = false){
+		$level++;
+		$items = $this -> getChilds($parent, $active, $inmenu);
+		if($items){
+			foreach ($items as $item){
+				$item['level'] = $level;
+				$this->tree[] = $item;
+				$this->getAllAsTree($item[$this->idField], $level, $active, $inmenu);
+			}
+		}
+		return $this->tree;
+	}
+	
 	function delDir() 
 	{		
 		foreach ($this->listing() as $file)

@@ -1,4 +1,6 @@
 <?php
+	
+
 	function initMainForm($itemObj,$context = array()){
 		//printAr($context);
 		$pages = ( $itemObj->getAllAsTree(0, 0) );
@@ -97,8 +99,11 @@
 		            )));      
 			
 			$dir = new readDir(ROOT.'/calculating');
-			$files = $dir->listing();
-			for ($index = 0; $index < sizeof($files); $index++) {$filesform[$files[$index]] = $files[$index];}
+			$files = $dir->listingAll(ROOT.'/calculating');
+			//printAr($files);
+			for ($index = 0; $index < sizeof($files); $index++) {
+					$filesform[$files[$index]['value']] = blankprint($files[$index]['level']).$files[$index]['file'];
+			}
 			$layoutForm -> addElement(new FPSelect(array(
 		                "name" => 'file',
 		                "title" => 'Файл',
@@ -169,11 +174,36 @@
 		return $myForm;
 	}
 
+	function setStatusRoleModule($id_modul,$id_role,$checked,$id_preloader){
+		
+		$objResponse = new xajaxResponse();
+		$objResponse->script("$('#{$id_preloader}').hide()");
+		if(!$id_modul || !$id_role){
+			return $objResponse;
+		}
+		$itemObj = new fmakeSiteModule();
+		if($checked){
+			$itemObj -> getUserObj() -> getAccesObj() -> setByModulRoleId($id_modul, $id_role);
+		}else{
+			$itemObj -> getUserObj() -> getAccesObj() -> deleteByModulRoleId($id_modul, $id_role);
+		}
+		
+		sleep(1);
+		
+		return $objResponse;
+	}
 	
 	$mainFormParam = new templateController_templateParam();
 	$action_url = "/".$request->parents."/".$request->modul;
 	$mainFormParam -> set('action_url',$action_url);
 	$globalTemplateParam->set('action_url',$action_url);
+
+	include_once ROOT.'/fmake/libs/xajax/xajax_core/xajax.inc.php';
+	$xajax = new xajax($action_url);
+	$xajax->configure('javascript URI','/fmake/libs/xajax/');
+	$xajax->register(XAJAX_FUNCTION,"setStatusRoleModule");
+	$xajax->processRequest();
+	$globalTemplateParam->set('xajax',$xajax);
 	
 	$itemObj = new fmakeSiteModule();
 	$itemObj -> setId($request -> id) ;
@@ -269,6 +299,22 @@
 			$modul->tree = false;
 			$items = $itemObj -> getAllAsTree();
 			$globalTemplateParam->set('items',$items);
+			$user = $itemObj->getUserObj();
+			$roleObj = $user->getRoleObj();
+			$globalTemplateParam->set('roleObj',$roleObj);
+			$roles = $user->getRoleObj() -> getRols();
+			$globalTemplateParam->set('roles',$roles);
+			$accesObj = $user->getAccesObj();
+			$checkRoles = array();
+			for ($i = 0; $i < sizeof($items); $i++) {
+				
+				$accesArr =  $accesObj -> getByModulId($items[$i][$itemObj->idField]);
+				for ($j = 0; $j < sizeof($accesArr); $j++) {
+					$checkRoles[$items[$i][$itemObj->idField]][$accesArr[$j][ 'id_role']] = true;
+				}
+				
+			}
+			$globalTemplateParam->set('checkRoles',$checkRoles);
 			$modul->template = "settings/system_pages.tpl";
 		break;
 	}
