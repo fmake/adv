@@ -195,6 +195,9 @@ button.green div div
 	{position:absolute;display: none;}	
 .show-check-pages
 	{margin:16px 0 0 0;}	
+	
+.project-search
+	{width: 180px;padding: 2px;}	
 /*-----------------FOOTER------------------------------*/
 .subfooter-mini
 	{ width: 100%; height: 10px; clear: both; visibility: hidden; overflow: hidden; position: relative; }

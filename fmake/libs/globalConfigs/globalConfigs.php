@@ -1,7 +1,7 @@
 <?php
 class globalConfigs extends fmakeCore{
 	
-	public $table = "site_config";
+	public $table = "configs";
 
 
 	function __get($key){

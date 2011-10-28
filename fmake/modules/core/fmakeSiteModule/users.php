@@ -6,7 +6,7 @@ define(ID_REGISTRATOR,3);
 
 class fmakeSiteModule_users extends fmakeCore{
 	
-	public $table = "site_user";
+	public $table = "users";
 	public $idField = "id_user";
 	public $type = "user";
 	public $id; 	// int

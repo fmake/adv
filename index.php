@@ -17,8 +17,9 @@ $modul->getPage($request -> getEscape('modul'),$user->role ,$twig);
 $globalTemplateParam->set('modul',$modul);
 
 $modul->template = "base/main.tpl";
+
 if($modul->file){
-	include($modul->file);
+	include("calculating/".$modul->file);
 }
 
 $menu = $modul->getAllForMenu(0, true,$q=false,$flag=true,true,$user->role);

@@ -113,6 +113,17 @@
 		                "css_style" => 'width:308px;',
 		                "wrapper" => &$leftWrapper,
 		            )));
+			$layoutForm -> addElement(new FPTextField(array(
+					                "name" => 'css_class',
+					                "title" => 'Класс стиля',
+					            	"comment" =>
+					                    'Только цифрами и латинскими буквами',
+					                "size" => 25, 
+					                "valid_RE" => FP_VALID_NAME,
+					                "wrapper" => &$leftWrapper,
+					 				"value" => $context['item']['css_class'],
+			)));
+			
 			$layoutForm -> addElement(new FPTextArea(array(
 		                "name" => 'text',
 		                "title" => 'Описание раздела',

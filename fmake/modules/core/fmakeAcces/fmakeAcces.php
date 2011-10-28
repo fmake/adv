@@ -47,11 +47,8 @@
 		function setAcces($idModul,$rols){
 		
 			$allCurrenRole = $this->arraySimple($this->getByModulId($idModul,"id_role"),"id_role");
-			//printAr($allCurrenRole);
-			//printAr($rols);
 			if(!$allCurrenRole)$allCurrenRole = array();
 			if(!$rols)$rols = array();
-			
 			//находим те роли которе надо удалить и которые надо добавить
 			$deleteRole = array_diff($allCurrenRole,$rols);
 			$addRole = array_diff($rols,$allCurrenRole);

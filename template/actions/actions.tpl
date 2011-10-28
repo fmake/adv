@@ -1,4 +1,4 @@
-[[ import TEMPLATE_PATH ~ "admin/macro/actions.tpl" as forms ]]
+[[ import TEMPLATE_PATH ~ "macro/macro.tpl" as forms ]]
 
 
 [[if 'showlink'  in  actions ]]
