@@ -33,7 +33,9 @@
                     ).
                     (isset($this->_maxValueLength) ?
                         ' maxlength="'.$this->_maxValueLength.'"' : ''
-                    ).                    
+                    ).(isset($this->_ID) ?
+                        ' id="'.$this->_ID.'"' : ''
+                    ).                   
                     $this->getEventsSource().
                     ($this->_readOnly ? " readonly" : "").
                     ($this->_disabled ? " disabled" : "").

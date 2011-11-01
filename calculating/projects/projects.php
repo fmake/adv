@@ -57,15 +57,27 @@ function initMainForm($itemObj,$context = array()){
 		$layoutProjectForm = new FPColLayout(array("table_padding" => 5,"element_align" => "left", "hold_output" => true,));
 		
 		$layoutProjectForm -> addElement(new FPTextField(array(
-			                "name" => 'lve',
-			                "title" => 'LiveInternet',
-			            	"comment" =>
-			                    'Только цифрами и латинскими буквами',
+			                "name" => 'date',
+			                "id" => "date",
+			                "title" => 'Дата премии',
+							"comment" => 'С какого времени клиент будет платить за позиции',
 			                "size" => 25, 
 			                "max_length" => 36,
 			                "wrapper" => &$leftWrapper,
-			 				"value" => $context['item']['url'],
+			 				"value" => "12.11.2011",
 			 				"align" => "left"
+		)));
+		
+		$layoutProjectForm -> addElement(new FPTextField(array(
+					                "name" => 'lve',
+					                "title" => 'LiveInternet',
+					            	"comment" =>
+					                    'Только цифрами и латинскими буквами',
+					                "size" => 25, 
+					                "max_length" => 36,
+					                "wrapper" => &$leftWrapper,
+					 				"value" => $context['item']['url'],
+					 				"align" => "left"
 		)));
 		
 		$layoutProjectForm -> addElement(new FPTextField(array(
