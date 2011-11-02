@@ -2,6 +2,7 @@
 [[ extends "base/main.tpl" ]]
 
 [[ block content ]]
+[[ include TEMPLATE_PATH ~ "projects/project_query_patern.tpl"]]
 <link type="text/css" href="/styles/redmond/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <style>
 	[[ raw ]]
@@ -96,10 +97,10 @@
 					<table cellspacing="0" cellpadding="2" border="0" align="left">
 					<tbody><tr>
 						<td>
-							<input type="checkbox" value="1" checked="" name="inmenu">
+							<input type="checkbox" value="1"  name="inmenu" id="posl-ras">
 						</td>
 						<td>
-							<span>последовательный расчет</span>
+							<label for="posl-ras">последовательный расчет</label>
 						</td>
 					</tr>
 					</tbody></table>
@@ -109,34 +110,30 @@
 				<td colspan="2">
 					<h2>Поисковые системы</h2>
 					<div class="search-systems">
-						<div class="search-system" ><a href="" class="active" rel="yandex" >Яндекс</a></div><div class="search-system" ><a href="" rel="google">Google</a></div>
+						<div class="search-system" >
+							<a href="javascript: void(0);" rel="1" >Яндекс</a></div><div class="search-system" >
+							<a href="javascript: void(0);" rel="2">Google</a>
+						</div>
 					</div>
-					<div class="yandex regions" >
-						<div class="region"><a href="" class="active" >Москва</a></div>
-						<div class="region"><a href="" >Санкт-Петербург</a></div>
-						<div class="region"><a href="">Иваново</a></div>
-						<div class="region"><a href="" class="new-region"><img src="/images/green-plus.png" class="f_l"/> Добавить регион</a></div>
+					<div class="regions" id="region_1" >
+						<div class="region"><a href="javascript: void(0);" rel="2" >Москва</a></div>
+						<div class="region"><a href="javascript: void(0);" rel="3" >Санкт-Петербург</a></div>
+						<div class="region"><a href="javascript: void(0);" rel="4" >Иваново</a></div>
+						<div class="region"><a href="javascript: void(0);" class="new-region"><img src="/images/green-plus.png" class="f_l"/> Добавить регион</a></div>
 					</div>
 					
-					<table>
-						<tr>
-							<td>&nbsp;</td>
-							<td><a href="" class="new-region">Загрузить из exel</a></td>
-							<td align="center">
-							 с <input type="text" name="place[0][from]"> по <input type="text"  name="place[0][to]">           
-							</td>
-							<td><a href="" title="Добавить еще правило"><img src="/images/green-plus.png" class="f_l"/></a></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td><input type="text" name="place[0][from]"></td>
-							<td align="center">
-							 <input type="text"  name="place[0][to]">           
-							</td>
-							<td></td>
-						</tr>
-					</table>
+					<div id="querys-tables">
 					
+					</div>
+					
+					[[raw]]
+					<script>
+						//initTableData(3,2);
+						//initTableData(2,1);
+						
+					</script>
+					[[endraw]]
+					<br /><br />
 				</td>
 			</tr>
 			
