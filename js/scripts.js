@@ -221,7 +221,7 @@ $(document).ready(function(){
 		initTableData(searchId,regionId);
 	});
 	
-	$(".regions A").click(function() {
+	$(".regions .region A").click(function() {
 		$(".regions A").removeClass("active");
 		$(this).addClass("active");
 		regionId = parseInt( $(this).attr("rel") );
@@ -230,6 +230,19 @@ $(document).ready(function(){
 		}
 		initTableData(searchId,regionId);
 		
+	});
+	
+	
+	// Dialog			
+	$('#dialog').dialog({
+		autoOpen: false,
+		width: 400,
+		minHeight: 50
+	});
+	
+	$('#region-link').click(function(){
+		$('#dialog').dialog('open');
+		return false;
 	});
 	
 });

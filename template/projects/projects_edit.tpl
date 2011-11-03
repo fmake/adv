@@ -117,10 +117,31 @@
 					</div>
 					<div class="regions" id="region_1" >
 						<div class="region"><a href="javascript: void(0);" rel="2" >Москва</a></div>
-						<div class="region"><a href="javascript: void(0);" rel="3" >Санкт-Петербург</a></div>
-						<div class="region"><a href="javascript: void(0);" rel="4" >Иваново</a></div>
-						<div class="region"><a href="javascript: void(0);" class="new-region"><img src="/images/green-plus.png" class="f_l"/> Добавить регион</a></div>
+						<div class="region-add"><a href="javascript: void(0);" id="region-link" class="new-region"><img src="/images/green-plus.png" class="f_l"/> Добавить регион</a></div>
 					</div>
+					
+				
+					<!-- ui-dialog -->
+		<div id="dialog" title="Добавление региона" style="display:none;">
+			<p>
+				<select>
+					<option value="3">Санкт-Петербург</option>
+					<option value="4">Иваново</option>
+				</select>
+				<input type="button" value="добавить" />
+				<p>&nbsp;</p>
+				<p><a href="javascript: void(0);" onclick="$('#add-new-region').toggle();" id="region-link" class="new-region"><img src="/images/green-plus.png" class="f_l mr5"/> Добавить новый регион</a></p>
+				<p>&nbsp;</p>
+				<p id="add-new-region" style="display:none;">
+					<input type="text" name="region_caption" /> <input type="text" name="region_lr" style="width:30px" /> <input type="button" value="добавить" />
+				</p>
+			</p>
+		</div>
+				
+					
+					
+					<div class="region"><a href="javascript: void(0);" rel="3" >Санкт-Петербург</a></div>
+					<div class="region"><a href="javascript: void(0);" rel="4" >Иваново</a></div>
 					
 					<div id="querys-tables">
 					
