@@ -1,8 +1,11 @@
 <?php
 
 define(ID_ADMINISTRATOR,1);
-define(ID_MODERATOR,2);
-define(ID_REGISTRATOR,3);
+define(ID_OPTIMISATOR,4);
+define(ID_AKKAUNT,6);
+define(ID_SEO_ANALITIC,7);
+define(ID_CLIENT,8);
+
 
 class fmakeSiteModule_users extends fmakeCore{
 	

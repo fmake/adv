@@ -22,8 +22,7 @@
 [[raw]]
 <script>
 	$(function() {
-		$( "#date" ).datepicker(
-			{
+		$( "#date" ).datepicker({
 			showOn: "both",
 			buttonImage: "/images/calendar.gif",
 			dateFormat: "dd.mm.yy",
@@ -40,7 +39,8 @@
 
 	<div id="main-container">
 		{form|raw}
-		
+		<form style="margin:0px;" action="{action_url}" method="POST" name="editformquery" id="editformquery">
+		<input type="hidden" value="true" name="editformSubmitIndicator">
 		<table cellspacing="0" cellpadding="2" border="0" class="edit-Table edit-GroupTbl edit-GroupTbl-bot">
 			<tr><td class="edit-GroupTitleCell">Запросы и бюджет</td></tr>
 			<tr><td align="left">
@@ -49,7 +49,7 @@
 				<td width="150">
 				<span class="edit-Title">Бюджет SAPE</span></td>
 				<td width="300">
-				<input type="text" maxlength="36" size="16" value="" name="sape_bud"></td>
+				<input type="text" maxlength="36" size="16" value="{item['sape_money']}" name="sape_money"></td>
 				</tr>
 				<tr>
 				<td>&nbsp;</td><td width="300">
@@ -64,7 +64,7 @@
 						<td width="150">
 						<span class="edit-Title">Абонемент</span></td>
 						<td width="300">
-						<input type="text" maxlength="36" size="16" value="" name="abonement"></td>
+						<input type="text" maxlength="36" size="16" value="{item['abonement']}" name="abonement" id="abonement" onkeyup="maxPrice();" ></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td><td width="300">
@@ -79,7 +79,7 @@
 				<td width="150">
 					<span class="edit-Title">Максимальная премия</span></td>
 				<td width="300">
-					<b>35 400</b> рублей
+					<b id="max-sum-site">0</b> рублей
 				</td>
 				</tr>
 				</table>
@@ -110,38 +110,49 @@
 				<td colspan="2">
 					<h2>Поисковые системы</h2>
 					<div class="search-systems">
-						<div class="search-system" >
-							<a href="javascript: void(0);" rel="1" >Яндекс</a></div><div class="search-system" >
-							<a href="javascript: void(0);" rel="2">Google</a>
-						</div>
+						[[ for ssys in ssystems]]
+								<div class="search-system" ><a href="javascript: void(0);" rel="{ssys['id_seo_search_system']}" >{ssys['name']}</a></div>
+						[[endfor]]
 					</div>
-					<div class="regions" id="region_1" >
-						<div class="region"><a href="javascript: void(0);" rel="2" >Москва</a></div>
-						<div class="region-add"><a href="javascript: void(0);" id="region-link" class="new-region"><img src="/images/green-plus.png" class="f_l"/> Добавить регион</a></div>
-					</div>
+					[[ for ssys in ssystems]]
+						[[ if ssys['child'] ]]
+							<div class="regions" id="region_{ssys['id_seo_search_system']}" >
+								[[for ssch in ssys['child']]]
+									[[if ssch['used'] ]]
+										<div class="region"><a href="javascript: void(0);" rel="{ssch['id_seo_search_system']}" >{ssch['name']}</a></div>
+									[[endif]]
+								[[endfor]]
+								<div class="region-add"><a href="javascript: void(0);" id="region-link" class="new-region"><img src="/images/green-plus.png" class="f_l"/> Добавить регион</a></div>
+							</div>
+						[[endif]]
+					[[endfor]]
+					
+					
 					
 				
 					<!-- ui-dialog -->
-		<div id="dialog" title="Добавление региона" style="display:none;">
-			<p>
-				<select>
-					<option value="3">Санкт-Петербург</option>
-					<option value="4">Иваново</option>
-				</select>
-				<input type="button" value="добавить" />
-				<p>&nbsp;</p>
-				<p><a href="javascript: void(0);" onclick="$('#add-new-region').toggle();" id="region-link" class="new-region"><img src="/images/green-plus.png" class="f_l mr5"/> Добавить новый регион</a></p>
-				<p>&nbsp;</p>
-				<p id="add-new-region" style="display:none;">
-					<input type="text" name="region_caption" /> <input type="text" name="region_lr" style="width:30px" /> <input type="button" value="добавить" />
-				</p>
-			</p>
-		</div>
+					<div id="dialog" title="Добавление региона" style="display:none;">
+						<p>
+							<select id="consecutive_calculation_select" >
+								[[ for ssys in ssystems]]
+											[[for ssch in ssys['child']]]
+												[[if not ssch['used'] ]]
+													<option value="{ssch['id_seo_search_system']}">{ssch['name']}</option>
+												[[endif]]
+											[[endfor]]
+								[[endfor]]
+								
+							</select>
+							<input type="button" id="consecutive_calculation_boton" value="добавить" onclick="addConsecutive();return false;"/>
+							<p>&nbsp;</p>
+							<p><a href="javascript: void(0);" onclick="$('#add-new-region').toggle();" id="region-link" class="new-region"><img src="/images/green-plus.png" class="f_l mr5"/> Добавить новый регион</a></p>
+							<p>&nbsp;</p>
+							<p id="add-new-region" style="display:none;">
+								<input title="название" type="text" name="region_caption" id="region_caption_new"/> <input title="lr" type="text" name="region_lr" style="width:30px" id="region_lr_new" /> <input onclick="addConsecutiveNew();return false;" type="button" value="добавить" />
+							</p>
+						</p>
+					</div>
 				
-					
-					
-					<div class="region"><a href="javascript: void(0);" rel="3" >Санкт-Петербург</a></div>
-					<div class="region"><a href="javascript: void(0);" rel="4" >Иваново</a></div>
 					
 					<div id="querys-tables">
 					
@@ -151,15 +162,23 @@
 					<script>
 						//initTableData(3,2);
 						//initTableData(2,1);
-						
 					</script>
 					[[endraw]]
 					<br /><br />
 				</td>
 			</tr>
-			
+			<tr><td align="left" colspan="2">
+				<table cellspacing="0" cellpadding="20" border="0" align="left">
+				<tbody><tr>
+				<td valign="top">
+				<input type="submit" class="edit-SubmitButton" onclick="if (!_fp_validateEditform()) return false; else addFormContent();" value="   Сохранить  " name="submit">
+				</td>
+				</tr>
+				</tbody></table>
+				</td>
+			</tr>
 		</table>
-		
+		</form>
 
 		
 	</div>

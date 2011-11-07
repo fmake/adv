@@ -88,6 +88,8 @@ function chekedOtherRole(className){
 
 // данные поисковой системы и региона
 dataSearchSystem = {};
+// колличество дней в месяце
+dayMonth = 30;
 
 //новую таблицу запросов
 function getTableQueryPattern(searchSystem,regionSystem) {
@@ -158,7 +160,7 @@ function addCol(searchSystem,regionSystem){
 		row++;
 	});
 	
-	$(dataSearchSystem[searchSystem][regionSystem]['selector'] +" tr:last td:last").before("<td></td>");
+	$(dataSearchSystem[searchSystem][regionSystem]['selector'] +" tr:last td:last").before("<td align=\"right\" class=\"sum-exs-"+dataSearchSystem[searchSystem][regionSystem]['exs_count']+"\">0</td>");
 	
 	// прибавляем колличество столбцов - правил
 	dataSearchSystem[searchSystem][regionSystem]['exs_count']++;
@@ -195,6 +197,89 @@ function initTableData(searchSystem,regionSystem){
 	
 }
 
+
+//получить регион по патерну
+function getRegionPattern(regionSystem,regionNameSystem) {
+	//alert($("#price-pattern .tr-pattern").html());
+	content = $("#region-pattern").html();
+	content = content.replace(/\\\$region_id\\/g,regionSystem);
+	content = content.replace(/\\\$region_name\\/g,regionNameSystem);
+	
+	return content;
+}
+
+function addConsecutive(){
+	
+	
+	
+	$(".regions .region-add").before( getRegionPattern($("#consecutive_calculation_select").val(),$("#consecutive_calculation_select option:selected").html()) );
+	
+	$("#consecutive_calculation_select option:selected").remove();
+	if($("#consecutive_calculation_select option").length == 0){
+		$("#consecutive_calculation_select").remove();
+		$("#consecutive_calculation_boton").remove();
+	}
+	initRegions();
+}
+
+function addConsecutiveNew(){
+	if(!$("#region_lr_new").val() || !$("#region_caption_new").val()){
+		alert('заполните поля');
+		return;
+	}
+	// пишем в базу данных
+	
+	xajax_addRegion( $("#region_caption_new").val(), $("#region_lr_new").val());
+	$(".regions .region-add").before( getRegionPattern( $("#region_lr_new").val(), $("#region_caption_new").val() ) );
+	$("#region_lr_new").val('');
+	$("#region_caption_new").val('');
+	initRegions();
+}
+//событие на клик регионов
+function initRegions(){
+	$(".regions .region A").click(function() {
+		$(".regions A").removeClass("active");
+		$(this).addClass("active");
+		regionId = parseInt( $(this).attr("rel") );
+		if(!searchId){
+			return;
+		}
+		initTableData(searchId,regionId);
+	});
+}
+
+function maxPrice() {
+	// максимальный заработок
+	var maxSum = 0;
+	$(".exs-0").each(function() { 
+		if($(this).val() != ''){
+			maxSum += parseInt($(this).val());
+		}
+	});
+	var abonement = parseInt( $("#abonement").val() );
+	$("#max-sum-site").html( dayMonth * maxSum + abonement );
+	
+}
+
+function maxMonthPrice(regionSystem,regionNameSystem,exs_num){
+	var sumExs = 0;
+	var table = "#querys_"+regionSystem+"_"+regionNameSystem;
+	$(table+" .exs-"+exs_num).each(function() { 
+		if($(this).val() != ''){
+			sumExs += parseInt($(this).val());
+		}
+	});
+	
+	$(table + " .sum-exs-"+exs_num).html( dayMonth * sumExs );
+	maxPrice();
+}
+
+function addFormContent() {
+	$('*[name=editformquery]').prepend($('*[name=editform] .edit-Table'));
+	$('*[name=editform]').html('');
+	return true;
+}
+
 $(document).ready(function(){	
 
 	$(".search-system A").click(function() {
@@ -221,17 +306,8 @@ $(document).ready(function(){
 		initTableData(searchId,regionId);
 	});
 	
-	$(".regions .region A").click(function() {
-		$(".regions A").removeClass("active");
-		$(this).addClass("active");
-		regionId = parseInt( $(this).attr("rel") );
-		if(!searchId){
-			return;
-		}
-		initTableData(searchId,regionId);
-		
-	});
-	
+	// событие на клик регионов
+	initRegions();
 	
 	// Dialog			
 	$('#dialog').dialog({

@@ -50,7 +50,10 @@ class fmakeSiteModule extends fmakeCore{
 		if($inmenu)
 			$select -> addWhere("inmenu='1'");
 			
-		return $select -> addFrom($this->table.$dop_table_type) -> addWhere("parent='".$id."'") -> addOrder($this->order) -> queryDB();	
+		if($this -> order){
+			$select -> addOrder($this->order);
+		}
+		return $select -> addFrom($this->table) -> addWhere("parent='".$id."'") -> queryDB();	
 	}	
 	
 	function _getChilds ($id = null, $active = false, $inmenu = false,$role = false){

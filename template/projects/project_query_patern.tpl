@@ -10,7 +10,7 @@
 <div id="price-pattern" style="display:none;">
 		<table><tr class="tr-pattern">
 			<td align="right">
-			 <input title="цена запроса по правилу" type="text" name="data[\$search_system_id\][\$search_system_region_id\][price][\$row_num\][\$exs_num\]" class="price">           
+			 <input title="цена запроса по правилу" class="price exs-\$exs_num\" onkeyup="maxMonthPrice(\$search_system_id\,\$search_system_region_id\,\$exs_num\)" type="text" name="data[\$search_system_id\][\$search_system_region_id\][price][\$row_num\][\$exs_num\]" >           
 			</td>
 		</tr>
 		</table>
@@ -33,7 +33,12 @@
 	<table class="querys" id="querys_\$search_system_id\_\$search_system_region_id\">
 		<tr class="first-tr">
 			<td><input type="checkbox" /></td>
-			<td><a href="javascript: void(0);" class="new-region">Загрузить из exel</a></td>
+			<td>
+				<a href="javascript: void(0);" class="new-region" onclick="$('#file_\$search_system_id\_\$search_system_region_id\').show();$(this).remove()">Загрузить из exel</a>
+				<input type="file" name="file[\$search_system_id\][\$search_system_region_id\]" style="display:none;" id="file_\$search_system_id\_\$search_system_region_id\"/>
+				<br/>
+				<a href="/images/examplequerys.xls" target="_blank" >пример</a>
+			</td>
 			<td><a href="javascript: void(0);" onclick="addCol(\$search_system_id\,\$search_system_region_id\);" title="Добавить еще правило"><img src="/images/green-plus.png" class="f_l"/></a></td>
 		</tr>
 		<tr class="last-tr">
@@ -42,4 +47,8 @@
 			<td></td>
 		</tr>
 	</table>
+</div>
+
+<div id="region-pattern"  style="display:none;">
+	<div class="region"><a href="javascript: void(0);" rel="\$region_id\" >\$region_name\</a></div>
 </div>
