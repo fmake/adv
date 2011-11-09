@@ -1,6 +1,7 @@
 <div id="exs-pattern" style="display:none;">
 	<table><tr class="tr-pattern">
 		<td align="center">
+		   <input type="hidden" name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][id]" class="query">
 		 с <input title="Правило для позиции сайта с" type="text" name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][from]" class="exs"> по <input title="Правило для позиции сайта по" type="text"  name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][to]" class="exs">           
 		</td>
 	</tr>

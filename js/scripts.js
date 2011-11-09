@@ -108,17 +108,19 @@ function getPricePattern(searchSystem,regionSystem,row_num,exs_num) {
 	content = content.replace(/\\\$search_system_region_id\\/g,regionSystem);
 	content = content.replace(/\\\$row_num\\/g,row_num);
 	content = content.replace(/\\\$exs_num\\/g,exs_num);
-	
+	alert(dataQuery[searchSystem][regionSystem]['price'][row_num][exs_num]);
 	return content;
 }
 
-//получить цену по патерну
+//получить правило по патерну
 function getExsPattern(searchSystem,regionSystem) {
 	
 	content = $("#exs-pattern .tr-pattern").html();
 	content = content.replace(/\\\$search_system_id\\/g,searchSystem);
 	content = content.replace(/\\\$search_system_region_id\\/g,regionSystem);
 	content = content.replace(/\\\$exs_num\\/g,dataSearchSystem[searchSystem][regionSystem]['exs_count']);
+	alert(dataQuery[searchSystem][regionSystem]['place'][dataSearchSystem[searchSystem][regionSystem]['exs_count']]['from']);
+	alert(dataQuery[searchSystem][regionSystem]['place'][dataSearchSystem[searchSystem][regionSystem]['exs_count']]['to']);
 	return content;
 }
 
@@ -128,6 +130,7 @@ function getQueryPattern(searchSystem,regionSystem) {
 	content = content.replace(/\\\$search_system_id\\/g,searchSystem);
 	content = content.replace(/\\\$search_system_region_id\\/g,regionSystem);
 	content = content.replace(/\\\$row_num\\/g,dataSearchSystem[searchSystem][regionSystem]['row_count']);
+	alert(dataQuery[searchSystem][regionSystem]['querys'][dataSearchSystem[searchSystem][regionSystem]['row_count']]['query']);
 	return $(content);
 }
 
@@ -181,7 +184,7 @@ function initObjectData(searchSystem,regionSystem){
 	dataSearchSystem[searchSystem][regionSystem]['exs_count'] = 0;
 }
 
-function initTableData(searchSystem,regionSystem){
+function initTableData(searchSystem,regionSystem,row,col){
 	$(".querys").hide();
 	if(dataSearchSystem[searchSystem] && dataSearchSystem[searchSystem][regionSystem]){
 		$(dataSearchSystem[searchSystem][regionSystem]['selector']).show();
@@ -192,8 +195,12 @@ function initTableData(searchSystem,regionSystem){
 	$("#querys-tables").append(tableContent);
 	dataSearchSystem[searchSystem][regionSystem]['selector'] = '#querys_'+searchSystem+'_'+regionSystem;
 	$(dataSearchSystem[searchSystem][regionSystem]['selector']).show();
-	addRowNum(searchSystem,regionSystem,8);
-	addColNum(searchSystem,regionSystem,2);
+	if(!row)
+		row = 8;
+	if(!col)
+		col = 2;
+	addRowNum(searchSystem,regionSystem,row);
+	addColNum(searchSystem,regionSystem,col);
 	
 }
 

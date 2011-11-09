@@ -97,7 +97,7 @@
 	$mainFormParam -> set('action_url',$action_url);
 	$globalTemplateParam->set('action_url',$action_url);
 	
-	$itemObj = new searchSystems();
+	$itemObj = new projects_seo_searchSystem();
 	$itemObj -> setId($request -> id) ;
 	$globalTemplateParam->set('itemObj',$itemObj);
 	$mainFormParam -> set('itemObj',$itemObj);

@@ -158,6 +158,45 @@
 					
 					</div>
 					
+					
+					<script>
+						dataQuery= {'{}'};
+						[[ for searchsystem,sd in data]]
+							dataQuery[{searchsystem}] = {'{}'};
+							[[ for region,ssd in sd]]
+								dataQuery[{searchsystem}][{region}] = {'{}'};
+								dataQuery[{searchsystem}][{region}]['querys'] = {'{}'};
+								dataQuery[{searchsystem}][{region}]['place'] = {'{}'};
+								dataQuery[{searchsystem}][{region}]['price'] = {'{}'};
+								
+								[[ for i,query in ssd['querys'] ]]
+									dataQuery[{searchsystem}][{region}]['querys'][{i}] = {'{}'};
+									dataQuery[{searchsystem}][{region}]['querys'][{i}]['query'] = '{query['query']}';
+									dataQuery[{searchsystem}][{region}]['querys'][{i}]['id_seo_query'] = {query['id_seo_query']};
+								[[endfor]]
+								
+								[[ for i,place in ssd['place'] ]]
+									dataQuery[{searchsystem}][{region}]['place'][{i}] = {'{}'};
+									dataQuery[{searchsystem}][{region}]['place'][{i}]['from'] = '{place['from']}';
+									dataQuery[{searchsystem}][{region}]['place'][{i}]['to'] = {place['to']};
+								[[endfor]]
+								
+								[[ for q,price in ssd['price'] ]]
+									dataQuery[{searchsystem}][{region}]['price'][{q}] = {'{}'};
+									[[ for e,pr in price ]]
+										[[ if pr['price'] ]]
+											dataQuery[{searchsystem}][{region}]['price'][{q}][{e}] = {pr['price']};
+										[[else]]
+											dataQuery[{searchsystem}][{region}]['price'][{q}][{e}] = 0;
+										[[endif]]
+									[[endfor]]
+								[[endfor]]
+								initTableData({searchsystem},{region},{df('sizeof',ssd['querys'])},{df('sizeof',ssd['place'])});
+							[[endfor]]
+						[[endfor]]
+					</script>
+					
+					
 					[[raw]]
 					<script>
 						//initTableData(3,2);

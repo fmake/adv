@@ -8,7 +8,7 @@ class projects extends fmakeCore{
 	* Все проект с seo параметрами
 	*/
 	function getProjectWithSeoParams(){
-		$projectSeo = new projects_seoParams();
+		$projectSeo = new projects_seo_seoParams();
 		$select = $this->dataBase->SelectFromDB( __LINE__);
 		$arr = $select 
 				 -> addFrom("$this->table LEFT JOIN $projectSeo->table on `$this->table`.$this->idField = `$projectSeo->table`.$projectSeo->idField");
@@ -20,7 +20,7 @@ class projects extends fmakeCore{
 	 * Все проекты с seo параметрами
 	 */
 	function getProjectsWithSeoParams(){
-		$projectSeo = new projects_seoParams();
+		$projectSeo = new projects_seo_seoParams();
 		$select = $this->dataBase->SelectFromDB( __LINE__);
 		$arr = $select
 				-> addFrom("$this->table LEFT JOIN $projectSeo->table on `$this->table`.$this->idField = `$projectSeo->table`.$projectSeo->idField");

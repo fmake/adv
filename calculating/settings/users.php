@@ -144,7 +144,7 @@
 				}
 				$itemObj -> addParam("password",md5($elements["password"]));	
 				$itemObj -> newItem();
-				$user -> getAccesObj() -> setAcces($itemObj -> id,$request -> rols_array);
+				//$user -> getAccesObj() -> setAcces($itemObj -> id,$request -> rols_array);
 				action_redir($action_url);
 			}else{
 				$form =  $myForm  -> display();
@@ -166,7 +166,7 @@
 					unset ( $itemObj -> params["password"] );
 				}
 				$itemObj -> update();
-				$user -> getAccesObj() -> setAcces($itemObj -> id,$request -> rols_array);
+				//$user -> getAccesObj() -> setAcces($itemObj -> id,$request -> rols_array);
 				action_redir($action_url);
 			}else{
 				$form =  $myForm  -> display();
