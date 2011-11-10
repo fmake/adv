@@ -32,4 +32,22 @@ class projects_seo_seoParams extends fmakeCore{
 		$this->id = $insert	-> getInsertId();
 	}
 	
+	
+	
+	/**
+	* удаление + очищение запросов, правил цен, поисковых систем связанных с проектом, которые теперь не нужны
+	* @see fmakeCore::delete()
+	*/
+	function delete(){
+	
+		$prSeoQuery = new projects_seo_query();
+		$prSeoQuery -> deleteByProjectId($this -> id);
+		$exsSeo = new projects_seo_searchSystemExs();
+		$exsSeo -> deleteByProjectId($this -> id);
+		$prSeoSearchSystem = new projects_seo_searchSystemAccess();
+		$prSeoSearchSystem -> deleteByProjectId($this -> id); 
+		
+		parent::delete();
+	}
+	
 }

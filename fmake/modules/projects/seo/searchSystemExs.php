@@ -35,4 +35,45 @@ class projects_seo_searchSystemExs extends fmakeCore{
 			
 	}
 	
+	/**
+	*
+	* удаляем все правила проекта
+	* @param unknown_type $id_exs
+	*/
+	function deleteByProjectId($id_project){
+		$where[] = "`id_project` = '{$id_project}'";
+		$exs = ($this -> getWhere($where));
+		$index = sizeof($exs);
+		for ($i = 0; $i < $index; $i++) {
+			$this->setId($exs[$i][$this->idField]);
+			$this -> delete();
+		}
+	}
+	
+	/**
+	*
+	* удаляем все правила проекта
+	* @param unknown_type $id_exs
+	*/
+	function deleteBySearchSystemProjectId($id_seo_search_system,$id_project){
+		$where[] = "`id_seo_search_system` = '{$id_seo_search_system}'";
+		$where[] = "`id_project` = '{$id_project}'";
+		$exs = ($this -> getWhere($where));
+		$index = sizeof($exs);
+		for ($i = 0; $i < $index; $i++) {
+			$this->setId($exs[$i][$this->idField]);
+			$this -> delete();
+		}
+	}
+	
+	/**
+	 * удаление + очищение правил цен, которые теперь не нужны
+	 * @see fmakeCore::delete()
+	 */
+	function delete(){
+		$price = new projects_seo_searchSystemExsPrice();
+		$price -> deleteByExId($this -> id);
+		parent::delete();
+	}
+	
 }

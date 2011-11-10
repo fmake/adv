@@ -70,7 +70,7 @@ function initMainForm($itemObj,$context = array()){
 			                "size" => 25, 
 			                "max_length" => 36,
 			                "wrapper" => &$leftWrapper,
-			 				"value" => date("d.m.Y",$context['item']['date_payment']),
+			 				"value" => date("d.m.Y",$context['item']['date_payment'] ? $context['item']['date_payment'] : time()),
 			 				"align" => "left"
 		)));
 		
@@ -254,10 +254,35 @@ $globalTemplateParam->set('xajax',$xajax);
 
 
 switch ($request -> action){
+	case 'delete':
+		$myForm2 = new phpObjectForms(array("name" => 'deleteform', "action" => $action_url, "display_outer_table" => false, "table_align" => false,
+		    "table_width" => '600',"enable_js_validation" => true,"hold_output" => true,"css_class_prefix" => "edit-"
+		    ));
+		    $layoutForm2 = new FPColLayout(array("table_padding" => 5,"element_align" => "center", "hold_output" => true,));
+		    $layoutForm2 -> addElement(new FPHidden(array("name" => "action","value" => "delete_confirm")));
+		    $layoutForm2 -> addElement(new FPHidden(array("name" => "id","value" => $request -> id)));
+		    $layoutForm2 -> addElement(new FPText(array("text" =>'<div align="left">'.
+										                     '<h2>Удаление записи</h2>'.
+															 'Вы уверенны что хотите удалить запись?'.
+										                     '</div>')));  
+		    $layoutForm2 -> addElement(new FPCheckBox(array("name" => 'confirm',"title" => 'подтверждаю',"table_align" => 'left',"checked" => false,"comment" => 'Если включено,<br /> то вы подтверждаете удаление')));
+		    $layoutForm2 -> addElement(new FPRowLayout(array("table_align" => "left","table_padding" => 20,"elements" => array(new FPButton(array("submit" => true,"name" => 'submit',"title" => '   Продолжить  ',)),))));
+		    $myForm2 -> setBaseLayout($layoutForm2);
+		    $form =  $myForm2 -> display();
+		    $globalTemplateParam->set('form',$form);
+		    $modul -> template = "actions/delete.tpl";
+		    break;
+	case 'delete_confirm':
+		if($request -> confirm && $request -> id){
+			$itemObj -> setId($request -> id);
+			$itemObj -> delete();
+		}
+		action_redir($action_url);
+		break;
 	case 'update':
-		printAr($_REQUEST);
+		//printAr($_REQUEST);
 		$itemObj -> setId($request -> id);
-		$itemObj -> addParam("url", $request -> getEscape('url'));
+		$itemObj -> addParam("url", trim($request -> getEscape('url')));
 		if($request -> type =="seo"){
 			$itemObj -> addParam("is_seo", 1);
 		}
@@ -294,112 +319,18 @@ switch ($request -> action){
 			
 			
 			// добавление запросов
-			$projectSeoQuery -> addParam("id_project", $itemObj -> id);
-			$searchSystemExs -> addParam("id_project", $itemObj -> id);
-			$searchSystemAccess -> addParam("id_project", $itemObj -> id);
-			$data = $request -> data;
-			if($data){
-				foreach ($data as $searchSystemID => $datainner){
-					
-					foreach ($datainner as $regionID => $datainner){
-							if($regionID){
-								$searchSystemID = $regionID;
-							}
-							//echo $searchSystemID;
-							// добавляем запросы
-							if($datainner['querys']){
-								$querys = array();
-								$index = sizeof($datainner['querys']);
-								for ($i = 0; $i < $index; $i++) {
-									
-									if($datainner['querys'][$i]['id']){
-										$projectSeoQuery -> setId(intval($datainner['querys'][$i]['id']));
-										$projectSeoQuery -> addParam("query", $query);
-										$projectSeoQuery -> update();
-										$querys[$i] = $projectSeoQuery -> getInfo();
-									}else if($query = trim($datainner['querys'][$i]['query']) ){
-										$projectSeoQuery -> addParam("id_seo_search_system", $searchSystemID);
-										$projectSeoQuery -> addParam("query", $query);
-										$projectSeoQuery -> newItem();
-										$querys[$i] = $projectSeoQuery -> getInfo();
-									}else{
-										break;
-									}
-									
-									
-								}
-							}
-							// все запросы обработанные
-							//printAr($querys);
-							
-							$searchSystemExs -> addParam("id_seo_search_system", $searchSystemID);
-							// работаем с правилами
-							if($datainner['place']){
-								$exs = array();
-								$index = sizeof($datainner['place']);
-								for ($i = 0; $i < $index; $i++) {
-									if($datainner['place'][$i]['id'] && $datainner['place'][$i]['from'] && $datainner['place'][$i]['to']){
-										$searchSystemExs -> setId($datainner['place'][$i]['id']);
-										$searchSystemExs -> addParam("from", $datainner['place'][$i]['from']);
-										$searchSystemExs -> addParam("to", $datainner['place'][$i]['to']);
-										$searchSystemExs -> update();
-										$exs[$i] = $projectSeoQuery -> getInfo();
-									}else if( $datainner['place'][$i]['from'] && $datainner['place'][$i]['to'] ){
-										$searchSystemExs -> addParam("from", $datainner['place'][$i]['from']);
-										$searchSystemExs -> addParam("to", $datainner['place'][$i]['to']);
-										$searchSystemExs -> newItem();
-										$exs[$i] = $searchSystemExs -> getInfo();
-									}else{
-										//заканчиваем на пустом правиле, если удалили поля от и до то и удаляем правило
-										if( $datainner['place'][$i]['id'] && (!$datainner['place'][$i]['from'] || !$datainner['place'][$i]['to']) ){
-											$searchSystemExs -> setId($datainner['place'][$i]['id']);
-											$searchSystemExs -> delete();
-										}
-										break;
-									}
-								}
-								//printAr($exs);
-								//удаляем устаревшие правила
-								$searchSystemExs -> deleteWhereNotIn($itemObj -> id,$searchSystemID ,$exs);
-							}
-
-							// цены по правилам выставляем
-							if($querys){
-								foreach ($querys as $i => $val){
-									for($j=0; $j < sizeof($exs); $j++){
-										
-										$searchSystemExsPrice -> addParam("id_exs",$exs[$j][$searchSystemExs -> idField]);
-										$searchSystemExsPrice -> addParam("id_seo_query",$querys[$i][$projectSeoQuery -> idField]);
-										$searchSystemExsPrice -> addParam("price",$datainner['price'][$i][$j]);
-										$exPrice = $searchSystemExsPrice -> addPriceEx();
-										//printAr($exPrice);
-										if($j==0){
-											$maxSitePrice += $arr[$i+1][$j+1];
-										}
-										
-										
-									}
-								}
-								// добавляем поисковую систему к проекту
-								$searchSystemAccess -> addParam("id_seo_search_system", $searchSystemID);
-								$searchSystemAccess -> addSystemAccess();
-								$searchSystemsUsed[] = $searchSystemID;
-							}
-
-							
-					}
-				}
-				//printAr($searchSystemsUsed);
-				$searchSystemAccess -> deleteWhereNotIn($itemObj -> id,$searchSystemsUsed);
-				
-				
+			include 'projects_addquery.php';
+			if($maxSeoPay){
+				$projectSeo -> addParam("max_seo_pay", $maxSeoPay);
+				$projectSeo -> update();
 			}
+			
 		}
-		//action_redir($action_url);
+		action_redir($action_url);
 		break;
 	case 'add':
 		//printAr($_REQUEST);
-		$itemObj -> addParam("url", $request -> getEscape('url'));
+		$itemObj -> addParam("url", trim($request -> getEscape('url')));
 		if($request -> type =="seo"){
 			$itemObj -> addParam("is_seo", 1);
 		}
@@ -433,6 +364,14 @@ switch ($request -> action){
 			$projectAcess -> addParam("id_user", $request -> role[ID_CLIENT][0]);
 			$projectAcess -> addParam("pay_percent", $request -> pay[ID_CLIENT]);
 			$projectAcess -> addAccess();
+			
+			// добавление запросов
+			include 'projects_addquery.php';
+			if($maxSeoPay){
+				$projectSeo -> setId($itemObj -> id);
+				$projectSeo -> addParam("max_seo_pay", $maxSeoPay);
+				$projectSeo -> update();
+			}
 			
 		}
 		action_redir($action_url);
@@ -511,8 +450,8 @@ switch ($request -> action){
 	default:
 		$filds = array(
 					 'url'=>array( 'name' => 'Адрес', 'col' => false),
-					 'max_price'=>array( 'name' => 'Макс. Бюджет', 'col' => "200px"),
-					 'percent'=>array( 'name' => '%', 'col' => "100px"),
+					 'max_seo_pay'=>array( 'name' => 'Макс. Бюджет', 'col' => "100px",'align' => "right"),
+					 'percent'=>array( 'name' => '%', 'col' => "50px"),
 					 'actions'=>array( 'name' => 'Действие', 'col' => "230px"),
 		);
 		$actions = array('delete', 'edit');
@@ -524,6 +463,4 @@ switch ($request -> action){
 		$modul->template = "projects/projects.tpl";
 	break;
 }
-
-
 

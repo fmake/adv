@@ -67,4 +67,13 @@ class projects_accessRole extends fmakeCore{
 		return $rols;
 	}
 	
+	/**
+	*
+	* удаляем по проекту
+	*/
+	function deleteByProjectId($id_project){
+		$delete = $this->dataBase->DeleteFromDB( __LINE__ );
+		$delete	-> addTable($this->table) -> addWhere("`id_project` = '".$id_project."'") -> queryDB();
+	}
+	
 }

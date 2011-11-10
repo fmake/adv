@@ -52,7 +52,7 @@
 						
 						[[ for key,fild in filds ]]
 							[[ if key != 'actions' ]]
-								<td>
+								<td [[if fild['align'] ]]align="{fild['align']}"[[endif]]>
 									[[ if loop.first ]]
 										<a href="{action_url}?action=edit&id={item[itemObj.idField]}" class="link-icon f12" >{item[key]}</a>
 									[[else]]

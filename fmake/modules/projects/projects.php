@@ -26,4 +26,20 @@ class projects extends fmakeCore{
 				-> addFrom("$this->table LEFT JOIN $projectSeo->table on `$this->table`.$this->idField = `$projectSeo->table`.$projectSeo->idField");
 		return $select -> queryDB();
 	}
+
+	/**
+	* удаление + очищение запросов, правил цен, поисковых систем связанных с проектом, которые теперь не нужны
+	* @see fmakeCore::delete()
+	*/
+	function delete(){
+		
+		/*
+		 * сео параметры проекта
+		 */
+		$prSeo = new projects_seo_seoParams($this -> id);
+		$prSeo -> delete();
+		$prAcces = new projects_accessRole();
+		$prAcces -> deleteByProjectId($this -> id);
+		parent::delete();
+	}
 }

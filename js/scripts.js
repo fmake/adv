@@ -108,7 +108,14 @@ function getPricePattern(searchSystem,regionSystem,row_num,exs_num) {
 	content = content.replace(/\\\$search_system_region_id\\/g,regionSystem);
 	content = content.replace(/\\\$row_num\\/g,row_num);
 	content = content.replace(/\\\$exs_num\\/g,exs_num);
-	alert(dataQuery[searchSystem][regionSystem]['price'][row_num][exs_num]);
+	try {
+		// вызываем ошибку
+		if(dataQuery[searchSystem][regionSystem]['price'][row_num][exs_num] == undefined){sad2312['sad']};
+		content = content.replace(/\\\$price_val\\/g,dataQuery[searchSystem][regionSystem]['price'][row_num][exs_num]);
+	} catch (e) {
+		content = content.replace(/\\\$price_val\\/g,"");
+	}
+	
 	return content;
 }
 
@@ -119,8 +126,16 @@ function getExsPattern(searchSystem,regionSystem) {
 	content = content.replace(/\\\$search_system_id\\/g,searchSystem);
 	content = content.replace(/\\\$search_system_region_id\\/g,regionSystem);
 	content = content.replace(/\\\$exs_num\\/g,dataSearchSystem[searchSystem][regionSystem]['exs_count']);
-	alert(dataQuery[searchSystem][regionSystem]['place'][dataSearchSystem[searchSystem][regionSystem]['exs_count']]['from']);
-	alert(dataQuery[searchSystem][regionSystem]['place'][dataSearchSystem[searchSystem][regionSystem]['exs_count']]['to']);
+	try {
+		content = content.replace(/\\\$id_val\\/g,dataQuery[searchSystem][regionSystem]['place'][dataSearchSystem[searchSystem][regionSystem]['exs_count']]['id']);
+		content = content.replace(/\\\$from_val\\/g,dataQuery[searchSystem][regionSystem]['place'][dataSearchSystem[searchSystem][regionSystem]['exs_count']]['from']);
+		content = content.replace(/\\\$to_val\\/g,dataQuery[searchSystem][regionSystem]['place'][dataSearchSystem[searchSystem][regionSystem]['exs_count']]['to']);
+	} catch (e) {
+		content = content.replace(/\\\$from_val\\/g,"");
+		content = content.replace(/\\\$to_val\\/g,"");
+		content = content.replace(/\\\$id_val\\/g,"");
+	}
+	
 	return content;
 }
 
@@ -130,7 +145,15 @@ function getQueryPattern(searchSystem,regionSystem) {
 	content = content.replace(/\\\$search_system_id\\/g,searchSystem);
 	content = content.replace(/\\\$search_system_region_id\\/g,regionSystem);
 	content = content.replace(/\\\$row_num\\/g,dataSearchSystem[searchSystem][regionSystem]['row_count']);
-	alert(dataQuery[searchSystem][regionSystem]['querys'][dataSearchSystem[searchSystem][regionSystem]['row_count']]['query']);
+	try {
+		//alert(dataQuery[searchSystem][regionSystem]['querys'][dataSearchSystem[searchSystem][regionSystem]['row_count']]['query']);
+		content = content.replace(/\\\$query_val\\/g,dataQuery[searchSystem][regionSystem]['querys'][dataSearchSystem[searchSystem][regionSystem]['row_count']]['query']);
+		content = content.replace(/\\\$id_val\\/g,dataQuery[searchSystem][regionSystem]['querys'][dataSearchSystem[searchSystem][regionSystem]['row_count']]['id']);
+	} catch (e) {
+		content = content.replace(/\\\$query_val\\/g,"");
+		content = content.replace(/\\\$id_val\\/g,"");
+	}
+	
 	return $(content);
 }
 
@@ -176,6 +199,7 @@ function addColNum(searchSystem,regionSystem,num) {
 	}
 }
 
+// инициализируем объект
 function initObjectData(searchSystem,regionSystem){
 	if(!dataSearchSystem[searchSystem])
 		dataSearchSystem[searchSystem] = {};
@@ -184,20 +208,27 @@ function initObjectData(searchSystem,regionSystem){
 	dataSearchSystem[searchSystem][regionSystem]['exs_count'] = 0;
 }
 
-function initTableData(searchSystem,regionSystem,row,col){
-	$(".querys").hide();
-	if(dataSearchSystem[searchSystem] && dataSearchSystem[searchSystem][regionSystem]){
-		$(dataSearchSystem[searchSystem][regionSystem]['selector']).show();
-		return;
+function initTableData(searchSystem,regionSystem,row,col,showTable){
+	if(showTable == undefined){
+		showTable = true;
+	}
+	if(showTable){
+		$(".querys").hide();
+		if(dataSearchSystem[searchSystem] && dataSearchSystem[searchSystem][regionSystem]){
+			$(dataSearchSystem[searchSystem][regionSystem]['selector']).show();
+			return;
+		}
 	}
 	initObjectData(searchSystem,regionSystem);
 	var tableContent = ( getTableQueryPattern(searchSystem,regionSystem) );
 	$("#querys-tables").append(tableContent);
 	dataSearchSystem[searchSystem][regionSystem]['selector'] = '#querys_'+searchSystem+'_'+regionSystem;
-	$(dataSearchSystem[searchSystem][regionSystem]['selector']).show();
-	if(!row)
+	if(showTable){
+		$(dataSearchSystem[searchSystem][regionSystem]['selector']).show();
+	}
+	if(!row || row < 8)
 		row = 8;
-	if(!col)
+	if(!col || col < 2)
 		col = 2;
 	addRowNum(searchSystem,regionSystem,row);
 	addColNum(searchSystem,regionSystem,col);
@@ -281,10 +312,19 @@ function maxMonthPrice(regionSystem,regionNameSystem,exs_num){
 	maxPrice();
 }
 
+/*
+ * добавляем верхнюю форму вниз и делаем сабмит
+ */
 function addFormContent() {
 	$('*[name=editformquery]').prepend($('*[name=editform] .edit-Table'));
 	$('*[name=editform]').html('');
 	return true;
+}
+
+function chekAllItems(regionSystem,regionNameSystem){
+	$(".checkbox_"+regionSystem+"_"+regionNameSystem).attr("checked", "checked");
+	$(this).attr("checked", "");
+	return false;
 }
 
 $(document).ready(function(){	

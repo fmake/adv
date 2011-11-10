@@ -64,7 +64,7 @@
 						<td width="150">
 						<span class="edit-Title">Абонемент</span></td>
 						<td width="300">
-						<input type="text" maxlength="36" size="16" value="{item['abonement']}" name="abonement" id="abonement" onkeyup="maxPrice();" ></td>
+						<input type="text" maxlength="36" size="16" value="{item['abonement']   ? item['abonement']  : 0 }" name="abonement" id="abonement" onkeyup="maxPrice();" ></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td><td width="300">
@@ -161,6 +161,7 @@
 					
 					<script>
 						dataQuery= {'{}'};
+						[[ set first = 0]]
 						[[ for searchsystem,sd in data]]
 							dataQuery[{searchsystem}] = {'{}'};
 							[[ for region,ssd in sd]]
@@ -172,13 +173,14 @@
 								[[ for i,query in ssd['querys'] ]]
 									dataQuery[{searchsystem}][{region}]['querys'][{i}] = {'{}'};
 									dataQuery[{searchsystem}][{region}]['querys'][{i}]['query'] = '{query['query']}';
-									dataQuery[{searchsystem}][{region}]['querys'][{i}]['id_seo_query'] = {query['id_seo_query']};
+									dataQuery[{searchsystem}][{region}]['querys'][{i}]['id'] = {query['id_seo_query']};
 								[[endfor]]
 								
 								[[ for i,place in ssd['place'] ]]
 									dataQuery[{searchsystem}][{region}]['place'][{i}] = {'{}'};
 									dataQuery[{searchsystem}][{region}]['place'][{i}]['from'] = '{place['from']}';
 									dataQuery[{searchsystem}][{region}]['place'][{i}]['to'] = {place['to']};
+									dataQuery[{searchsystem}][{region}]['place'][{i}]['id'] = {place['id_exs']};
 								[[endfor]]
 								
 								[[ for q,price in ssd['price'] ]]
@@ -191,7 +193,23 @@
 										[[endif]]
 									[[endfor]]
 								[[endfor]]
-								initTableData({searchsystem},{region},{df('sizeof',ssd['querys'])},{df('sizeof',ssd['place'])});
+								
+								/*инициализируем первую поисковую сиситему будто пользователь нажал на нее*/
+								[[if not first ]]
+									initTableData({searchsystem},{region},{df('sizeof',ssd['querys'])},{df('sizeof',ssd['place'])});
+									$('.search-system A[rel={searchsystem}]').addClass('active');
+									$("#region_{searchsystem}").show();
+									$("#region_{searchsystem} .region A[rel={region}]").addClass('active');
+									searchId = {searchsystem};
+									[[ set first = 1]]
+								[[else]]
+									initTableData({searchsystem},{region},{df('sizeof',ssd['querys'])},{df('sizeof',ssd['place'])},false);	
+								[[endif]]
+								
+								/*подсчитываем цены по столбцам*/
+								[[ for i,place in ssd['place'] ]]
+									maxMonthPrice({searchsystem},{region},{i});
+								[[endfor]]
 							[[endfor]]
 						[[endfor]]
 					</script>
@@ -206,14 +224,13 @@
 					<br /><br />
 				</td>
 			</tr>
-			<tr><td align="left" colspan="2">
-				<table cellspacing="0" cellpadding="20" border="0" align="left">
-				<tbody><tr>
-				<td valign="top">
+			<tr><td align="right" colspan="2" >
+
+				<select name="subaction" >
+					<option>Групповое действие</option>
+					<option value="delete">Удалить</option>
+				</select>
 				<input type="submit" class="edit-SubmitButton" onclick="if (!_fp_validateEditform()) return false; else addFormContent();" value="   Сохранить  " name="submit">
-				</td>
-				</tr>
-				</tbody></table>
 				</td>
 			</tr>
 		</table>

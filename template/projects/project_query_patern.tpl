@@ -1,8 +1,8 @@
 <div id="exs-pattern" style="display:none;">
 	<table><tr class="tr-pattern">
 		<td align="center">
-		   <input type="hidden" name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][id]" class="query">
-		 с <input title="Правило для позиции сайта с" type="text" name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][from]" class="exs"> по <input title="Правило для позиции сайта по" type="text"  name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][to]" class="exs">           
+		   <input value="\$id_val\" type="hidden" name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][id]" class="query">
+		 с <input value="\$from_val\" title="Правило для позиции сайта с" type="text" name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][from]" class="exs"> по <input value="\$to_val\" title="Правило для позиции сайта по" type="text"  name="data[\$search_system_id\][\$search_system_region_id\][place][\$exs_num\][to]" class="exs">           
 		</td>
 	</tr>
 	</table>
@@ -11,7 +11,7 @@
 <div id="price-pattern" style="display:none;">
 		<table><tr class="tr-pattern">
 			<td align="right">
-			 <input title="цена запроса по правилу" class="price exs-\$exs_num\" onkeyup="maxMonthPrice(\$search_system_id\,\$search_system_region_id\,\$exs_num\)" type="text" name="data[\$search_system_id\][\$search_system_region_id\][price][\$row_num\][\$exs_num\]" >           
+			 <input title="цена запроса по правилу" value="\$price_val\" class="price exs-\$exs_num\" onkeyup="maxMonthPrice(\$search_system_id\,\$search_system_region_id\,\$exs_num\)" type="text" name="data[\$search_system_id\][\$search_system_region_id\][price][\$row_num\][\$exs_num\]" >           
 			</td>
 		</tr>
 		</table>
@@ -19,10 +19,10 @@
 
 <div id="query-pattern" style="display:none;">
 		<table><tr class="query-tr">
-			<td><input title="отметить для группового действия" type="checkbox" name="data[\$search_system_id\][\$search_system_region_id\][action][\$row_num\]" /></td>
+			<td><input class="checkbox_\$search_system_id\_\$search_system_region_id\" title="отметить для группового действия" type="checkbox" name="data[\$search_system_id\][\$search_system_region_id\][action][\$row_num\]" /></td>
 			<td>
-				<input type="hidden" name="data[\$search_system_id\][\$search_system_region_id\][querys][\$row_num\][id]" class="query">
-				<input title="запрос" type="text" name="data[\$search_system_id\][\$search_system_region_id\][querys][\$row_num\][query]" class="query">
+				<input value="\$id_val\" type="hidden" name="data[\$search_system_id\][\$search_system_region_id\][querys][\$row_num\][id]" class="query">
+				<input value="\$query_val\" title="запрос" type="text" name="data[\$search_system_id\][\$search_system_region_id\][querys][\$row_num\][query]" class="query">
 			</td>
 			<td></td>
 		</tr>
@@ -33,7 +33,7 @@
 <div id="table-query-pattern" style="display:none;">
 	<table class="querys" id="querys_\$search_system_id\_\$search_system_region_id\">
 		<tr class="first-tr">
-			<td><input type="checkbox" /></td>
+			<td><input type="checkbox" onclick="chekAllItems(\$search_system_id\,\$search_system_region_id\);return false;" /></td>
 			<td>
 				<a href="javascript: void(0);" class="new-region" onclick="$('#file_\$search_system_id\_\$search_system_region_id\').show();$(this).remove()">Загрузить из exel</a>
 				<input type="file" name="file[\$search_system_id\][\$search_system_region_id\]" style="display:none;" id="file_\$search_system_id\_\$search_system_region_id\"/>

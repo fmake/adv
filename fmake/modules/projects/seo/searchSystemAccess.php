@@ -66,6 +66,9 @@ class projects_seo_searchSystemAccess extends fmakeCore{
 	* Удаление записи, перед использованием надо установить id записи
 	*/
 	function delete(){
+		$prSeoExs = new projects_seo_searchSystemExs();
+		$prSeoExs -> deleteBySearchSystemProjectId($this->params[id_seo_search_system],$this->params[id_project]);
+		
 		$delete = $this->dataBase->DeleteFromDB( __LINE__ );
 		$delete	-> addTable($this->table) ;
 		foreach($this->idField as $fld){
@@ -75,7 +78,7 @@ class projects_seo_searchSystemAccess extends fmakeCore{
 	}
 	
 	function deleteWhereNotIn($id_project, $arr){
-		if(!$arr[0])return;
+		//if(!$arr[0])return;
 	
 		$select = $this->dataBase->SelectFromDB(__LINE__);
 	
@@ -84,7 +87,6 @@ class projects_seo_searchSystemAccess extends fmakeCore{
 		$select -> addWhere("id_seo_search_system !='".$arr[$i]."'");
 	
 		$deletedElement =  $select -> addFrom($this->table)  -> addWhere("id_project = '{$id_project}'") ->  queryDB();
-	
 		for($i=0;$i<sizeof($deletedElement);$i++){
 			foreach($this->idField as $fld){
 				$this->addParam($fld, $deletedElement[$i][$fld]);
@@ -92,7 +94,7 @@ class projects_seo_searchSystemAccess extends fmakeCore{
 			$this->delete();
 		}
 			
-		}
+	}
 	/*
 	 * получаем роли для проекта
 	*/
@@ -105,5 +107,16 @@ class projects_seo_searchSystemAccess extends fmakeCore{
 		}
 		return $systems;
 	}
+	
+	/**
+	*
+	* удаляем по проекту
+	* @param unknown_type $id_exs
+	*/
+	function deleteByProjectId($id_project){
+		$delete = $this->dataBase->DeleteFromDB( __LINE__ );
+		$delete	-> addTable($this->table) -> addWhere("`id_project` = '".$id_project."'") -> queryDB();
+	}
+	
 	
 }

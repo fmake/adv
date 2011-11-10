@@ -15,4 +15,29 @@ class projects_seo_query extends fmakeCore{
 		return ($this -> getWhere($where));
 	}
 	
+	/**
+	*
+	* удаляем все запросы проекта
+	* @param unknown_type $id_exs
+	*/
+	function deleteByProjectId($id_project){
+		$where[] = "`id_project` = '{$id_project}'";
+		$querys = ($this -> getWhere($where));
+		$index = sizeof($querys);
+		for ($i = 0; $i < $index; $i++) {
+			$this->setId($querys[$i][$this->idField]);
+			$this -> delete();
+		}
+	}
+	
+	/**
+	* удаление + очищение правил-цен, которые теперь не нужны
+	* @see fmakeCore::delete()
+	*/
+	function delete(){
+		$price = new projects_seo_searchSystemExsPrice();
+		$price -> deleteByQueryId($this -> id);
+		parent::delete();
+	}
+	
 }

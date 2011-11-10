@@ -43,26 +43,52 @@ class projects_seo_searchSystemExsPrice extends fmakeCore{
 		}
 	}
 	
+	/**
+	 * 
+	 * Добавляем цену для правила и поисковой системы
+	 */
 	function addPriceEx(){
 		foreach($this->idField as $fld){
 			$where[] = "`$fld` = '{$this -> params[$fld]}'";
 		}
 		$ex = $this -> getWhere($where);
-		if($exs){
+		if($ex){
 			$this -> update();
 		}else{
 			$this -> newItem();
 			$ex = $this -> getWhere($where);
 		}
-		return $ex;
+		return $ex[0];
 	}
-	
+	/**
+	 * получаем цену по поисковой системе и правилу
+	 */
 	function getPriceExsSearch($id_exs,$id_seo_query){
 		$where[] = "`id_exs` = '{$id_exs}'";
 		$where[] = "`id_seo_query` = '{$id_seo_query}'";
 		
 		$arr = $this -> getWhere($where);
 		return $arr[0];
+	}
+	
+	/**
+	 * 
+	 * удаляем все цены если удалено правило
+	 * @param unknown_type $id_exs
+	 */
+	function deleteByExId($id_exs){
+		$delete = $this->dataBase->DeleteFromDB( __LINE__ );
+		$delete	-> addTable($this->table) -> addWhere("`id_exs` = '".$id_exs."'") -> queryDB();
+	}
+	
+	/**
+	*
+	* удаляем все цены если удален запрос
+	* @param unknown_type $id_exs
+	*/
+	function deleteByQueryId($id_query){
+		$delete = $this->dataBase->DeleteFromDB( __LINE__ );
+		$delete	-> addTable($this->table) -> addWhere("`id_seo_query` = '".$id_query."'") -> queryDB();
 	}
 	
 }
