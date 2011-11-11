@@ -317,9 +317,9 @@ switch ($request -> action){
 			$projectAcess -> addParam("pay_percent", $request -> pay[ID_CLIENT]);
 			$projectAcess -> addAccess();
 			
-			
 			// добавление запросов
 			include 'projects_addquery.php';
+
 			if($maxSeoPay){
 				$projectSeo -> addParam("max_seo_pay", $maxSeoPay);
 				$projectSeo -> update();
@@ -327,7 +327,7 @@ switch ($request -> action){
 			
 		}
 		action_redir($action_url);
-		break;
+		break; 
 	case 'add':
 		//printAr($_REQUEST);
 		$itemObj -> addParam("url", trim($request -> getEscape('url')));
@@ -380,16 +380,31 @@ switch ($request -> action){
 		$item = $itemObj -> getProjectWithSeoParams();
 		$item['roles'] = $projectAcess -> getProjectRols($itemObj -> id);
 		$item['searchsystems'] = $searchSystemAccess -> getProjectSystems($itemObj -> id);
-		//printAr($item);
+		$searchSystemsOrder = array();
+		//printAr($item['searchsystems']);
+		// инициализируем массив data все данные запросы поисковые системы и т.п.
 		$data = array();
 		if($item['searchsystems']){
 			foreach ($item['searchsystems'] as $id => $stm){
+				// выставляем номер поисковой системы и региона, так же раставляем их в нужном порядке сортировки
 				$searchSystems -> setId($id);
-				$srcstmp = ( $searchSystems -> getInfo() );
-				if($srcstmp['parent']){
-					$srcstnum = $srcstmp['parent'];
+				$item['searchsystems'][$id]  = ( $searchSystems -> getInfo() );
+				if($item['searchsystems'][$id]['parent']){
+					$srcstnum = $item['searchsystems'][$id]['parent'];
 					$regionnum = $id;
+					$searchSystems -> setId($item['searchsystems'][$id]['parent']);
+					$tmp = $item['searchsystems'][$id];
+					$parent = $searchSystems -> getInfo();
+					if(!$searchSystemsOrder[ $parent[ $searchSystems -> idField ] ])
+						$searchSystemsOrder[ $parent[ $searchSystems -> idField ] ] = $parent;
+					// эти системы использованны в проекте
+					$searchSystemsOrder[ $parent[ $searchSystems -> idField ] ]['used'] = true;
+					$tmp['used'] = true;
+					$searchSystemsOrder[ $parent[ $searchSystems -> idField ] ]['child'][] = $tmp;
+					
 				}else{
+					$searchSystemsOrder[$id] = $item['searchsystems'][$id];
+					$searchSystemsOrder[$id]['used'] = true;
 					$srcstnum =  $id;
 					$regionnum = 0;
 				}
@@ -411,37 +426,58 @@ switch ($request -> action){
 				
 			}
 		}
+		//printAr($item['searchsystems']);
 		//printAr($data);
+		$searchSystemsUsedItems = $item['searchsystems'];
+		$item['searchsystems'] = $searchSystemsOrder;
+		unset($searchSystemsOrder);
+		
 		$mainFormParam -> set('item',$item);
 		$globalTemplateParam->set('item',$item);
 		$globalTemplateParam->set('data',$data);
 	case 'new':
+		// ищем всевозможные поисковые системы, и смотрим какие из них используются
 		$systems = ( $searchSystems -> getChilds(0) );
 		$index = sizeof($systems);
+		$usedSearchSystemOrdering;
+		$usedSearchSystem = false;
 		for ($i = 0; $i < $index; $i++) {
 			$systems[$i]['child'] = $searchSystems -> getChilds($systems[$i][$searchSystems->idField]);
-			
-			if( $item['searchsystems'][ $systems[$i][$searchSystems -> idField] ] ){
+			if( $searchSystemsUsedItems[ $systems[$i][$searchSystems -> idField] ] ){
 				$systems[$i]['used'] = true;
+				$usedSearchSystem = true;
 			}
 			// проверяем используются ли регионы в системе
 			$index2 = sizeof($systems[$i]['child']);
-			$usedSearchSystem = false;
+			$usedSearchSystemRegion = false;
 			for ($j = 0; $j < $index2; $j++) {
-				if( $item['searchsystems'][ $systems[$i]['child'][$j][$searchSystems -> idField] ] ){
+				if( $searchSystemsUsedItems[ $systems[$i]['child'][$j][$searchSystems -> idField] ] ){
 					$systems[$i]['child'][$j]['used'] = true;
-					$usedSearchSystem = true;
+					$usedSearchSystemRegion = true;
 				}
 			}
-			if($index2 && !$usedSearchSystem){
+			if($index2 && !$usedSearchSystemRegion){
 				$systems[$i]['child'][0]['used'] = true;
+				$usedSearchSystemRegion = true;
 			}
-			
-				
+			// если используется регион, то и используется поисковая система
+			if($usedSearchSystemRegion ){
+				$systems[$i]['used'] = true;
+			}
 		}
-		//printAr($systems);
+		if(!$usedSearchSystem){
+			$systems[0]['used'] = true;
+			$usedSearchSystem = true;
+			$usedSearchSystemOrdering[0] = $systems[0];
+		}
+		
+		// если нет поисковых систем, то заполняем по умолчанию первыми
+		if(!$item['searchsystems']){
+			$item['searchsystems'] = $usedSearchSystemOrdering;
+		}
 		//printAr($item['searchsystems']);
 		
+		$globalTemplateParam -> set('item',$item);
 		$globalTemplateParam->set('ssystems',$systems);
 		$form =  initMainForm($itemObj,$mainFormParam -> get()) -> display();
 		$globalTemplateParam->set('form',$form);

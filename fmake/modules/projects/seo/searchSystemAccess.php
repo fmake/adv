@@ -18,7 +18,7 @@ class projects_seo_searchSystemAccess extends fmakeCore{
 		
 		if($this->filds){
 	
-			if(in_array('position',$this->filds)){
+			if(in_array('position',$this->filds) && !$this->params['position']){
 				$select = $this->dataBase->SelectFromDB(__LINE__);
 				$position = $select -> addFild('MAX(`position`) AS `position`') -> addFrom($this->table) -> queryDB();
 				$this->params['position'] = $position[0]['position'] + 1;

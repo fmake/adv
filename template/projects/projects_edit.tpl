@@ -87,7 +87,7 @@
 			<tr>
 				<td colspan="2"><table cellspacing="0" cellpadding="2" border="0" align="left">
 					<tbody><tr>
-						<td><a href="javascript: void(0);" onclick="$('.dop-params').toggle();">Дополнительные параметры</a></td>
+						<td><a href="javascript: void(0);" onclick="$('.dop-params').toggle();" class="dop-params-link">Дополнительные параметры</a></td>
 					</tr>
 					</table>
 				</td>
@@ -110,16 +110,19 @@
 				<td colspan="2">
 					<h2>Поисковые системы</h2>
 					<div class="search-systems">
-						[[ for ssys in ssystems]]
-								<div class="search-system" ><a href="javascript: void(0);" rel="{ssys['id_seo_search_system']}" >{ssys['name']}</a></div>
+						[[ for ssys in item['searchsystems']]]
+							[[if ssys['used'] ]] 
+								<div class="search-system" ><a href="javascript: void(0);" rel="{ssys['id_seo_search_system']}" >{ssys['name']}</a><input type="hidden" name="searchorder[]" value="{ssys['id_seo_search_system']}" /></div>
+							[[endif]]
 						[[endfor]]
+							<div class="search-system-add"><a href="javascript: void(0);" id="system-search-link"><img src="/images/green-plus.png" class="f_l"/> Добавить систему</a></div>
 					</div>
-					[[ for ssys in ssystems]]
+					[[ for ssys in item['searchsystems']]]
 						[[ if ssys['child'] ]]
 							<div class="regions" id="region_{ssys['id_seo_search_system']}" >
 								[[for ssch in ssys['child']]]
 									[[if ssch['used'] ]]
-										<div class="region"><a href="javascript: void(0);" rel="{ssch['id_seo_search_system']}" >{ssch['name']}</a></div>
+										<div class="region"><a href="javascript: void(0);" rel="{ssch['id_seo_search_system']}" >{ssch['name']}</a><input type="hidden" name="regionorder[{ssys['id_seo_search_system']}][]" value="{ssch['id_seo_search_system']}" /></div>
 									[[endif]]
 								[[endfor]]
 								<div class="region-add"><a href="javascript: void(0);" id="region-link" class="new-region"><img src="/images/green-plus.png" class="f_l"/> Добавить регион</a></div>
@@ -129,7 +132,22 @@
 					
 					
 					
-				
+					<!-- ui-dialog -->
+					<div id="dialog_system_search" title="Добавление поисковой системы" style="display:none;">
+						<p>
+							<select id="search_system_select" >
+								[[ for ssys in ssystems]]
+									[[if not ssys['used'] ]]
+										<option value="{ssys['id_seo_search_system']}">{ssys['name']}</option>
+									[[endif]]
+								[[endfor]]
+								
+							</select>
+							<input type="button" id="system_search_calculation_button" value="добавить" onclick="addSearchSystem();return false;"/>
+							
+						</p>
+					</div>
+					
 					<!-- ui-dialog -->
 					<div id="dialog" title="Добавление региона" style="display:none;">
 						<p>
@@ -213,14 +231,6 @@
 							[[endfor]]
 						[[endfor]]
 					</script>
-					
-					
-					[[raw]]
-					<script>
-						//initTableData(3,2);
-						//initTableData(2,1);
-					</script>
-					[[endraw]]
 					<br /><br />
 				</td>
 			</tr>
@@ -230,12 +240,13 @@
 					<option>Групповое действие</option>
 					<option value="delete">Удалить</option>
 				</select>
-				<input type="submit" class="edit-SubmitButton" onclick="if (!_fp_validateEditform()) return false; else addFormContent();" value="   Сохранить  " name="submit">
+				<input type="submit" class="edit-SubmitButton" onclick="if (!_fp_validateEditform()) return false; else addFormContent();" value="   применить  " name="submit">
+				<br /><br />
 				</td>
 			</tr>
 		</table>
 		</form>
-
+	
 		
 	</div>
 [[ endblock ]]

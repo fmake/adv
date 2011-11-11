@@ -2,6 +2,7 @@
 /**
  * добавление запросов из таблицы 
  */
+//printAr($_REQUEST);
 $projectSeoQuery -> addParam("id_project", $itemObj -> id);
 $searchSystemExs -> addParam("id_project", $itemObj -> id);
 $searchSystemAccess -> addParam("id_project", $itemObj -> id);
@@ -10,7 +11,7 @@ $data = $request -> data;
 if($data){
 	$maxSeoPay = 0;
 	foreach ($data as $searchSystemID => $datainner){
-		
+		$searchSystemParentID = $searchSystemID;
 		foreach ($datainner as $regionID => $datainner){
 				if($regionID){
 					$searchSystemID = $regionID;
@@ -108,8 +109,26 @@ if($data){
 						}
 					}
 					//printAr($querys);
+					$position = 3000;
+					for ($ind = 0; $ind < sizeof($request -> searchorder); $ind++) {
+						if($searchSystemParentID == $request -> searchorder[$ind] ){
+							$position = ($ind+1)*100;
+						}
+					}
+					
+					$positionRegion = 0;
+					//printAr($request -> regionorder);
+					// если это регион
+					if($searchSystemParentID != $searchSystemID){
+						for ($ind = 0; $ind < sizeof($request -> regionorder[$searchSystemParentID]); $ind++) {
+							if($searchSystemID == $request -> regionorder[$searchSystemParentID][$ind] ){
+								$positionRegion = sizeof($request -> regionorder[$searchSystemParentID]) - $ind;
+							}
+						}
+					}
 					// добавляем поисковую систему к проекту
 					$searchSystemAccess -> addParam("id_seo_search_system", $searchSystemID);
+					$searchSystemAccess -> addParam("position", $position - $positionRegion);
 					$searchSystemAccess -> addSystemAccess();
 					$searchSystemsUsed[] = $searchSystemID;
 				}

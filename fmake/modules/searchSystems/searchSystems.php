@@ -1,6 +1,24 @@
 <?php
-class searchSystems extends fmakeSiteModule{
-		
-	public $table = "seo_search_system";
-	public $idField = "id_seo_search_system";
+interface searchSystems{
+	
+	/**
+	 * 
+	 * позиция сайта 
+	 */
+	function getPosition();
+	/**
+	 * 
+	 * получить позицю с данными сайта, урлом и т.п.
+	 */
+	function getPositionWhithData();
+	/**
+	 * 
+	 * получить данные с определенной страницы
+	 */
+	function getResponse();
+	/**
+	 * 
+	 * получить определенное колличество сайтов по запросу
+	 */
+	function getNumSite();
 }

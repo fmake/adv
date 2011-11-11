@@ -242,8 +242,31 @@ function getRegionPattern(regionSystem,regionNameSystem) {
 	content = $("#region-pattern").html();
 	content = content.replace(/\\\$region_id\\/g,regionSystem);
 	content = content.replace(/\\\$region_name\\/g,regionNameSystem);
+	content = content.replace(/\\\$search_id\\/g,searchId);
 	
 	return content;
+}
+
+//получить регион по патерну
+function getSearchSystemPattern(regionSystem,regionNameSystem) {
+	//alert($("#price-pattern .tr-pattern").html());
+	content = $("#search-system-pattern").html();
+	content = content.replace(/\\\$search_id\\/g,regionSystem);
+	content = content.replace(/\\\$search_name\\/g,regionNameSystem);
+	
+	return content;
+}
+
+function addSearchSystem() {
+	$(".search-systems .search-system-add").before( getSearchSystemPattern($("#search_system_select").val(),$("#search_system_select option:selected").html()) );
+	
+	$("#search_system_select option:selected").remove();
+	if($("#search_system_select option").length == 0){
+		$("#search_system_select").remove();
+		$("#system_search_calculation_button").remove();
+	}
+	$('#dialog_system_search').dialog('close');
+	initSearchSystems();
 }
 
 function addConsecutive(){
@@ -257,6 +280,7 @@ function addConsecutive(){
 		$("#consecutive_calculation_select").remove();
 		$("#consecutive_calculation_boton").remove();
 	}
+	$('#dialog').dialog('close');
 	initRegions();
 }
 
@@ -271,6 +295,7 @@ function addConsecutiveNew(){
 	$(".regions .region-add").before( getRegionPattern( $("#region_lr_new").val(), $("#region_caption_new").val() ) );
 	$("#region_lr_new").val('');
 	$("#region_caption_new").val('');
+	$('#dialog').dialog('close');
 	initRegions();
 }
 //событие на клик регионов
@@ -283,6 +308,35 @@ function initRegions(){
 			return;
 		}
 		initTableData(searchId,regionId);
+		return false;
+	});
+}
+
+//событие на клик поисковой системы
+function initSearchSystems(){
+	$(".search-system A").click(function() {
+		// убираем другие таблицы
+		$(".querys").hide();
+		// убираем другие регионы
+		$(".regions").hide();
+		$(".regions A").removeClass("active")
+		$(".search-system A").removeClass("active");
+		$(this).addClass("active");
+		searchId = parseInt($(this).attr("rel"));
+		if( $("#region_"+searchId).html() ){
+			$("#region_"+searchId).show();
+			regionId = parseInt( $("#region_"+searchId +" A:first").attr('rel') );
+			$("#region_"+searchId +" A:first").addClass("active");
+		}else{
+			regionId = 0;
+		}
+		
+		
+		if(!searchId){
+			return;
+		}
+		initTableData(searchId,regionId);
+		return false;
 	});
 }
 
@@ -329,29 +383,8 @@ function chekAllItems(regionSystem,regionNameSystem){
 
 $(document).ready(function(){	
 
-	$(".search-system A").click(function() {
-		// убираем другие таблицы
-		$(".querys").hide();
-		// убираем другие регионы
-		$(".regions").hide();
-		$(".regions A").removeClass("active")
-		$(".search-system A").removeClass("active");
-		$(this).addClass("active");
-		searchId = parseInt($(this).attr("rel"));
-		if( $("#region_"+searchId).html() ){
-			$("#region_"+searchId).show();
-			regionId = parseInt( $("#region_"+searchId +" A:first").attr('rel') );
-			$("#region_"+searchId +" A:first").addClass("active");
-		}else{
-			regionId = 0;
-		}
-		
-		
-		if(!searchId){
-			return;
-		}
-		initTableData(searchId,regionId);
-	});
+	// событие на клик поисковой системы
+	initSearchSystems();
 	
 	// событие на клик регионов
 	initRegions();
@@ -362,10 +395,38 @@ $(document).ready(function(){
 		width: 400,
 		minHeight: 50
 	});
+	// Dialog			
+	$('#dialog_system_search').dialog({
+		autoOpen: false,
+		width: 300,
+		minHeight: 40
+	});
+	
 	
 	$('#region-link').click(function(){
 		$('#dialog').dialog('open');
 		return false;
+	});
+	
+	$('#system-search-link').click(function(){
+		$('#dialog_system_search').dialog('open');
+		return false;
+	});
+	
+	$( ".search-systems" ).sortable({
+		//connectWith: ".search-system",
+		cursor: 'crosshair',
+		helper: 'clone',
+		items: 'div.search-system',
+		cancel: 'button'
+		//disabled: true
+	});
+	$( ".regions" ).sortable({
+		cursor: 'crosshair',
+		helper: 'clone',
+		items:  'div.region',
+		cancel: 'button'
+		//disabled: true
 	});
 	
 });

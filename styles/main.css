@@ -200,14 +200,24 @@ button.green div div
 	{width: 180px;padding: 2px;}
 	
 /*-------------------------------EDIT PROJECT----------------------------*/
+.dop-params-link
+	{text-decoration: none;border-bottom: 1px dashed #2687AD;}
 .search-systems
 	{width: 100%;height: 20px;padding-left: 10px;}
 .search-systems .search-system, .search-systems div
 	{float: left;margin-right: 10px;}
 .search-systems .search-system A
 	{font-size: 16px;}
+.search-system-add 
+	{margin-left: 20px;}	
+.search-systems .search-system-add A
+	{font-size: 12px;}
 .search-systems .search-system A.active
 	{text-decoration: none;color: #000000;}
+.search-systems .search-system-add A
+	{color: #000000;}	
+.search-systems .search-system-add A img
+	{float: left;margin: 0 5px 0 0;}
 .regions
 	{margin: 10px 0;padding-left: 10px;width: 100%;height: 20px;display: none;}		
 .regions div.region
