@@ -4,23 +4,46 @@
 [[block left]]
 	<h4>Сайты</h4>
 	<ul>
-		<li><a href="{action_url}">Активные</a></li>
-		<li><a href="{action_url}">Архив</a></li>
+		<li><a [[if request.getFilter('active') == 1]]class="active"[[endif]] href="{action_url}?{request.writeFilter('active')}&filter[active]=1">Активные</a></li>
+		<li><a [[if request.getFilter('active') == 0]]class="active"[[endif]] href="{action_url}?{request.writeFilter('active')}&filter[active]=0">Архив</a></li>
 	</ul>
 	<h4>Услуга</h4>
 	<ul>
-		<li><a href="{action_url}">Продвижение</a></li>
-		<li><a href="{action_url}">Контекст</a></li>
+		<li><a [[if not request.getFilter('is_seo') and not request.getFilter('is_context')]]class="active"[[endif]] href="{action_url}?{request.writeFilter('is_seo','is_context')}">Все</a></li>
+		<li><a [[if request.getFilter('is_seo') == 1]]class="active"[[endif]] href="{action_url}?{request.writeFilter('is_seo','is_context')}&filter[is_seo]=1">Продвижение</a></li>
+		<li><a [[if request.getFilter('is_context') == 1]]class="active"[[endif]] href="{action_url}?{request.writeFilter('is_seo','is_context')}&filter[is_context]=1">Контекст</a></li>
 	</ul>
 	<h4>Группировка</h4>
 	<ul>
-		<li><a href="{action_url}">По названиям</a></li>
-		<li><a href="{action_url}">По клиентам</a></li>
-		<li><a href="{action_url}">По оптимизаторам</a></li>
-		<li><a href="{action_url}">По менеджерам</a></li>
+		<li><a [[if request.getFilter('groupby') == 0]]class="active"[[endif]] href="{action_url}?{request.writeFilter('groupby')}">По названиям</a></li>
+		<li><a [[if request.getFilter('groupby') == ID_CLIENT]]class="active"[[endif]] href="{action_url}?{request.writeFilter('groupby')}&filter[groupby]={ID_CLIENT}">По клиентам</a></li>
+		<li><a [[if request.getFilter('groupby') == ID_OPTIMISATOR]]class="active"[[endif]] href="{action_url}?{request.writeFilter('groupby')}&filter[groupby]={ID_OPTIMISATOR}">По оптимизаторам</a></li>
+		<li><a [[if request.getFilter('groupby') == ID_AKKAUNT]]class="active"[[endif]] href="{action_url}?{request.writeFilter('groupby')}&filter[groupby]={ID_AKKAUNT}">По менеджерам</a></li>
 	</ul>
 	<h4>Поиск сайта</h4>
-	<input type="text" name="project" class="project-search" style="width:180px" />
+	<input type="text" name="project" class="project-search" style="width:180px" id="project" />
+	[[raw]]
+	<script>
+	function checkSiteAutocomplite(id){
+		$(".edit-table tbody tr").removeClass("check-autocomplite");
+		$(".edit-table tbody tr#site_tr"+id).addClass("check-autocomplite");
+		window.location = "#site"+id;
+	}
+	
+	$(function() {
+		$( "#project" ).autocomplete({
+	[[endraw]]
+			source: "{action_url}?action=getsite&{request.writeFilter('')|raw}",
+	[[raw]]		
+			autoFocus: true,
+			minLength: 2,
+			select: function( event, ui ) {
+				checkSiteAutocomplite(ui.item.id);
+			}
+		});
+	});
+	</script>
+	[[endraw]]
 [[endblock]]
 
 [[block content]]
@@ -46,14 +69,22 @@
 					[[endfor]]
 				</tr>
 			</thead>
+			<tfoot>
+			    <tr>
+			      [[ for key,fild in filds ]]
+						<td [[if fild['align'] ]]align="{fild['align']}"[[endif]]>{foot[key]}</td>
+					[[endfor]]
+			    </tr>
+			  </tfoot>
 			<tbody>
 				[[ for item in items ]]
-					<tr [[if loop.index is odd]]class="odd"[[endif]]>
+					<tr [[if loop.index is odd]]class="odd"[[endif]] id="site_tr{item[itemObj.idField]}">
 						
 						[[ for key,fild in filds ]]
 							[[ if key != 'actions' ]]
 								<td [[if fild['align'] ]]align="{fild['align']}"[[endif]]>
 									[[ if loop.first ]]
+										<a name="site{item[itemObj.idField]}" ></a>
 										<a href="{action_url}?action=edit&id={item[itemObj.idField]}" class="link-icon f12" >{item[key]}</a>
 									[[else]]
 										{item[key]}

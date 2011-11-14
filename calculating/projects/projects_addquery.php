@@ -3,11 +3,19 @@
  * добавление запросов из таблицы 
  */
 //printAr($_REQUEST);
+//printAr($_FILES);
+$excel = new ExcelParser();
 $projectSeoQuery -> addParam("id_project", $itemObj -> id);
 $searchSystemExs -> addParam("id_project", $itemObj -> id);
 $searchSystemAccess -> addParam("id_project", $itemObj -> id);
 $monthDay = 30;
 $data = $request -> data;
+//exit;
+/*
+$excel = new ExcelParser();
+$excel->file = $file['tmp_name'];
+$arr = $excel->getFileInArray();
+*/
 if($data){
 	$maxSeoPay = 0;
 	foreach ($data as $searchSystemID => $datainner){
@@ -15,6 +23,28 @@ if($data){
 		foreach ($datainner as $regionID => $datainner){
 				if($regionID){
 					$searchSystemID = $regionID;
+				}
+				//echo "{$searchSystemParentID} ----  {$regionID}";
+				// если загрузили файл
+				if($_FILES['file']['name'][$searchSystemParentID][$regionID] && !$_FILES['file']['error'][$searchSystemParentID][$regionID]){
+					//echo "qqq";
+					$excel->file = $_FILES['file']['tmp_name'][$searchSystemParentID][$regionID];
+					$arr = $excel->getFileInArray();
+					$datainner['place'] = $excel->getExt($arr);
+					if(!$searchSystemExs -> valid($datainner['place'])){
+						echo "Правила заполнены неверно";
+						continue;
+					}
+					$index = sizeof($datainner['place']);
+					for ($i = 0; $i < $index; $i++) {	
+						$tmpexs = $searchSystemExs -> getExsProjectSystemFromTo($itemObj -> id,$searchSystemID,$datainner['place'][$i]['from'],$datainner['place'][$i]['to']);
+						if($tmpexs){
+							$datainner['place'][$i]['id'] = $tmpexs[$searchSystemExs -> idField];
+						}
+					}
+					
+					$datainner['querys'] = ( $excel->getQuery($arr) );
+					$datainner['price'] = ( $excel->getPrice($arr,$datainner['place']) );
 				}
 				//echo $searchSystemID;
 				// добавляем запросы
@@ -46,10 +76,15 @@ if($data){
 							$projectSeoQuery -> update();
 							$querys[$i] = $projectSeoQuery -> getInfo();
 						}else if($query = trim($datainner['querys'][$i]['query']) ){
-							$projectSeoQuery -> addParam("id_seo_search_system", $searchSystemID);
-							$projectSeoQuery -> addParam("query", $query);
-							$projectSeoQuery -> newItem();
-							$querys[$i] = $projectSeoQuery -> getInfo();
+							// необходимо проверить может такой запрос уже существует
+							if( ($tmpQuery = $projectSeoQuery -> getItemProjectSystemQuery($itemObj -> id,$searchSystemID, $query)) ){
+								$querys[$i] = $tmpQuery;
+							}else{
+								$projectSeoQuery -> addParam("id_seo_search_system", $searchSystemID);
+								$projectSeoQuery -> addParam("query", $query);
+								$projectSeoQuery -> newItem();
+								$querys[$i] = $projectSeoQuery -> getInfo();
+							}
 						}else{
 							break;
 						}

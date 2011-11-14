@@ -31,6 +31,10 @@ class requestController{
 		return $_REQUEST[$this -> filter][$name];
 	}
 	
+	function setFilter($name,$val){
+		$_REQUEST[$this -> filter][$name] = $val;
+	}
+	
 	function getFilterArr(){
 		$filter = $_REQUEST[$this -> filter];
 		
@@ -46,7 +50,7 @@ class requestController{
 		if($filter){
 			foreach ($filter AS $name => $value)
 			{
-				if($value == false){
+				if($value === false){
 					unset($filter[$name]);
 				}
 			}

@@ -141,6 +141,9 @@ h3 { font: 14px/20px 'Arial'; color: #000000;}
 	{position:absolute;left:0;top:0;height:100%;width: 190px;padding: 15px 20px;}
 #wrapper #left ul li
 	{padding: 0 0 0 15px;}
+#wrapper #left ul li A.active
+	{color: #313131;font-size: 12px;text-decoration: none;}
+	
 #wrapper  #right
 	{position:static;margin:0 0 0 230px;padding: 15px;}
 #wrapper #center
@@ -171,8 +174,12 @@ button.green div div
 	{background: #9e9e9e;font-weight: bold;color: #ffffff;padding: 10px 0 10px 15px;}
 #wrapper .edit-table tbody td
 	{padding: 10px 0 10px 15px;}
+#wrapper .edit-table tfoot td
+	{background: #9e9e9e;font-weight: bold;color: #ffffff;padding: 10px 0 10px 15px;}	
 #wrapper .edit-table tbody tr.odd td
 	{background: #f4f4f4;}	
+#wrapper .edit-table tbody tr.check-autocomplite td
+	{background: #FFFFCC;}	
 #wrapper .edit-table tbody td .link-icon
 	{margin: 0 5px 0 0;}
 

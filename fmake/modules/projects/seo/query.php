@@ -15,6 +15,19 @@ class projects_seo_query extends fmakeCore{
 		return ($this -> getWhere($where));
 	}
 	
+	/*
+	* получаем запись по проекту системе и запросу
+	*/
+	function getItemProjectSystemQuery($id_project,$id_seo_search_system,$query, $active = 1){
+		$where[] = "`id_project` = '{$id_project}'";
+		$where[] = "`id_seo_search_system` = '{$id_seo_search_system}'";
+		$where[] = "`query` = '{$query}'";
+		if($active)
+			$where[] = "`active` = '{$active}'";
+		$query = ($this -> getWhere($where));
+		return $query[0];
+	}
+	
 	/**
 	*
 	* удаляем все запросы проекта

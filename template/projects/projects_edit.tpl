@@ -3,7 +3,7 @@
 
 [[ block content ]]
 [[ include TEMPLATE_PATH ~ "projects/project_query_patern.tpl"]]
-<link type="text/css" href="/styles/redmond/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+
 <style>
 	[[ raw ]]
 		.edit-GroupTbl
@@ -17,8 +17,7 @@
 	[[endraw]]
 </style>	
 
-<script language="javascript" type="text/javascript" src="/js/jquery-ui-1.8.16.custom.min.js"></script>
-<script language="javascript" type="text/javascript" src="/js/jquery.ui.datepicker-ru.js"></script>
+
 [[raw]]
 <script>
 	$(function() {
@@ -39,7 +38,7 @@
 
 	<div id="main-container">
 		{form|raw}
-		<form style="margin:0px;" action="{action_url}" method="POST" name="editformquery" id="editformquery">
+		<form style="margin:0px;" action="{action_url}" method="POST" name="editformquery" id="editformquery" enctype="multipart/form-data">
 		<input type="hidden" value="true" name="editformSubmitIndicator">
 		<table cellspacing="0" cellpadding="2" border="0" class="edit-Table edit-GroupTbl edit-GroupTbl-bot">
 			<tr><td class="edit-GroupTitleCell">Запросы и бюджет</td></tr>
@@ -97,10 +96,10 @@
 					<table cellspacing="0" cellpadding="2" border="0" align="left">
 					<tbody><tr>
 						<td>
-							<input type="checkbox" value="1"  name="inmenu" id="posl-ras">
+							<input title="Премия будет рассчитываться по порядку поисковых систем, перетащите их в нужном порядке" type="checkbox" value="1" name="consecutive_calculation" id="posl-ras" [[if item.consecutive_calculation]]checked[[endif]]>
 						</td>
 						<td>
-							<label for="posl-ras">последовательный расчет</label>
+							<label title="Премия будет рассчитываться по порядку поисковых систем, перетащите их в нужном порядке" for="posl-ras">последовательный расчет</label>
 						</td>
 					</tr>
 					</tbody></table>

@@ -1,5 +1,6 @@
 <?php
 
+
 function initMainForm($itemObj,$context = array()){
 		$usersObj = new fmakeSiteModule_users();
 	
@@ -254,6 +255,19 @@ $globalTemplateParam->set('xajax',$xajax);
 
 
 switch ($request -> action){
+	case 'getsite':
+		include 'includes/json_function.php';
+		$url = strtolower($request -> getEscape('term'));
+		$request -> setFilter('url', $url);
+		$items = $itemObj -> getProjectsWithSeoParams("{$itemObj -> table}.{$itemObj -> idField}, url",$request -> getFilterArr());
+		
+		$result = array();
+		foreach ($items as $key=>$value) {
+			array_push($result, array("id"=>$value[$itemObj -> idField], "label"=>$value['url'], "value" => strip_tags($value['url'])));
+		}
+		echo array_to_json($result);
+		exit;
+	break;
 	case 'delete':
 		$myForm2 = new phpObjectForms(array("name" => 'deleteform', "action" => $action_url, "display_outer_table" => false, "table_align" => false,
 		    "table_width" => '600',"enable_js_validation" => true,"hold_output" => true,"css_class_prefix" => "edit-"
@@ -298,6 +312,11 @@ switch ($request -> action){
 				$projectSeo -> addParam("sape_money", $request -> getEscape('sape_money'));
 			if(isset($_REQUEST['abonement']))
 				$projectSeo -> addParam("abonement", $request -> getEscape('abonement'));
+			if(isset($_REQUEST['consecutive_calculation']))
+				$projectSeo -> addParam("consecutive_calculation", 1);
+			else 
+				$projectSeo -> addParam("consecutive_calculation", "0");
+			
 			$projectSeo -> update();
 			
 			$projectAcess -> addParam("id_project", $itemObj -> id);
@@ -326,7 +345,7 @@ switch ($request -> action){
 			}
 			
 		}
-		action_redir($action_url);
+		action_redir($action_url."?action=edit&id={$itemObj -> id}");
 		break; 
 	case 'add':
 		//printAr($_REQUEST);
@@ -345,6 +364,10 @@ switch ($request -> action){
 			$projectSeo -> addParam("id_sape", $request -> getEscape('id_sape'));
 			$projectSeo -> addParam("sape_money", $request -> getEscape('sape_money'));
 			$projectSeo -> addParam("abonement", $request -> getEscape('abonement'));
+			if(isset($_REQUEST['consecutive_calculation']))
+				$projectSeo -> addParam("consecutive_calculation", 1);
+			else
+				$projectSeo -> addParam("consecutive_calculation", "0");
 			$projectSeo -> newItem();
 			
 			
@@ -484,6 +507,9 @@ switch ($request -> action){
 		$modul -> template = "projects/projects_edit.tpl";
 	break;
 	default:
+		if(!isset($_REQUEST[$request->filter]['active'])){
+			$request -> setFilter("active", 1);
+		}
 		$filds = array(
 					 'url'=>array( 'name' => 'Адрес', 'col' => false),
 					 'max_seo_pay'=>array( 'name' => 'Макс. Бюджет', 'col' => "100px",'align' => "right"),
@@ -493,9 +519,15 @@ switch ($request -> action){
 		$actions = array('delete', 'edit');
 		$globalTemplateParam->set('actions',$actions);
 		$globalTemplateParam->set('filds',$filds);
-		
-		$items = $itemObj -> getProjectsWithSeoParams();
+		$globalTemplateParam->setNonPointer('ID_CLIENT',ID_CLIENT);
+		$globalTemplateParam->setNonPointer('ID_OPTIMISATOR',ID_OPTIMISATOR);
+		$globalTemplateParam->setNonPointer('ID_AKKAUNT',ID_AKKAUNT);
+		$items = $itemObj -> getProjectsWithSeoParams("*",$request -> getFilterArr());
+		$countPrice = $itemObj -> getProjectsWithSeoParams("SUM(`max_seo_pay`) as sum",$request -> getFilterArr());
+		$foot['max_seo_pay'] = $countPrice[0]['sum'];
+		//printAr($foot);
 		$globalTemplateParam->set('items',$items);
+		$globalTemplateParam->set('foot',$foot);
 		$modul->template = "projects/projects.tpl";
 	break;
 }

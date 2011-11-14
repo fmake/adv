@@ -6,12 +6,47 @@ class projects_seo_searchSystemExs extends fmakeCore{
 	public $order = "`from`";
 	public $order_as = ASC;
 	/*
-	* получаем роли для проекта
+	* получаем правила для проекта
 	*/
 	function getExsProjectSystem($id_project,$id_seo_search_system){
 		$where[] = "`id_project` = '{$id_project}'";
 		$where[] = "`id_seo_search_system` = '{$id_seo_search_system}'";
 		return ($this -> getWhere($where));
+	}
+	
+	/*
+	* проверяем есть ли такое правило для данного проекта и поисковой системы
+	*/
+	function getExsProjectSystemFromTo($id_project,$id_seo_search_system,$from,$to){
+		$where[] = "`id_project` = '{$id_project}'";
+		$where[] = "`id_seo_search_system` = '{$id_seo_search_system}'";
+		$where[] = "`from` = '{$from}'";
+		$where[] = "`to` = '{$to}'";
+		$exs = ($this -> getWhere($where));
+		return $exs[0];
+	}
+	
+	/**
+	 * 
+	 * проверка правил на валидность
+	 */
+	function valid($arr){
+	
+		for($i=0;$i < sizeof($arr) ;$i++){
+			if(!$arr[$i]['from'] && !$arr[$i]['to']) break;
+	
+			if(!$arr[$i]['from'] || !$arr[$i]['to']) return false;
+			if($arr[$i]['from'] > $arr[$i]['to']) return false;
+				
+			if($arr[$i+1]['from'] && $arr[$i]['to'] > $arr[$i+1]['from']) return false;
+				
+			if($arr[$i+1]['from'] && ($arr[$i]['to'] + 1) != $arr[$i+1]['from']) return false;
+	
+	
+		}
+	
+		return true;
+	
 	}
 	
 	function deleteWhereNotIn($id_project,$id_seo_search_system, $arr){

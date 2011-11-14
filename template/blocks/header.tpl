@@ -10,6 +10,9 @@
 	<script language="javascript" type="text/javascript" src="/js/jquery-1.6.1.min.js"></script>
 	<script language="javascript" type="text/javascript" src="/js/scripts.js"></script>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	<link type="text/css" href="/styles/redmond/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+	<script language="javascript" type="text/javascript" src="/js/jquery-ui-1.8.16.custom.min.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/jquery.ui.datepicker-ru.js"></script>
 	[[if xajax]]
 		[[phpcode`
 			$context['xajax']->printJavascript();
