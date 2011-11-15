@@ -261,9 +261,18 @@ switch ($request -> action){
 		$request -> setFilter('url', $url);
 		$items = $itemObj -> getProjectsWithSeoParams("{$itemObj -> table}.{$itemObj -> idField}, url",$request -> getFilterArr());
 		
+		if($role = $request -> getFilter('groupby')){
+			$index = sizeof($items);
+			for ($i = 0; $i < $index; $i++) {
+				$rls = $projectAcess -> getProjectRols($items[$i][$itemObj -> idField]);
+				$items[$i]['id_user'] = $rls[$role]['id_user'];
+			}
+			
+		}
+		
 		$result = array();
 		foreach ($items as $key=>$value) {
-			array_push($result, array("id"=>$value[$itemObj -> idField], "label"=>$value['url'], "value" => strip_tags($value['url'])));
+			array_push($result, array("id"=>$value[$itemObj -> idField],"user"=>$value['id_user'], "label"=>$value['url'], "value" => strip_tags($value['url'])));
 		}
 		echo array_to_json($result);
 		exit;
@@ -522,13 +531,33 @@ switch ($request -> action){
 		$globalTemplateParam->setNonPointer('ID_CLIENT',ID_CLIENT);
 		$globalTemplateParam->setNonPointer('ID_OPTIMISATOR',ID_OPTIMISATOR);
 		$globalTemplateParam->setNonPointer('ID_AKKAUNT',ID_AKKAUNT);
-		$items = $itemObj -> getProjectsWithSeoParams("*",$request -> getFilterArr());
-		$countPrice = $itemObj -> getProjectsWithSeoParams("SUM(`max_seo_pay`) as sum",$request -> getFilterArr());
-		$foot['max_seo_pay'] = $countPrice[0]['sum'];
-		//printAr($foot);
-		$globalTemplateParam->set('items',$items);
-		$globalTemplateParam->set('foot',$foot);
-		$modul->template = "projects/projects.tpl";
+		
+		if($role = $request -> getFilter('groupby')){
+			$items = $user -> getByRole(intval($role));
+			$index = sizeof($items);
+			for ($i = 0; $i < $index; $i++) {
+				$request -> setFilter('id_user', $items[$i][$user -> idField]);
+				$items[$i]['projects'] = $itemObj -> getProjectsWithSeoParamsWithAccessUser("*",$request -> getFilterArr());
+				$countPrice = $itemObj -> getProjectsWithSeoParamsWithAccessUser("SUM(`max_seo_pay`) as sum",$request -> getFilterArr());
+				$items[$i]['max_seo_pay'] = $countPrice[0]['sum'];
+				$request -> setFilter('id_user', false);
+				if(!$items[$i]['projects']){
+					unset($items[$i]);
+					continue;	
+				}
+				
+			}
+			$globalTemplateParam->set('items',$items);
+			$modul->template = "projects/project_groupby.tpl";
+		}else{
+			$items = $itemObj -> getProjectsWithSeoParams("*",$request -> getFilterArr());
+			$countPrice = $itemObj -> getProjectsWithSeoParams("SUM(`max_seo_pay`) as sum",$request -> getFilterArr());
+			$foot['max_seo_pay'] = $countPrice[0]['sum'];
+			//printAr($foot);
+			$globalTemplateParam->set('items',$items);
+			$globalTemplateParam->set('foot',$foot);
+			$modul->template = "projects/projects.tpl";
+		}
 	break;
 }
 

@@ -24,9 +24,15 @@
 	<input type="text" name="project" class="project-search" style="width:180px" id="project" />
 	[[raw]]
 	<script>
-	function checkSiteAutocomplite(id){
+	function checkSiteAutocomplite(id,user){
 		$(".edit-table tbody tr").removeClass("check-autocomplite");
 		$(".edit-table tbody tr#site_tr"+id).addClass("check-autocomplite");
+		
+		if(user){
+			$(".table-user").hide();
+			$("#table-user-"+user).show();
+		}
+		
 		window.location = "#site"+id;
 	}
 	
@@ -38,7 +44,7 @@
 			autoFocus: true,
 			minLength: 2,
 			select: function( event, ui ) {
-				checkSiteAutocomplite(ui.item.id);
+				checkSiteAutocomplite(ui.item.id,ui.item.user);
 			}
 		});
 	});
