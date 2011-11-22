@@ -18,6 +18,7 @@
 </style>	
 
 
+<script language="javascript" type="text/javascript" src="/js/scripts_projectedit.js"></script>
 [[raw]]
 <script>
 	$(function() {

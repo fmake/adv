@@ -54,7 +54,7 @@ class projects_accessRole extends fmakeCore{
 			$this -> newItem();
 		}
 	}
-	/*
+	/**
 	 * получаем роли для проекта
 	 */
 	function getProjectRols($id_project){
@@ -66,6 +66,19 @@ class projects_accessRole extends fmakeCore{
 		}
 		return $rols;
 	}
+	
+	/**
+	 * 
+	 * Enter description here ...
+	 * @param unknown_type $id_project
+	 */
+	function getProjectByRoleUser($id_role,$id_user){
+		$where[] = "`id_role` = '{$id_role}'";
+		$where[] = "`id_user` = '{$id_user}'";
+		$item =  ($this -> getWhere($where));
+		return $item[0];
+	}	
+	
 	
 	/**
 	*

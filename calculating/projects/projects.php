@@ -45,7 +45,7 @@ function initMainForm($itemObj,$context = array()){
 		
 		$clientsArr = $usersObj -> getByRole(ID_CLIENT,true);
 		for ($i = 0; $i < sizeof($clientsArr); $i++) {
-			$clients[$clientsArr[$i][ $usersObj -> idField ]] = $clientsArr[$i]['name'];
+			$clients[$clientsArr[$i][ $usersObj -> idField ]] = $clientsArr[$i]['company'];
 		}
 		
 		$layoutForm -> addElement(new FPSelect(array(
