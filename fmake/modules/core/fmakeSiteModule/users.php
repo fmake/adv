@@ -238,6 +238,15 @@ class fmakeSiteModule_users extends fmakeCore{
 		$project = new projects();
 		$projectAccess = new projects_accessRole();
 		$select = $this->dataBase->SelectFromDB( __LINE__);
+		
+		if($filds){
+			if(trim($filds) == "*"){
+				$filds = ("DISTINCT `$this->table`.id_user, name, company ");
+			}else {
+				$filds = ("DISTINCT `$this->table`.id_user, ".$filds);
+			}
+		}
+		
 		if($filter){
 			foreach ($filter as $name => $value){
 				$fltrstr .= ' AND '.$value;
@@ -258,7 +267,7 @@ class fmakeSiteModule_users extends fmakeCore{
 		";
 
 		return $select -> stringQueryDB($query);
-	}	
+	}		
 	
 	
 }
