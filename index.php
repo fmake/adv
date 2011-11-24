@@ -27,4 +27,4 @@ $globalTemplateParam->set('menu',$menu);
 $template = $twig->loadTemplate($modul->template);
 $template->display($globalTemplateParam->get());
 
-// test
+// testing
