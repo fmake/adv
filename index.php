@@ -6,7 +6,7 @@ ini_set('display_errors',1);
 error_reporting(7);
 session_start();
 
-
+// add file FController.php
 require('./fmake/FController.php');
 
 
