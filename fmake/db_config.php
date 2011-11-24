@@ -7,7 +7,7 @@
 	$dataBase = new dataBaseController(
 						$_SERVER["PHP_SELF"],
 						"root",//пользователь
-						"sqlroot",//пароль
+						"",//пароль
 						"adv",//имя базы 
 						"localhost",//сервер
 						"",
