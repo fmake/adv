@@ -9,7 +9,7 @@ var lasturl="";	//here we store the current URL hash
 			loadUrl(hash);
 		}
 	}
-	
+//l	
 function loadUrl(url){
 	url = (url.replace('#tab',''));
 	if(url)
