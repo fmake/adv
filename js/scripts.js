@@ -15,10 +15,7 @@ function loadUrl(url){
 	if(url)
 		clickTab( false, parseInt(url) );
 }
-// new commen
-//new new new neWt
 
-//asdasdasdasdasdasdasdas
 //работа с табами
 var tabs = "#tabs .item";
 var tabscontent = ".tab-content";
