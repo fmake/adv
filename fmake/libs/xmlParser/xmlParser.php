@@ -29,7 +29,7 @@ class xmlParser{
 	            $arrData[$index] = $value;
 	        }
 	    }
-	    return $arrData;
+	    return $arrData ? $arrData : false;
 	}
 	
 }

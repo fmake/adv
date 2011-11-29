@@ -117,7 +117,7 @@ abstract class cURL_multi {
         while (count($this->sessions)) {
             $this->checkSessions();
         }
-		echo "--------------wait--------------------<br />";
+		//echo "--------------wait--------------------<br />";
     }
 
     /**

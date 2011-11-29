@@ -75,7 +75,7 @@ abstract class  searchSystems{
 				if ($this->cmpUrls($this->host, $ans[$i])){
 					$this->url = $ans[$i];
 					$pos =  ($page*$this->groups)+$i+1;
-					return array($pos,$this->url);
+					return array('pos' => $pos,'url' => $this->url);
 				}
 			}
 			$page++;

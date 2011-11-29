@@ -13,6 +13,10 @@ class projects_seo_position extends fmakeCore{
 	* Создание нового объекта, с использованием массива params
 	*/
 	function newItem(){
+		if($this -> getPositionByQueryDate($this -> params['id_seo_query'],$this -> params['date'])){
+			$this->update();
+			return;
+		}
 		$insert = $this->dataBase->InsertInToDB(__LINE__);
 		$insert	-> addTable($this->table);
 		$this->getFilds();
@@ -59,10 +63,13 @@ class projects_seo_position extends fmakeCore{
 		return $arr[0];
 	}
 	
-	function test($url, $content, $info,$date){
-		$arr = explode(";", $content);
-		print ( "[$url]  $arr[0] ".($arr[1])."<br />" );
-		echo "date {$date} <br />";
+	function setPosition($url, $content, $info, $date){
+		$xml = new xmlParser();
+		$ans = $xml -> xmlToArray($content);
+		$this -> addParam('id_seo_query', $ans['query']);
+		$this -> addParam('date', $date);
+		$this -> addParam('pos', $ans['pos'] ? $ans['pos'] : 0);
+		$this -> newItem();
 	}
 	
 	/**
@@ -71,7 +78,7 @@ class projects_seo_position extends fmakeCore{
 	function checkPosition($id_seo_query,$checkIfExist = false){
 		$pos = $this -> getPositionByQueryDate($id_seo_query);
 		if($pos && !$checkIfExist){
-			return array($pos[0]);
+			return array('pos' => $pos['pos'],'id_seo_query' => $id_seo_query);
 		}
 		$seoQuery = new projects_seo_query($id_seo_query);
 		$seoSearchSystem = new projects_seo_searchSystem();
@@ -87,7 +94,9 @@ class projects_seo_position extends fmakeCore{
 		$class = searchSystems::$parentClassName.'_'.$system['class'];
 		$searchSystem = new $class;
 		$searchSystem -> setData($query['query'], $project['url'], 213);
-		return $searchSystem -> getPositionWhithData();
+		$arrPos = $searchSystem -> getPositionWhithData();
+		$arrPos['id_seo_query'] = $id_seo_query;
+		return $arrPos;
 	}
 	
 	/**
@@ -96,8 +105,9 @@ class projects_seo_position extends fmakeCore{
 	function getXml($data){
 		$xml = '<?xml version="1.0" encoding="utf-8"?>
 				<advposition>
-					<pos>'.$data[0].'</pos>
-					<url>'.htmlentities($data[1]).'</url>
+					<pos>'.$data['pos'].'</pos>
+					<url>'.htmlentities($data['url']).'</url>
+					<query>'.($data['id_seo_query']).'</query>
 				</advposition>
 		';
 		return $xml;
@@ -117,18 +127,18 @@ class projects_seo_position extends fmakeCore{
 		$querysSize = sizeof($querys);
 		$sizeQ = ceil($querysSize/$parallelCheck);
 		$mc = new cURL_mymulti();
-		$mc -> addCallBack(array(new self, 'test'),strtotime("today"));
-		$mc->setMaxSessions(20); // limit 2 parallel sessions (by default 10)
+		$mc -> addCallBack(array(new self, 'setPosition'),strtotime("today"));
+		$mc->setMaxSessions(10); // limit 2 parallel sessions (by default 10)
 		//$mc->setMaxSize(10240); // limit 10 Kb per session (by default 10 Mb)
 		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&id_seo_query=';
 		
 		for ($i = 0; $i < $sizeQ; $i++) {
 			for ($j = 0; $j < $parallelCheck; $j++) {
 				if(!$querys[$j+$parallelCheck*$i][$seoQuery->idField])continue;
-				$mc->addUrl($url_query.($i+$j*20));
+				$mc->addUrl($url_query.($querys[$i+$j*$parallelCheck][$seoQuery -> idField]));
 			}
 			$mc->wait();
-			echo "wait<br />";
+			//echo "wait<br />";
 		}
 	}
 	
