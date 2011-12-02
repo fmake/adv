@@ -3,6 +3,7 @@ class projects_seo_query extends fmakeCore{
 		
 	public $table = "projects_seo_query";
 	public $idField = "id_seo_query";
+	public $order = "query";
 
 	/**
 	* запросы для проекта
