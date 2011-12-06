@@ -4,7 +4,7 @@ class projects_seo_position extends fmakeCore{
 	public $table = "projects_seo_query_position";
 	public $idField = array("id_seo_query","date");
 	public $order = "date";
-	public $order_as = DESC;
+	public $order_as = ASC;
 
 	
 	
@@ -49,6 +49,16 @@ class projects_seo_position extends fmakeCore{
 	}	
 	
 	/**
+	* получить позиции по запросу в промежутке
+	*/
+	function getPositionsByQueryDate( $id_seo_query, $date_start,$date_end){
+		$where[] = "`id_seo_query` = '{$id_seo_query}'";
+		$where[] = "`date` >= '{$date_start}'";
+		$where[] = "`date` <= '{$date_end}'";
+		return ($this -> getWhere($where));
+	}
+	
+	/**
 	* получить позицию по запросу и дате
 	*/
 	function getPositionByQueryDate( $id_seo_query, $date = false){
@@ -57,8 +67,6 @@ class projects_seo_position extends fmakeCore{
 			$date = strtotime("today");
 		}
 		$where[] = "`date` = '{$date}'";
-		if($active)
-			$where[] = "`active` = '{$active}'";
 		$arr = ($this -> getWhere($where));
 		return $arr[0];
 	}

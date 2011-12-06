@@ -32,6 +32,14 @@ abstract class  searchSystems{
 	
 	/**
 	*
+	*  ждем пока не закончится время использования
+	*/
+	public function sleepTotime($time){
+		while (time()< $time){usleep(100000);}
+	}
+	
+	/**
+	*
 	* перекодировка для сайтов на русском
 	*/
 	public function idnaConvert($a){

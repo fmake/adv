@@ -9,6 +9,7 @@ class searchSystems_Mail extends searchSystems{
 	public $url			= '';
 	private $curl		= false;
 	public $depth 		= 100;
+	public $sleepTime	= 5;
 	
 	function __construct($query = false, $host  = false){
 		$this -> setData($query, $host,$region);
@@ -30,7 +31,8 @@ class searchSystems_Mail extends searchSystems{
 	function setInterfaceCurl(){
 		$ethernetInterface = new ethernetInterface();
 		$proxy = $ethernetInterface -> getProxyByGoogle();
-		$this -> curl ->set_opt( CURLOPT_PROXY, $proxy  );
+		$this -> curl -> set_opt( CURLOPT_PROXY, $proxy['proxy']  );
+		$this -> sleepTotime($proxy['last_used'] + $this->sleepTime);
 		return $proxy;
 	}
 	

@@ -22,7 +22,7 @@ class ethernetInterface {
 		return $this -> getProxyObj() -> getByYandex ($active);
 	}
 	
-	function getProxyByGoogle($active = true){
+	function getProxyByGoogle($active = false){
 		return $this -> getProxyObj() -> getByGoogle ($active);
 	}
 	

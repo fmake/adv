@@ -34,9 +34,14 @@ class ethernetInterface_Proxy extends fmakeCore{
 		if($active)
 			$select -> addWhere("active='1'");
 		
-		$arr = $select -> addFrom($this->table) -> addOrder($this->order, ASC)-> queryDB();
-		$num = rand(0,count($arr)-1);
-		return $arr[$num]['proxy'];
+		$arr = $select -> addFrom($this->table) -> addOrder("last_used", ASC)-> queryDB();
+		
+		// выставляем время использования
+		$this->setId($arr[0]['id']);
+		$this->addParam("last_used", time());
+		$this -> update();
+		
+		return $arr[0];
 	}
 	
 	function setDefault(){

@@ -8,7 +8,7 @@ class searchSystems_Google extends searchSystems{
 	public $url			= '';
 	private $curl		= false;
 	public $depth 		= 100;
-	
+	public $sleepTime	= 2;
 	
 	public function __construct($query = false, $host = false){
 		$this -> setData($query, $host);
@@ -29,7 +29,8 @@ class searchSystems_Google extends searchSystems{
 	function setInterfaceCurl(){
 		$ethernetInterface = new ethernetInterface();
 		$proxy = $ethernetInterface -> getProxyByGoogle();
-		$this -> curl ->set_opt( CURLOPT_PROXY, $proxy  );
+		$this -> curl ->set_opt( CURLOPT_PROXY, $proxy['proxy']  );
+		$this -> sleepTotime($proxy['last_used'] + $this->sleepTime);
 		return $proxy;
 	}
 	
