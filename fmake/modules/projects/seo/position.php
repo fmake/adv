@@ -140,7 +140,6 @@ class projects_seo_position extends fmakeCore{
 		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&id_seo_query=';
 		for ($i = 0; $i < $sizeQ; $i++) {
 			for ($j = 0; $j < $parallelCheck; $j++) {
-				if(!$querys[$j+$parallelCheck*$i][$seoQuery->idField])continue;
 				$mc->addUrl($url_query.($querys[$i*$parallelCheck+$j][$seoQuery -> idField]));
 			}
 			$mc->wait();

@@ -26,6 +26,9 @@ class ethernetInterface {
 		return $this -> getProxyObj() -> getByGoogle ($active);
 	}
 	
+	function setDefault(){
+		return $this -> getProxyObj() -> setDefault();
+	}
 	
 	
 }
