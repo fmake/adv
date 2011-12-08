@@ -66,7 +66,6 @@ class projects_seo_searchSystemExsPrice extends fmakeCore{
 	function getPriceExsSearch($id_exs,$id_seo_query){
 		$where[] = "`id_exs` = '{$id_exs}'";
 		$where[] = "`id_seo_query` = '{$id_seo_query}'";
-		
 		$arr = $this -> getWhere($where);
 		return $arr[0];
 	}

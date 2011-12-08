@@ -17,6 +17,13 @@ switch ($request -> action){
 		$pos -> checkAllPosition();
 	break;
 	/**
+	* подсчет денег
+	*/
+	case 'check_money':
+		$money = new projects_seo_money();
+		$money -> checkMoney($request -> date);
+		break;
+	/**
 	 * выставляем все значения по умолчанию
 	 */	
 	case 'default_value':
