@@ -2,5 +2,6 @@
 ~*
 fmake/db_config.php
 template/cache/*
+*~
 !.gitignore
 !*.example
