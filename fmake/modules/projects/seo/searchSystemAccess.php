@@ -108,6 +108,13 @@ class projects_seo_searchSystemAccess extends fmakeCore{
 		return $systems;
 	}
 	
+	/*
+	* получаем поисковые системы в проекте
+	*/
+	function getProjectSearchSystems($id_project){
+		$where[] = "`id_project` = '{$id_project}'";
+		return ($this -> getWhere($where));
+	}
 	/**
 	*
 	* удаляем по проекту

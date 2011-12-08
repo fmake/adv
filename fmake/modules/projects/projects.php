@@ -3,6 +3,7 @@ class projects extends fmakeCore{
 		
 	public $table = "projects";
 	public $idField = "id_project";
+	public $order = "url";
 
 	/*
 	* Все проект с seo параметрами
@@ -13,6 +14,7 @@ class projects extends fmakeCore{
 		$arr = $select 
 				 -> addFrom("$this->table LEFT JOIN $projectSeo->table on `$this->table`.$this->idField = `$projectSeo->table`.$projectSeo->idField");
 		$select -> addWhere("`$this->table`.`".$this->idField."`='".$this->id."'");
+		$select -> addOrder($this -> order);
 		$arr = $select -> queryDB();
 		return $arr[0];
 	}
@@ -70,6 +72,8 @@ class projects extends fmakeCore{
 			}
 		}
 
+		$select -> addOrder($this -> order);
+		
 		$arr = $select
 				-> addFrom("$this->table LEFT JOIN $projectSeo->table on `$this->table`.$this->idField = `$projectSeo->table`.$projectSeo->idField");
 		return $select -> queryDB();
