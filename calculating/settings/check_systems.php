@@ -22,7 +22,7 @@
 					        'Количество одновременно проверяемых запросов в поисковых системах',
                 "required" => true,
                 "size" => 33,
-                "valid_RE" => FP_VALID_NAME,
+                "valid_RE" => FP_VALID_QUANTITY,
                 "max_length" => 256,
                 "wrapper" => &$leftWrapper,
             	"value" => $configs -> 	query_parallel_check,
@@ -50,7 +50,10 @@
 	
 	switch ($request -> action){
 		case 'pos_update':
-			if ($request -> pos['query_parallel_check']) {	
+			if ($request -> pos['query_parallel_check']) {
+				if($request -> pos['query_parallel_check'] < 1){
+					$_REQUEST['pos']['query_parallel_check'] = 1;
+				}	
 				$configs -> udateByValue("query_parallel_check",$request -> getEscapeVal($request -> pos['query_parallel_check']));
 			}
 			action_redir($action_url);
