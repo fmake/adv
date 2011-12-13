@@ -19,7 +19,7 @@
 				<tr [[if loop.index is odd]]class="odd"[[endif]]>
 					<td><a href="#" class="groupHeadUser" onclick="$('#table-user-{itemUser['id_user']}').toggle();return false;">{itemUser['name']}</a></td>
 					<td align="right">{itemUser['max_seo_pay']}</td>
-					<td></td>
+					<td  align="right">{itemUser['percent']} %</td>
 					<td></td>
 				</tr>
 			</table>	

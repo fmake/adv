@@ -14,7 +14,7 @@ switch ($request -> action){
 	*/
 	case 'check_positions':
 		$pos = new projects_seo_position();
-		$pos -> checkAllPosition();
+		$pos -> checkAllPosition($request -> checkIfExist );
 	break;
 	/**
 	* подсчет денег

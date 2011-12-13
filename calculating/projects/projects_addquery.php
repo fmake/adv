@@ -8,7 +8,6 @@ $excel = new ExcelParser();
 $projectSeoQuery -> addParam("id_project", $itemObj -> id);
 $searchSystemExs -> addParam("id_project", $itemObj -> id);
 $searchSystemAccess -> addParam("id_project", $itemObj -> id);
-$monthDay = 30;
 $data = $request -> data;
 //exit;
 /*

@@ -5,7 +5,7 @@ class projects_seo_position extends fmakeCore{
 	public $idField = array("id_seo_query","date");
 	public $order = "date";
 	public $order_as = ASC;
-
+	static $count = 0;
 	
 	
 	/**
@@ -76,8 +76,9 @@ class projects_seo_position extends fmakeCore{
 		$ans = $xml -> xmlToArray($content);
 		$this -> addParam('id_seo_query', $ans['query']);
 		$this -> addParam('date', $date);
-		$this -> addParam('pos', $ans['pos'] ? $ans['pos'] : 0);
+		$this -> addParam('pos', $ans['pos'] ? $ans['pos'] : "0");
 		$this -> newItem();
+		//echo ++self::$count."<br />";
 	}
 	
 	/**
@@ -124,7 +125,7 @@ class projects_seo_position extends fmakeCore{
 	/**
 	* получить позицию по запросу и дате
 	*/
-	function checkAllPosition(){
+	function checkAllPosition( $checkIfExist = false){
 		$seoQuery = new projects_seo_query();
 		$querys = ( $seoQuery -> getQuerys() );
 		global $configs,$hostname,$cronKey;
@@ -137,14 +138,18 @@ class projects_seo_position extends fmakeCore{
 		$mc = new cURL_mymulti();
 		$mc -> addCallBack(array(new self, 'setPosition'),strtotime("today"));
 		$mc->setMaxSessions($parallelCheck); // limit 2 parallel sessions (by default 10)
-		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&id_seo_query=';
+		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&checkIfExist='.$checkIfExist.'&id_seo_query=';
+		$size = 0;
 		for ($i = 0; $i < $sizeQ; $i++) {
 			for ($j = 0; $j < $parallelCheck; $j++) {
 				$mc->addUrl($url_query.($querys[$i*$parallelCheck+$j][$seoQuery -> idField]));
+				$size++;
 			}
 			$mc->wait();
 			//echo "wait<br />";
 		}
+		//echo $size."<br />";
+		//echo $querysSize;
 	}
 	
 	/**

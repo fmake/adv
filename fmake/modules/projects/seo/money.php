@@ -3,7 +3,7 @@ class projects_seo_money extends fmakeCore{
 		
 	public $table = "projects_seo_money";
 	public $idField = array("id_project","id_seo_search_system","date");
-
+	public $order = "date";
 	
 	function checkMoney($date = false){
 		if(!$date){
@@ -20,6 +20,7 @@ class projects_seo_money extends fmakeCore{
 		for ($i = 0; $i < $index; $i++) {
 			$projectsSeo[$i]['search_systems'] = $seoSearchSystemsAcces -> getProjectSearchSystems($projectsSeo[$i][$projects -> idField]);
 			$index2 = sizeof($projectsSeo[$i]['search_systems']);
+			//printAr($projectsSeo[$i]['search_systems']);
 			for ($j = 0; $j < $index2; $j++) {
 				$money = 0;
 				$projectsSeo[$i]['search_systems'][$j]['exs'] = ( $searchSystemExs -> getExsProjectSystem($projectsSeo[$i][$projects -> idField], $projectsSeo[$i]['search_systems'][$j]['id_seo_search_system']) );
@@ -41,14 +42,15 @@ class projects_seo_money extends fmakeCore{
 						}
 					}
 				}
-				echo $money;
+				//echo $money."<br />";
 				$this -> addParam("money", $money);
 				$this -> addParam("id_project", $projectsSeo[$i][$projects -> idField]);
 				$this -> addParam("id_seo_search_system", $projectsSeo[$i]['search_systems'][$j]['id_seo_search_system']);
 				$this -> addParam("date", $date);
+				$this -> addParam("position", $projectsSeo[$i]['search_systems'][$j]['position']);
 				$this -> newItem();
 			}
-			exit;
+			//exit;
 		}
 		
 	}
@@ -98,7 +100,7 @@ class projects_seo_money extends fmakeCore{
 	*/
 	function getMoneyByProjectSearchSystemDate( $id_project,$id_seo_search_system, $date){
 		$where[] = "`id_project` = '{$id_project}'";
-		$where[] = "`id_seo_search_system` >= '{$id_seo_search_system}'";
+		$where[] = "`id_seo_search_system` = '{$id_seo_search_system}'";
 		$where[] = "`date` = '{$date}'";
 		return ($this -> getWhere($where));
 	}

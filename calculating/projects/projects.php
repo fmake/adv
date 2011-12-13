@@ -240,6 +240,7 @@ $searchSystemExs = new projects_seo_searchSystemExs();
 $searchSystemExsPrice = new projects_seo_searchSystemExsPrice();
 $searchSystemAccess = new projects_seo_searchSystemAccess();
 $searchSystems = new projects_seo_searchSystem();
+$monthDay = 30;
 
 $globalTemplateParam->set('itemObj',$itemObj);
 $mainFormParam -> set('itemObj',$itemObj);
@@ -522,7 +523,7 @@ switch ($request -> action){
 		$filds = array(
 					 'url'=>array( 'name' => 'Адрес', 'col' => false),
 					 'max_seo_pay'=>array( 'name' => 'Макс. Бюджет', 'col' => "100px",'align' => "right"),
-					 'percent'=>array( 'name' => '%', 'col' => "50px"),
+					 'percent'=>array( 'name' => '%', 'col' => "50px",'align' => "right"),
 					 'actions'=>array( 'name' => 'Действие', 'col' => "230px"),
 		);
 		$actions = array('delete', 'edit');
@@ -531,13 +532,21 @@ switch ($request -> action){
 		$globalTemplateParam->setNonPointer('ID_CLIENT',ID_CLIENT);
 		$globalTemplateParam->setNonPointer('ID_OPTIMISATOR',ID_OPTIMISATOR);
 		$globalTemplateParam->setNonPointer('ID_AKKAUNT',ID_AKKAUNT);
-		
+		$request -> setFilter('date', strtotime("today"));
 		if($role = $request -> getFilter('groupby')){
 			$items = $user -> getByRole(intval($role));
 			$index = sizeof($items);
 			for ($i = 0; $i < $index; $i++) {
 				$request -> setFilter('id_user', $items[$i][$user -> idField]);
-				$items[$i]['projects'] = $itemObj -> getProjectsWithSeoParamsWithAccessUser("*",$request -> getFilterArr());
+				if($role == 8)
+					$items[$i]['name'] = $items[$i]['company'].' ('.$items[$i]['name'].')';
+				$items[$i]['projects'] = 
+					$itemObj -> getProjectsWithSeoParamsWithAccessUser("{$itemObj -> table}.id_project,url,max_seo_pay,round({$monthDay}*`day_money`/`max_seo_pay`*100) as percent",
+																								$request -> getFilterArr());
+				$countPercent = $itemObj -> getProjectsWithSeoParamsWithAccessUser("SUM(round({$monthDay}*`day_money`/`max_seo_pay`*100)) as sum",$request -> getFilterArr());
+				if($items[$i]['projects'])
+					$items[$i]['percent'] = round( $countPercent[0]['sum']/sizeof($items[$i]['projects']) );
+				
 				$countPrice = $itemObj -> getProjectsWithSeoParamsWithAccessUser("SUM(`max_seo_pay`) as sum",$request -> getFilterArr());
 				$items[$i]['max_seo_pay'] = $countPrice[0]['sum'];
 				$request -> setFilter('id_user', false);
@@ -550,14 +559,21 @@ switch ($request -> action){
 			$globalTemplateParam->set('items',$items);
 			$modul->template = "projects/project_groupby.tpl";
 		}else{
-			$items = $itemObj -> getProjectsWithSeoParams("*",$request -> getFilterArr());
-			$countPrice = $itemObj -> getProjectsWithSeoParams("SUM(`max_seo_pay`) as sum",$request -> getFilterArr());
+			// дата для подсчета заработанных денег
+			 
+			$items = $itemObj -> 
+				getProjectsWithSeoParamsMoney("{$itemObj -> table}.id_project,url,max_seo_pay,round({$monthDay}*`day_money`/`max_seo_pay`*100) as percent",
+											$request -> getFilterArr());
+			$countPercent = $itemObj ->
+				getProjectsWithSeoParamsMoney("sum( round({$monthDay}*`day_money`/`max_seo_pay`*100) ) as sum",$request -> getFilterArr());
+			$foot['percent'] = round( $countPercent[0]['sum']/sizeof($items) );
+			$countPrice = $itemObj -> getProjectsWithSeoParamsMoney("SUM(`max_seo_pay`) as sum",$request -> getFilterArr());
 			$foot['max_seo_pay'] = $countPrice[0]['sum'];
-			//printAr($foot);
 			$globalTemplateParam->set('items',$items);
 			$globalTemplateParam->set('foot',$foot);
 			$modul->template = "projects/projects.tpl";
 		}
+		$request -> setFilter('date', false);
 	break;
 }
 
