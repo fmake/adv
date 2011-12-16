@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 13, 2011 at 04:02 PM
+-- Generation Time: Dec 16, 2011 at 06:27 PM
 -- Server version: 5.1.58
--- PHP Version: 5.3.6-13ubuntu3.2
+-- PHP Version: 5.3.6-13ubuntu3.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
 INSERT INTO `projects` (`id_project`, `url`, `caption`, `is_seo`, `is_context`, `active`) VALUES
 (119, 'wedart.ru', '', '1', '0', '1'),
 (77, 'rummebel.ru', '', '1', '0', '1'),
-(4, 'kinotaxi.ru', '', '1', '0', ''),
+(4, 'kinotaxi.ru', '', '1', '0', '0'),
 (6, 'mostax.ru', '', '1', '0', '1'),
 (8, 'ur.mostax.ru', '', '1', '0', '1'),
 (9, 'promo-venta.ru', '', '1', '0', '1'),
@@ -80,7 +80,7 @@ INSERT INTO `projects` (`id_project`, `url`, `caption`, `is_seo`, `is_context`, 
 (13, 'exp-avto.ru', '', '1', '0', '1'),
 (14, 'oldtaxi.ru', '', '1', '0', '1'),
 (15, 'all-angars.ru', '', '1', '0', '1'),
-(16, 'imperia-banket.ru', '', '1', '0', ''),
+(16, 'imperia-banket.ru', '', '1', '0', '0'),
 (127, 'sg-kaskad.ru', '', '1', '0', '1'),
 (18, 'rus.intermarksavills.ru', '', '1', '0', '1'),
 (129, 'grunberg-auto.ru', '', '1', '0', '1'),
@@ -92,28 +92,28 @@ INSERT INTO `projects` (`id_project`, `url`, `caption`, `is_seo`, `is_context`, 
 (113, 'worldprovodnik.ru', '', '1', '0', '1'),
 (28, 'banket-holding.ru', '', '1', '0', '1'),
 (29, 'taxi940.ru', '', '1', '0', '1'),
-(30, 'vkusnoff.ru', '', '1', '0', ''),
+(30, 'vkusnoff.ru', '', '1', '0', '0'),
 (31, 'lawine.ru', '', '1', '0', '1'),
 (110, 'sherbakova.ru', '', '1', '0', '1'),
 (32, 'simvol-str.ru', '', '1', '0', '1'),
 (41, 'peterburg.nyt.ru', '', '1', '0', '1'),
-(116, 'narco-centr.ru', '', '1', '0', ''),
+(116, 'narco-centr.ru', '', '1', '0', '0'),
 (35, 'mitek-tent.ru', '', '1', '0', '1'),
 (36, 'intermarksavills.ru', '', '1', '0', '1'),
 (114, 'tridpm.ru', '', '1', '0', '1'),
 (38, 'bit-mfua.ru', '', '1', '0', '1'),
-(39, 'rus.investments.intermarksavills.ru', '', '1', '0', ''),
-(102, 'travelnetplanet.com', '', '1', '0', ''),
+(39, 'rus.investments.intermarksavills.ru', '', '1', '0', '0'),
+(102, 'travelnetplanet.com', '', '1', '0', '0'),
 (42, 'teplast.ru', '', '1', '0', '1'),
-(43, 'intermarkrelocation.ru', '', '1', '0', ''),
-(46, 'www.oldtaxi.ru', '', '1', '0', ''),
-(49, 'rivolga.ru', '', '1', '0', ''),
+(43, 'intermarkrelocation.ru', '', '1', '0', '0'),
+(46, 'www.oldtaxi.ru', '', '1', '0', '0'),
+(49, 'rivolga.ru', '', '1', '0', '0'),
 (128, 'emubloch.ru', '', '1', '0', '1'),
 (118, 'zhako-studio.ru', '', '1', '0', '1'),
 (50, 'stimtrade.ru', '', '1', '0', '1'),
 (51, 'domson.ru', '', '1', '0', '1'),
 (52, 'pv-salon.ru', '', '1', '0', '1'),
-(117, 'narcologica.ru', '', '1', '0', ''),
+(117, 'narcologica.ru', '', '1', '0', '0'),
 (56, 'restlux.ru', '', '1', '0', '1'),
 (59, 'bus.oldtaxi.ru', '', '1', '0', '1'),
 (75, 'puhpero.ru', '', '1', '0', '1'),
@@ -125,7 +125,7 @@ INSERT INTO `projects` (`id_project`, `url`, `caption`, `is_seo`, `is_context`, 
 (74, 'DLebedev.ru', '', '1', '0', '1'),
 (73, '1taxi.ru', '', '1', '0', '1'),
 (78, 'psk-mig.ru', '', '1', '0', '1'),
-(79, 'truckservice.su', '', '1', '0', ''),
+(79, 'truckservice.su', '', '1', '0', '0'),
 (80, 'taxi-nedorogo.ru', '', '1', '0', '1'),
 (89, 'stroy-truck.ru', '', '1', '0', '1'),
 (88, 'tehauto.ru', '', '1', '0', '1'),
@@ -139,7 +139,7 @@ INSERT INTO `projects` (`id_project`, `url`, `caption`, `is_seo`, `is_context`, 
 (95, 'climavenet.ru', '', '1', '0', '1'),
 (97, 'nposks.ru', '', '1', '0', '1'),
 (98, 'spamaniya.ru', '', '1', '0', '1'),
-(99, 'hippocrat.info', '', '1', '0', ''),
+(99, 'hippocrat.info', '', '1', '0', '0'),
 (100, 'chudofei.ru', '', '1', '0', '1'),
 (101, 'docstyle.ru', '', '1', '0', '1'),
 (103, 'sellex.ru', '', '1', '0', '1'),
@@ -148,7 +148,7 @@ INSERT INTO `projects` (`id_project`, `url`, `caption`, `is_seo`, `is_context`, 
 (106, 'autooptparts.ru', '', '1', '0', '1'),
 (130, '1chai.ru  ', '', '1', '0', '1'),
 (108, 'lakmastone.ru', '', '1', '0', '1'),
-(109, 'stroiflot.ru', '', '1', '0', ''),
+(109, 'stroiflot.ru', '', '1', '0', '0'),
 (120, 'ztm.ru', '', '1', '0', '1'),
 (121, 'portissimo.ru', '', '1', '0', '1'),
 (122, 'srochnosro.ru', '', '1', '0', '1'),
@@ -929,6 +929,21 @@ INSERT INTO `projects_seo_money` (`id_project`, `id_seo_search_system`, `money`,
 (118, -1, 92, 1323720000, 100),
 (120, 2, 408, 1323720000, 0),
 (120, -1, 28, 1323720000, 100);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects_seo_money_users`
+--
+
+CREATE TABLE IF NOT EXISTS `projects_seo_money_users` (
+  `id_project` int(11) NOT NULL DEFAULT '0',
+  `id_user` int(11) NOT NULL DEFAULT '0',
+  `id_role` int(11) NOT NULL DEFAULT '0',
+  `money` float NOT NULL DEFAULT '0',
+  `date` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_project`,`id_role`,`date`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='деньги проекта для пользователей';
 
 -- --------------------------------------------------------
 
@@ -48812,14 +48827,14 @@ CREATE TABLE IF NOT EXISTS `site_modul` (
   `delete` enum('1','0') NOT NULL DEFAULT '0',
   `css_class` varchar(255) DEFAULT '',
   PRIMARY KEY (`id_modul`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Основные страницы системы' AUTO_INCREMENT=36 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Основные страницы системы' AUTO_INCREMENT=37 ;
 
 --
 -- Dumping data for table `site_modul`
 --
 
 INSERT INTO `site_modul` (`id_modul`, `parent`, `caption`, `keywords`, `description`, `text`, `url`, `file`, `position`, `index`, `inmenu`, `active`, `delete`, `css_class`) VALUES
-(1, 0, 'Личный кабинет', '', '', '<p>Добрый день</p>\r\n<p>Вы находитесь в Venta-Adv, Выберите нужный раздел</p>', 'main', 'settings/test.php', 1, '1', '1', '1', '0', ''),
+(1, 0, 'Личный кабинет', '', '', '<p>Добрый день</p>\r\n<p>Вы находитесь в Venta-Adv, Выберите нужный раздел</p>', 'main', 'text.php', 1, '1', '1', '1', '0', ''),
 (19, 18, 'Роли пользователей', '', '', '', 'roles', 'settings/user_role.php', 23, '0', '1', '1', '0', ''),
 (23, 18, 'Пользователи системы', '', '', '', 'list', 'settings/users.php', 19, '0', '1', '1', '0', ''),
 (18, 17, 'Пользователи', '', '', '', 'users', 'user_role.php', 18, '0', '1', '1', '0', ''),
@@ -48834,7 +48849,8 @@ INSERT INTO `site_modul` (`id_modul`, `parent`, `caption`, `keywords`, `descript
 (32, 29, 'Клиенты', '', '', '', 'clients', 'projects/clients.php', 31, '0', '1', '1', '0', ''),
 (33, 0, 'Кабинет пользователя', '', '', '', 'office', 'office', 28, '0', '1', '1', '0', ''),
 (34, 33, 'Позиции сайтов', '', '', '', 'site_position', 'office/site_positions.php', 33, '0', '1', '1', '0', ''),
-(35, 24, 'Подсчет данных', '', '', '', 'check', 'settings/check_systems.php', 34, '0', '1', '1', '0', '');
+(35, 24, 'Подсчет данных', '', '', '', 'check', 'settings/check_systems.php', 34, '0', '1', '1', '0', ''),
+(36, 24, 'Прокси', '', '', '', 'proxy', 'settings/proxy.php', 35, '0', '1', '1', '0', '');
 
 -- --------------------------------------------------------
 
@@ -48848,7 +48864,7 @@ CREATE TABLE IF NOT EXISTS `site_modul_access` (
   `id_role` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_modul` (`id_modul`,`id_role`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Модуль и доступ роли' AUTO_INCREMENT=92 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Модуль и доступ роли' AUTO_INCREMENT=98 ;
 
 --
 -- Dumping data for table `site_modul_access`
@@ -48859,7 +48875,7 @@ INSERT INTO `site_modul_access` (`id`, `id_modul`, `id_role`) VALUES
 (84, 15, 1),
 (72, 17, 1),
 (76, 16, 6),
-(81, 1, 8),
+(93, 1, 1),
 (69, 31, 1),
 (14, 18, 1),
 (15, 19, 1),
@@ -48870,13 +48886,13 @@ INSERT INTO `site_modul_access` (`id`, `id_modul`, `id_role`) VALUES
 (75, 16, 4),
 (26, 24, 1),
 (27, 25, 1),
-(80, 1, 4),
+(96, 1, 8),
 (74, 16, 1),
-(73, 1, 1),
-(83, 1, 7),
+(97, 1, 7),
+(94, 1, 4),
 (79, 16, 8),
 (77, 16, 7),
-(82, 1, 6),
+(95, 1, 6),
 (64, 30, 1),
 (63, 29, 1),
 (86, 32, 1),
@@ -48884,7 +48900,8 @@ INSERT INTO `site_modul_access` (`id`, `id_modul`, `id_role`) VALUES
 (88, 33, 8),
 (89, 34, 1),
 (90, 34, 8),
-(91, 35, 1);
+(91, 35, 1),
+(92, 36, 1);
 
 -- --------------------------------------------------------
 
@@ -48938,7 +48955,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id_user`, `name`, `role`, `login`, `password`, `email`, `active`, `email_message`, `system_message`, `company`, `send_email`) VALUES
 (1, 'Shevlyakov Nikita', 1, 'shevlyakov.nikita', '698d51a19d8a121ce581499d7b701668', 'shevlyakov.nikita@gmail.com', '1', '1', '1', '', ''),
-(2, 'Рауф Ашрафов', 8, 'ashrafov@kvidex.ru', 'bc82a592c4e12646378f67f8abef870f', 'ashrafov@kvidex.ru', '1', '', '1', 'Стильвест', ''),
+(2, 'Рауф Ашрафов', 8, 'ashrafov@kvidex.ru', 'bc82a592c4e12646378f67f8abef870f', 'ashrafov@kvidex.ru', '1', '1', '1', 'Стильвест', ''),
 (3, 'Андрей Фролов', 8, 'fam9@yandex.ru', '698d51a19d8a121ce581499d7b701668', 'fam9@yandex.ru', '1', '', '1', 'Прокат Сервис', ''),
 (4, 'Роман Лавник', 8, 'mostax@list.ru', '30d427a9dfeaa3ad13cdbd8ec43d0316', 'mostax@list.ru', '1', '', '1', 'Мостакс', ''),
 (5, 'Олег ', 8, 'irina_fralova@list.ru', '7620a9e9628e55159954d6cd3dab8672', 'irina_fralova@list.ru', '1', '', '1', 'Эксп Авто', ''),

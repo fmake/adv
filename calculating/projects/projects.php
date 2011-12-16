@@ -303,6 +303,9 @@ switch ($request -> action){
 		}
 		action_redir($action_url);
 		break;
+	case 'active':
+		$itemObj -> active();
+		action_redir($action_url);
 	case 'update':
 		//printAr($_REQUEST);
 		$itemObj -> setId($request -> id);
@@ -526,7 +529,7 @@ switch ($request -> action){
 					 'percent'=>array( 'name' => '%', 'col' => "50px",'align' => "right"),
 					 'actions'=>array( 'name' => 'Действие', 'col' => "230px"),
 		);
-		$actions = array('delete', 'edit');
+		$actions = array('delete', 'edit','active');
 		$globalTemplateParam->set('actions',$actions);
 		$globalTemplateParam->set('filds',$filds);
 		$globalTemplateParam->setNonPointer('ID_CLIENT',ID_CLIENT);
@@ -541,7 +544,7 @@ switch ($request -> action){
 				if($role == 8)
 					$items[$i]['name'] = $items[$i]['company'].' ('.$items[$i]['name'].')';
 				$items[$i]['projects'] = 
-					$itemObj -> getProjectsWithSeoParamsWithAccessUser("{$itemObj -> table}.id_project,url,max_seo_pay,round({$monthDay}*`day_money`/`max_seo_pay`*100) as percent",
+					$itemObj -> getProjectsWithSeoParamsWithAccessUser("{$itemObj -> table}.id_project,url,max_seo_pay,{$itemObj -> table}.active,round({$monthDay}*`day_money`/`max_seo_pay`*100) as percent",
 																								$request -> getFilterArr());
 				$countPercent = $itemObj -> getProjectsWithSeoParamsWithAccessUser("SUM(round({$monthDay}*`day_money`/`max_seo_pay`*100)) as sum",$request -> getFilterArr());
 				if($items[$i]['projects'])
@@ -562,7 +565,7 @@ switch ($request -> action){
 			// дата для подсчета заработанных денег
 			 
 			$items = $itemObj -> 
-				getProjectsWithSeoParamsMoney("{$itemObj -> table}.id_project,url,max_seo_pay,round({$monthDay}*`day_money`/`max_seo_pay`*100) as percent",
+				getProjectsWithSeoParamsMoney("{$itemObj -> table}.id_project,url,max_seo_pay,{$itemObj -> table}.active,round({$monthDay}*`day_money`/`max_seo_pay`*100) as percent",
 											$request -> getFilterArr());
 			$countPercent = $itemObj ->
 				getProjectsWithSeoParamsMoney("sum( round({$monthDay}*`day_money`/`max_seo_pay`*100) ) as sum",$request -> getFilterArr());

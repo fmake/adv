@@ -135,6 +135,9 @@
 			}
 			action_redir($action_url);
 		break;
+		case 'active':
+			$itemObj -> active();
+			action_redir($action_url);
 		case 'add':
 			$myForm = initMainForm($itemObj,$mainFormParam -> get());
 			if ($myForm->getSubmittedData()  &&  $myForm->isDataValid()) {
@@ -186,6 +189,9 @@
 			$modul -> template = "actions/new.tpl";
 		break;
 		default:
+			if(!isset($_REQUEST[$request->filter]['active'])){
+				$request -> setFilter("active", 1);
+			}
 			$filds = array(
 				 'name'=>array( 'name' => 'Имя', 'col' => false),
 				 'email'=>array( 'name' => 'Email', 'col' => false),
@@ -193,9 +199,9 @@
 				 'actions'=>array( 'name' => 'Действие', 'col' => "230px"),
 			);
 			$globalTemplateParam->set('filds',$filds);
-			$actions = array('delete', 'edit');
+			$actions = array('delete', 'edit','active');
 			$globalTemplateParam->set('actions',$actions);
-			$items = $itemObj -> getAll();
+			$items = $itemObj -> getByRole($request -> getFilterEscape('role'),$request -> getFilter('active'));
 			
 			
 			$rols = ( $itemObj -> getRoleObj() -> getRols() );
@@ -203,10 +209,11 @@
 			for ($index = 0; $index < sizeof($rols); $index++) {
 				$rolsArr[$rols[$index][$itemObj -> getRoleObj() -> idField]] = $rols[$index]['role'];
 			}
+			$globalTemplateParam->set('rols',$rols);
 			for ($index = 0; $index < sizeof($items); $index++) {
 				$items[$index]['role'] = $rolsArr[ $items[$index]['role'] ];
 			}
 			$globalTemplateParam->set('items',$items);
-			$modul->template = "actions/default.tpl";
+			$modul->template = "settings/users.tpl";
 		break;
 	}

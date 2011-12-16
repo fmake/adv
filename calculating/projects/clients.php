@@ -189,6 +189,9 @@ switch ($request -> action){
 		}
 		action_redir($action_url);
 		break;
+	case 'active':
+		$itemObj -> active();
+		action_redir($action_url);
 	case 'update':
 
 		$myForm = initMainForm($itemObj,$mainFormParam -> get());
@@ -250,7 +253,7 @@ switch ($request -> action){
 					 'name'=>array( 'name' => 'Контактное лицо', 'col' => false),
 					 'actions'=>array( 'name' => 'Действие', 'col' => "230px"),
 		);
-		$actions = array('delete', 'edit');
+		$actions = array('delete', 'edit','active');
 		$globalTemplateParam->set('actions',$actions);
 		$globalTemplateParam->set('filds',$filds);
 		$globalTemplateParam->setNonPointer('ID_CLIENT',ID_CLIENT);
@@ -258,7 +261,9 @@ switch ($request -> action){
 		$globalTemplateParam->setNonPointer('ID_AKKAUNT',ID_AKKAUNT);
 
 		if($role = $request -> getFilter('groupby')){
-			$items = $user -> getByRole(intval($role));
+			$role = intval($role);
+			if(!$role)break;
+			$items = $user -> getByRole($role);
 			$index = sizeof($items);
 			for ($i = 0; $i < $index; $i++) {
 				//$request -> setFilter('role', intval($role));
@@ -274,10 +279,12 @@ switch ($request -> action){
 			$modul->template = "projects/clients_groupby.tpl";
 		}else{
 			$items = $itemObj -> getUserWithProjectsParams("*",$request -> getFilterArr());
+			//printAr($items);
 			$globalTemplateParam->set('items',$items);
 			$globalTemplateParam->set('foot',$foot);
 			$modul->template = "projects/clients.tpl";
 		}
+		
 	break;
 }
 

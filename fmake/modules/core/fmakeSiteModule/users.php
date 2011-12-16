@@ -116,13 +116,14 @@ class fmakeSiteModule_users extends fmakeCore{
 	* Получаем записи по роли
 	*/
 	function getByRole($role,$active = false){
-		
-		$where[0] = 'role = '.$role;
+		if($role){
+			$where[] = 'role = '.$role;
+		}
 		if($active !== false){
 			if($active){
-				$where[1] = 'active = '.$active;
+				$where[] = 'active = '.$active;
 			}else{
-				$where[1] = "active = '0'";
+				$where[] = "active = '0'";
 			}
 		}
 		
@@ -203,7 +204,7 @@ class fmakeSiteModule_users extends fmakeCore{
 	
 		if($filds){
 			if(trim($filds) == "*")
-				$select -> addFild("DISTINCT `$this->table`.id_user, name, company ");
+				$select -> addFild("DISTINCT `$this->table`.id_user, name, company, `$this->table`.active");
 			else 
 			$select -> addFild("DISTINCT `$this->table`.id_user, ".$filds);
 		}
@@ -241,7 +242,7 @@ class fmakeSiteModule_users extends fmakeCore{
 		
 		if($filds){
 			if(trim($filds) == "*"){
-				$filds = ("DISTINCT `$this->table`.id_user, name, company ");
+				$filds = ("DISTINCT `$this->table`.id_user, name, company, `$this->table`.active");
 			}else {
 				$filds = ("DISTINCT `$this->table`.id_user, ".$filds);
 			}

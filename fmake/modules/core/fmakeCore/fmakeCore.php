@@ -265,7 +265,7 @@ class fmakeCore extends fmakeWhereSelector{
 	function active() {
 		
 		$update = $this->dataBase->UpdateDB( __LINE__);	
-		$update	-> addTable($this->table)	-> addFild("active", "NOT(active)", false) -> addWhere("{$this->idField}='".$this->id."'") -> queryDB();
+		$update	-> addTable($this->table)	-> addFild("active", "IF(active='1','0','1')", false) -> addWhere("{$this->idField}='".$this->id."'") -> queryDB();
 		
 	}
 	/**
