@@ -16,6 +16,7 @@
 		<a class="f14" href="/cron/cron.php?key={cronKey}&action=check_positions&checkIfExist=true" target="_blank">Проверить все запросы заново</a>
 	</div>
 	<div id="main-container" class="tab-content">
+		{payForm|raw}
 		<a class="f14" href="/cron/cron.php?key={cronKey}&action=check_money" target="_blank">Подсчитать премии компании по проектам</a><br />
 	</div>
 [[endblock]]
