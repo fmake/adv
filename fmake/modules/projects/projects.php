@@ -47,6 +47,9 @@ class projects extends fmakeCore{
 					case 'date':
 						$filter[$name] = "{$name} = '{$value}'";
 					break;
+					case 'id_role':
+						$filter[$name] = "`projects_access_role`.{$name} = '{$value}'";
+					break;
 				}
 			}
 			
@@ -146,7 +149,7 @@ class projects extends fmakeCore{
 	*/
 	function delete(){
 		
-		/*
+		/**
 		 * сео параметры проекта
 		 */
 		$prSeo = new projects_seo_seoParams($this -> id);

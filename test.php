@@ -6,7 +6,12 @@ ini_set('display_errors',1);
 error_reporting(7);
 session_start();
 require './fmake/configs.php';
-if($_GET['key'] != $cronKey )exit;
 require('./fmake/FController.php');
-$pos = new projects_seo_position();
-$pos -> checkAllPosition();
+
+echo strtotime("today");
+exit;
+$curl = new cURL();
+$curl -> init();
+echo 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&id_seo_query=700';
+$curl -> get('http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&id_seo_query=700');
+echo $curl->data();

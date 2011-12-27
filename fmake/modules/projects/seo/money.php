@@ -15,9 +15,11 @@ class projects_seo_money extends fmakeCore{
 		$seoPosition = new projects_seo_position();
 		$searchSystemExs = new projects_seo_searchSystemExs();
 		$searchSystemExsPrice = new projects_seo_searchSystemExsPrice();
+		$seoMoneyUser = new projects_seo_moneyUsers();
 		$projectsSeo = ( $projects -> getProjectsWithSeoParams(false,array('active' => 1)) );
 		$index = sizeof($projectsSeo);
 		for ($i = 0; $i < $index; $i++) {
+			$moneyToUser = array();
 			$projectsSeo[$i]['search_systems'] = $seoSearchSystemsAcces -> getProjectSearchSystems($projectsSeo[$i][$projects -> idField]);
 			$index2 = sizeof($projectsSeo[$i]['search_systems']);
 			//printAr($projectsSeo[$i]['search_systems']);
@@ -49,8 +51,12 @@ class projects_seo_money extends fmakeCore{
 				$this -> addParam("date", $date);
 				$this -> addParam("position", $projectsSeo[$i]['search_systems'][$j]['position']);
 				$this -> newItem();
+				$moneyToUser[] = array(
+									"id_seo_search_system" => $projectsSeo[$i]['search_systems'][$j]['id_seo_search_system'],
+									"money" => $money,
+									);
 			}
-			//exit;
+			$seoMoneyUser -> addMoney($moneyToUser, $projectsSeo[$i][$projects -> idField], $date);
 		}
 		
 	}

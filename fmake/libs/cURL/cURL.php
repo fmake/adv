@@ -42,7 +42,7 @@
 			$this->set_opt(CURLOPT_HEADER,false);
 			$this->set_opt(CURLOPT_ENCODING,'gzip,deflate');
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//$this->set_opt(CURLOPT_FOLLOWLOCATION,true);
+			$this->set_opt(CURLOPT_FOLLOWLOCATION,true);
 
 			
 			//$this->set_opt(CURLOPT_COOKIESESSION,true);

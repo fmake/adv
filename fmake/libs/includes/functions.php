@@ -31,7 +31,7 @@ function action_redir($url){
 	exit();
 }
 
-	function HttpError($code){
+function HttpError($code){
 	static $http = array (
 		100 => "HTTP/1.1 100 Continue",
 		101 => "HTTP/1.1 101 Switching Protocols",
@@ -77,6 +77,12 @@ function action_redir($url){
 	header($http[$code]);
 	//include(ROOT."template/error/".$code.".html");
 	//exit;
+}
+
+function getRusNameMoth($num){
+	$month = array(	1=>'январь', 2=>'февраль', 3=>'март', 4=>'апрель', 5=>'май', 6=>'июнь',
+				7=>'июль', 8=>'август', 9=>'сентябрь', 10=>'октябрь', 11=>'ноябрь', 12=>'декабрь');
+	return $month[(int) $num];
 }
 
 ?>

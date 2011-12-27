@@ -134,6 +134,8 @@ function initMainForm($itemObj,$context = array()){
 			$promos[$promoArr[$i][ $usersObj -> idField ]] = $promoArr[$i]['name'];
 		}
 		
+		global $configs;
+		
 		$promo = new FPRowLayout(array("elements" => array(
 											new FPSelect(array(
 											                "name" => 'role['.ID_OPTIMISATOR.']',
@@ -151,7 +153,7 @@ function initMainForm($itemObj,$context = array()){
 								                    "css_style" => 'width:30px;',
 								                    "required" => true,
 								                    "max_length" => 256,
-								                    "value" => $context['item']['roles'][ID_OPTIMISATOR]["pay_percent"]
+								                    "value" => $context['item']['roles'][ID_OPTIMISATOR]["pay_percent"] ?$context['item']['roles'][ID_OPTIMISATOR]["pay_percent"] : $configs->promo_percent_default
 											)),
 											new FPText(array("text" => "%")),
 						            ),
@@ -179,7 +181,7 @@ function initMainForm($itemObj,$context = array()){
 							                    "css_style" => 'width:30px;',
 							                    "required" => true,
 							                    "max_length" => 256,
-								                 "value" => $context['item']['roles'][ID_AKKAUNT]["pay_percent"]
+								                 "value" => $context['item']['roles'][ID_AKKAUNT]["pay_percent"] ? $context['item']['roles'][ID_AKKAUNT]["pay_percent"] : $configs->accaunt_percent_dafault
 										)),
 										new FPText(array("text" => "%")),
 										),

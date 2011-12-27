@@ -35,7 +35,7 @@ class searchSystems_Yandex extends searchSystems{
 		$proxy = $ethernetInterfaceObj -> getProxyByYandex(true);
 		$this -> curl -> set_opt(CURLOPT_HTTPHEADER,Array("Content-Type: application/xml"));
 		$this -> curl -> set_opt(CURLOPT_HTTPHEADER,Array("Accept: application/xml"));
-		$this -> curl ->set_opt( CURLOPT_PROXY, $proxy['proxy']  );
+		$this -> curl -> set_opt( CURLOPT_PROXY, $proxy['proxy']  );
 		return $proxy;
 	}
 	

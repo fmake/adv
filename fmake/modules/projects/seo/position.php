@@ -138,7 +138,11 @@ class projects_seo_position extends fmakeCore{
 		$mc = new cURL_mymulti();
 		$mc -> addCallBack(array(new self, 'setPosition'),strtotime("today"));
 		$mc->setMaxSessions($parallelCheck); // limit 2 parallel sessions (by default 10)
-		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&checkIfExist='.$checkIfExist.'&id_seo_query=';
+		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey;
+		if($checkIfExist){
+			$url_query .= '&checkIfExist=1';
+		}
+		$url_query .= '&id_seo_query=';
 		$size = 0;
 		for ($i = 0; $i < $sizeQ; $i++) {
 			for ($j = 0; $j < $parallelCheck; $j++) {
