@@ -8,7 +8,11 @@ session_start();
 require './fmake/configs.php';
 require('./fmake/FController.php');
 
-echo strtotime("today");
+echo strtotime("yesterday");
+
+$sapeMoney = new sape_money();
+echo $sapeMoney -> checkMoney();
+
 exit;
 $curl = new cURL();
 $curl -> init();

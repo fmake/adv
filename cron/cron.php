@@ -24,6 +24,20 @@ switch ($request -> action){
 		$money -> checkMoney($request -> date);
 		break;
 	/**
+	* подсчет денег sape
+	*/
+	case 'check_money_sape':
+		$sape = new sape_money();
+		$sape -> checkMoney($request -> date);
+		break;
+	/**
+	* пересчет денег sape
+	*/
+	case 'check_money_sape_all':
+		$sape = new sape_money();
+		$sape -> checkMoneyAll();
+		break;	
+	/**
 	 * выставляем все значения по умолчанию
 	 */	
 	case 'default_value':

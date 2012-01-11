@@ -1,4 +1,5 @@
 <?php
+include 'IXR_Client/IXR_Client.php';
 /**
  * Sape коннек, инициализация, основной объект
  */
@@ -7,6 +8,7 @@ class sape extends fmakeCore{
 	public static $irxClient = false;
 	private $server = 'api.sape.ru';
 	private $url = '/xmlrpc/?v=extended';
+	private $isLogin = false;
 	
 	function getIrxClient(){
 		if(!self::$irxClient)
@@ -22,19 +24,28 @@ class sape extends fmakeCore{
 	 * @param string $md5
 	 */
 	function login ($login,$pass,$isMd5 = false){
+		if($this->isLogin)
+			return true;
 		$irxClient = $this -> getIrxClient();
-		printAr( $irxClient -> query('sape.login', $login, $pass, $isMd5) );
-		return true;
+		$irxClient -> query('sape.login', $login, $pass, $isMd5);
+		if( is_int($irxClient -> getResponse()) )
+			return $this->isLogin = true;
+		else 
+			return $this->isLogin = false;
 	}
 	/**
 	 * 
-	 * Получить 
-	 * @param unknown_type $id_project
-	 * @param unknown_type $date_start
-	 * @param unknown_type $date_end
+	 * Коннект с паролем из параметров
+	 * @param string $login
+	 * @param string $pass
+	 * @param string $md5
 	 */
-	function getMoney($id_project,$date_start,$date_end){
-		return array();	
+	function loginDefault (){
+		global $configs;
+		return $this -> login($configs -> sape_login, $configs -> sape_password);
 	}
+
+	
+	
 	
 }
