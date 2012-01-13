@@ -13,7 +13,6 @@ class fmakeSiteAdministrator extends fmakeCore{
 	public $acces;	// char
 	public $name;
 	
-	
 	public static $accesObj = false;
 	public static $roleObj = false;
 	

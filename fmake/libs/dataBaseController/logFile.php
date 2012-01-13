@@ -28,6 +28,8 @@ class dataBaseController_logFile {
 				throw new Exception("невозможно создать файл <i>$output_filename</i>");
 	
 			$this -> writeToFile( $this ->startFileContent );
+		}else{
+			$this->logging = false;
 		}
 	}
 	

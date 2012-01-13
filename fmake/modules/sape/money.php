@@ -63,7 +63,7 @@ class sape_money extends sape{
 			$day = date("d",($date));
 			$irxClient -> query('sape.get_projects_money_stats',$year,$month,$day);
 		}
-		// зв все доступное время
+		// за все доступное время
 		else{
 			$irxClient -> query('sape.get_projects_money_stats');
 		}
@@ -104,7 +104,7 @@ class sape_money extends sape{
 	 */
 	function checkMoneyAll(){
 		$projects = new projects();
-		$projectsSeo = ( $projects -> getProjectsWithSeoParams() );	
+		$projectsSeo = ( $projects -> getProjectsWithSeoParams() );
 		$projectStat = $this -> getSapeMoneyDayProjects();
 		$index = sizeof($projectStat);
 		$index2 = sizeof($projectsSeo);
@@ -114,11 +114,14 @@ class sape_money extends sape{
 				if($projectsSeo[$j]['id_sape'] == $projectStat[$i]['project_id']){
 					$this -> addParam('id_project', $projectsSeo[$j][$projects -> idField]);
 					$this -> addParam('date',
-								strtotime("{$projectStat[$i]['date_logged']->year}.{$projectStat[$i]['date_logged']->month}.{$projectStat[$i]['date_logged']->day}"));
+						strtotime("{$projectStat[$i]['date_logged']->year}-{$projectStat[$i]['date_logged']->month}-{$projectStat[$i]['date_logged']->day}"));
 					$this -> addParam('sum', abs($projectStat[$i]['sum']));
 					$this -> newItem();
+					
 				}
+				
 			}
+			unset ($projectStat[$i]);
 		}
 		
 	}
@@ -130,9 +133,9 @@ class sape_money extends sape{
 	function newItem(){
 		if($this -> getMoneyDay($this -> params['id_project'],$this -> params['date'])){
 			$this->update();
-			return;
+		}else{
+			parent::newItem();
 		}
-		$this -> newItem();
 	}
 	
 	function update() {

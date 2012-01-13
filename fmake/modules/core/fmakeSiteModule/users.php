@@ -18,7 +18,7 @@ class fmakeSiteModule_users extends fmakeCore{
 	public $status;	// bool
 	public $acces;	// char
 	public $name;
-	
+	public $order = 'name';
 	
 	public static $accesObj = false;
 	public static $roleObj = false;

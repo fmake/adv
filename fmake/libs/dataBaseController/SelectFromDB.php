@@ -177,6 +177,7 @@ class SelectFromDB {
 
 		//echo $this->sql."<br>";
 		
+		
 		if($this->obj->query($this->sql, $this->line))
 		{
 			// SET this as null

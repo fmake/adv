@@ -3,6 +3,7 @@ header('Content-type: text/html; charset=utf-8');
 ini_set('display_errors',1);
 error_reporting(7);
 ini_set ('max_execution_time',3500);
+ini_set("memory_limit","128M");
 
 require '../fmake/configs.php';
 if($_GET['key'] != $cronKey)exit;
