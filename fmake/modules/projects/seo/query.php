@@ -46,6 +46,24 @@ class projects_seo_query extends fmakeCore{
 	}
 	
 	/**
+	* получаем запросы по проекту и url, и основной поисковой системе
+	*/
+	function getQueryByUrl($id_project,$id_project_url, $active = 1){
+		$projectSeoSearchSystem = new projects_seo_searchSystemAccess();
+		$id_seo_search_system = ( $projectSeoSearchSystem -> getProjectSearchSystems($id_project) );
+		$id_seo_search_system = $id_seo_search_system[0][$projectSeoSearchSystem ->idField[1]];
+		if(!$id_seo_search_system ){
+			return;
+		}
+		$where[] = "`id_project` = '{$id_project}'";
+		$where[] = "`id_seo_search_system` = '{$id_seo_search_system}'";
+		$where[] = "`id_project_url` = '{$id_project_url}'";
+		if($active)
+			$where[] = "`active` = '{$active}'";
+		return ($this -> getWhere($where));
+	}
+	
+	/**
 	*
 	* удаляем все запросы проекта
 	* @param unknown_type $id_exs

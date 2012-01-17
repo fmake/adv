@@ -373,6 +373,7 @@ switch ($request -> action){
 			
 			$projectSeo -> addParam($projectSeo -> idField, $itemObj -> id);
 			$projectSeo -> addParam("date_payment", strtotime($request -> getEscape('date_payment')));
+			$projectSeo -> addParam("date_create", time());
 			$projectSeo -> addParam("liveinternet_password", $request -> getEscape('liveinternet_password'));
 			$projectSeo -> addParam("metrika", $request -> getEscape('metrika'));
 			$projectSeo -> addParam("id_webmaster", $request -> getEscape('id_webmaster'));

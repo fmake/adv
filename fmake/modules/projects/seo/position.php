@@ -155,6 +155,40 @@ class projects_seo_position extends fmakeCore{
 		//echo $size."<br />";
 		//echo $querysSize;
 	}
+	/**
+	 * 
+	 * получаем стандартнй объект select
+	 */
+	function getChangeQueryPos_defObj($id_project,$date){
+		$yesterday = strtotime("-1 days",$date);
+		//$yesterday = 1323288000;
+		$select = $this->dataBase->SelectFromDB( __LINE__);
+
+		$select -> addWhere("A.`date` ={$date}");
+		$select -> addWhere("B.`date` ={$yesterday}");
+		$select -> addWhere("Q.`id_project` ={$id_project}");
+		$select -> addFild("sum(A.pos - B.pos) `change`");
+		$select
+				-> addFrom("`projects_seo_query` Q
+							LEFT JOIN `projects_seo_query_position` A ON Q.`id_seo_query` = A.`id_seo_query`
+							LEFT JOIN `projects_seo_query_position` B ON A.`id_seo_query` = B.`id_seo_query`");				
+		return $select;
+	}
+	
+	/**
+	 * 
+	 * получить измнение позиций с текущей даты 
+	 * @param unknown_type $id_project
+	 */
+	function getChangeQueryPos($id_project,$date){
+		$select = $this ->getChangeQueryPos_defObj($id_project, $date);
+		$select -> addWhere("(A.pos - B.pos) > 0");			
+		$plus = ($select -> queryDB());
+		$select = $this ->getChangeQueryPos_defObj($id_project, $date);
+		$select -> addWhere("(A.pos - B.pos) < 0");			
+		$mines = ($select -> queryDB());
+		return array('plus' => $plus[0]['change']?$plus[0]['change']:0,'mines' => $mines[0]['change']?$mines[0]['change']:0);
+	}
 	
 	/**
 	* удаление + очищение правил-цен, которые теперь не нужны

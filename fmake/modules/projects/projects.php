@@ -50,6 +50,12 @@ class projects extends fmakeCore{
 					case 'id_role':
 						$filter[$name] = "`projects_access_role`.{$name} = '{$value}'";
 					break;
+					case 'important':
+						$filter[$name] = "{$name} = '{$value}'";
+					break;
+					case 'newproject':
+						$filter['date_create'] = "date_create >= {$value}";
+					break;
 				}
 			}
 			
