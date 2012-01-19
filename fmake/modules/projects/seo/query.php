@@ -4,7 +4,7 @@ class projects_seo_query extends fmakeCore{
 	public $table = "projects_seo_query";
 	public $idField = "id_seo_query";
 	public $order = "query";
-
+	private $projectSearchSystem = array();
 	/**
 	* запросы для проекта
 	*/
@@ -49,9 +49,14 @@ class projects_seo_query extends fmakeCore{
 	* получаем запросы по проекту и url, и основной поисковой системе
 	*/
 	function getQueryByUrl($id_project,$id_project_url, $active = 1){
-		$projectSeoSearchSystem = new projects_seo_searchSystemAccess();
-		$id_seo_search_system = ( $projectSeoSearchSystem -> getProjectSearchSystems($id_project) );
-		$id_seo_search_system = $id_seo_search_system[0][$projectSeoSearchSystem ->idField[1]];
+		if(! isset($this -> projectSearchSystem[$id_project])){
+			$projectSeoSearchSystem = new projects_seo_searchSystemAccess();
+			$id_seo_search_system = $projectSeoSearchSystem -> getProjectSearchSystems($id_project);
+			$id_seo_search_system = $id_seo_search_system[0][$projectSeoSearchSystem ->idField[1]];
+			$this -> projectSearchSystem[$id_project] = $id_seo_search_system;
+		}else{
+			$id_seo_search_system = $this -> projectSearchSystem[$id_project];
+		}
 		if(!$id_seo_search_system ){
 			return;
 		}

@@ -49,6 +49,32 @@ class projects_seo_position extends fmakeCore{
 	}	
 	
 	/**
+	* получить позиции по запросу и датам в массиве
+	*/
+	function getPositionsByQueryInDate( $id_seo_query, $date){
+		$where[] = "`id_seo_query` = '{$id_seo_query}'";
+		$whereStr = "( 0 ";
+		$index = sizeof($date);
+		for ($i = 0; $i < $index; $i++) {
+			$whereStr .= "OR `date` = {$date[$i]} ";
+		}
+		$whereStr .= ")";
+		$where[] = $whereStr;
+		$arr = ($this -> getWhere($where));
+		$ans = array();
+		$index = sizeof($date);
+		for ($i = 0,$j=0; $i < $index; $i++) {
+			
+			if($arr[$j]['date'] == $date[$i]){
+				$ans[] = $arr[ $j++ ];
+			}else{
+				$ans[] = array('date' => $date[$i],'pos' => 0);
+			}
+		}
+		return $ans;
+	}
+	
+	/**
 	* получить позиции по запросу в промежутке
 	*/
 	function getPositionsByQueryDate( $id_seo_query, $date_start,$date_end){
@@ -137,7 +163,7 @@ class projects_seo_position extends fmakeCore{
 		$sizeQ = ceil($querysSize/$parallelCheck);
 		$mc = new cURL_mymulti();
 		$mc -> addCallBack(array(new self, 'setPosition'),strtotime("today"));
-		$mc->setMaxSessions($parallelCheck); // limit 2 parallel sessions (by default 10)
+		$mc->setMaxSessions($parallelCheck); // лимит парралельных запросов
 		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey;
 		if($checkIfExist){
 			$url_query .= '&checkIfExist=1';
@@ -150,10 +176,7 @@ class projects_seo_position extends fmakeCore{
 				$size++;
 			}
 			$mc->wait();
-			//echo "wait<br />";
 		}
-		//echo $size."<br />";
-		//echo $querysSize;
 	}
 	/**
 	 * 
