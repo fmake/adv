@@ -70,8 +70,8 @@
 [[endraw]]
 		<div class="message">
 			Апдейт <img width="100" height="20" border="0" alt="Апдейты поисковых систем" src="http://promopark.ru/analytics/informer/update_ya_sm.gif">,
-			Результат {todayPercent}% [[if todayPercent - yesterdayPercent > 0]](+{todayPercent - yesterdayPercent})[[elseif (todayPercent - yesterdayPercent) < 0]]({todayPercent - yesterdayPercent})[[endif]]
-			 прогноз {monthPay}([[if monthPay - lastMonthPay > 0]]+{monthPay - lastMonthPay}[[else]]{monthPay - lastMonthPay}[[endif]]) руб.
+			 <span style="padding: 0 30px;">{todayPercent}% [[if todayPercent - yesterdayPercent > 0]](+{todayPercent - yesterdayPercent})[[elseif (todayPercent - yesterdayPercent) < 0]]({todayPercent - yesterdayPercent})[[endif]]</span>
+			 <span style="padding: 0 30px;">{monthPay}([[if monthPay - lastMonthPay > 0]]+{monthPay - lastMonthPay}[[else]]{monthPay - lastMonthPay}[[endif]]) руб.</span>
 		</div>
 
 
