@@ -43,10 +43,38 @@ function showNextPosition(obj){
 }
 
 
+function setParamUrl(id_param,id_url,value){
+	$('#date_title_'+id_url+'_'+id_param +' i').html('');
+	$('#date_title_'+id_url+'_'+id_param + ' .show-check').show();
+	xajax_setParamUrl(id_param,id_url,value,true);
+}
+
+function endSetValue(id_param,id_url,date,value){
+	$('#date_title_'+id_url+'_'+id_param +' i').html(date);
+	$('#date_title_'+id_url+'_'+id_param +' .val').html(value);
+	$('#date_title_'+id_url+'_'+id_param + ' .show-check').hide();
+}
+
+function defaultAll(id) {
+	$(id+ ' input[type=checkbox]:checked').attr("checked", false).click().attr("checked", false);
+}
+
+
+$('#system-search-link').click(function(){
+	$('#dialog_system_search').dialog('open');
+	return false;
+});
+
 $(document).ready(function(){ 
 	
 	defaultColspan = ($(".position-colspan").eq(0).attr("colspan"));
 	$(".view-update").click(showNextPosition);
+	//Dialog			
+	$('.dialog_unique, .dialog_speed').dialog({
+		autoOpen: false,
+		width: 220,
+		minHeight: 40
+	});
 	
 });
 //-->
@@ -71,12 +99,27 @@ $(document).ready(function(){
 				</td>
 				[[ for d in updateDate]]
 					<td [[if loop.index < (updateCount - viewCount + nonUpdateCount)]]class="hidden-td"[[endif]]>
-						<a class="update-date" href="javascript: void(0);" title="12%">{d|date('d.m')}</a> 
+						<a class="update-date" href="javascript: void(0);" title="{d.update}%">{df('date','d.m',d.date)}</a> 
 					</td>
 				[[endfor]]
 				<td colspan="2">
-					<a href="">0% 14.12</a>
-					<a href="">2.35 сек</a>
+					[[ if url['id_project_url'] != -1]]
+					<a style="margin-right:10px;" href="javascript: void(0)" onclick="$('#dialog_unique_{url['id_project_url']}').dialog('open');return false;" >
+						[[for param in urlParams]]
+							[[if not param.checkbox and param.name == 'unique']]
+								<span id="date_title_{url['id_project_url']}_{param['id_projects_seo_url_param']}"><em class="val">{url['params'][param['id_projects_seo_url_param']]['value']}</em>% <i>{ url['params'][param['id_projects_seo_url_param']]['date'] | date('d.m')}</i></span>
+							[[endif]]
+						[[endfor]]
+					</a>
+					
+					<a href="javascript: void(0)" onclick="$('#dialog_speed_{url['id_project_url']}').dialog('open');return false;">
+						[[for param in urlParams]]
+							[[if not param.checkbox and param.name == 'speed']]
+								<span id="date_title_{url['id_project_url']}_{param['id_projects_seo_url_param']}"><em class="val">{url['params'][param['id_projects_seo_url_param']]['value']}</em> сек <i>{ url['params'][param['id_projects_seo_url_param']]['date'] | date('d.m')}</i></span>
+							[[endif]]
+						[[endfor]]
+					 </a>
+					 [[endif]]
 				</td>
 			</tr>
 			[[for query in url['query']]]
@@ -115,23 +158,29 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				</table>
-				<table class="url-diagnostic">
+				[[ if url['id_project_url'] != -1]]
+				<table class="url-diagnostic" id="url-diagnostic-{url['id_project_url']}">
 				<tr>
-					<td >
+					<td colspan="2">
 						<ul>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title"/><label for="chechbox_{url['id_project_url']}_title">Точное вхождение ключевиков в тайтл</label> <span id="date_title_{url['id_project_url']}"></span></li>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title" /><label>Наличие неточных вхождений</label> <span id="date_title_{url['id_project_url']}"></span></li>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title" /><label>Наличие заголовков</label> <span id="date_title_{url['id_project_url']}"></span></li>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title" /><label>Наличие метатегов</label> <span id="date_title_{url['id_project_url']}"></span></li>
+							[[for param in urlParams]]
+								[[if param.checkbox]]
+									<li>
+										<input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_{param['id_projects_seo_url_param']}_title" onclick="setParamUrl({param['id_projects_seo_url_param']},{url['id_project_url']},this.checked)" [[if url['params'][param['id_projects_seo_url_param']]['value'] ]]checked="checked" [[endif]]/>
+										<label for="chechbox_{url['id_project_url']}_{param['id_projects_seo_url_param']}_title">{param['caption']}</label><span id="date_title_{url['id_project_url']}_{param['id_projects_seo_url_param']}">
+											<i>[[if url['params'][param['id_projects_seo_url_param']] ]]{ url['params'][param['id_projects_seo_url_param']]['date'] | date('d.m.y')}[[endif]]</i>
+											<img class="show-check" src="/images/load-checkbox.gif">
+										</span>
+									</li>
+									[[if not loop.last and loop.index%4 == 0]]
+										</ul>
+										<ul>		
+									[[endif]]
+								[[endif]]	
+							[[endfor]]
+							
 						</ul>
-					</td>
-					<td>
-						<ul>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title"/><label for="chechbox_{url['id_project_url']}_title">Пересечение тегов a и H</label> <span id="date_title_{url['id_project_url']}"></span></li>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title" /><label>Количество заголовков h1</label> <span id="date_title_{url['id_project_url']}"></span></li>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title" /><label>Наличие списков</label> <span id="date_title_{url['id_project_url']}"></span></li>
-							<li><input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_title" /><label>Наличие мусора в коде</label> <span id="date_title_{url['id_project_url']}"></span></li>
-						</ul>	
+
 					</td>
 					<td>
 					</td>
@@ -143,10 +192,29 @@ $(document).ready(function(){
 					<td>
 					</td>
 					<td class="al-c">
-						<a href="" class="f14">сбросить данные</a>	
+						<a href="javascript: void(0)" onclick="defaultAll('#url-diagnostic-{url['id_project_url']}')" class="f14">сбросить данные</a>	
 					</td>
 				</tr>
-			</table>	
+			</table>
+			<!-- ui-dialog -->
+			<div class="dialog_unique" id="dialog_unique_{url['id_project_url']}" title="Уникальность страницы" style="display:none;">
+				<p align="center">
+					<input type="text" size="5" name="" width="100px" id="dialog_unique_value_{url['id_project_url']}" /><br />
+					<a href="http://www.content-watch.ru/" class="f14" target="_blank">content-watch.ru</a><br />
+					<input type="button" id="system_search_calculation_button" value="сохранить" onclick="setParamUrl(9,{url['id_project_url']},$('#dialog_unique_value_{url['id_project_url']}').val());$('#dialog_unique_{url['id_project_url']}').dialog('close');return false;"/>
+					
+				</p>
+			</div>
+			<!-- ui-dialog -->
+			<div class="dialog_speed" id="dialog_speed_{url['id_project_url']}" title="Скорость загрузки" style="display:none;">
+				<p align="center">
+					<input type="text" size="5" name="" width="100px" id="dialog_speed_value_{url['id_project_url']}"/><br />
+					<a href="http://tools.pingdom.com/" class="f14" target="_blank">tools.pingdom.com</a><br />
+					<input type="button" value="сохранить" onclick=setParamUrl(10,{url['id_project_url']},$('#dialog_speed_value_{url['id_project_url']}').val());$('#dialog_speed_{url['id_project_url']}').dialog('close');return false;"/>
+					
+				</p>
+			</div>
+		[[endif]]	
 		[[endfor]]
 		
 	</div>

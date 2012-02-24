@@ -322,9 +322,15 @@ TABLE.project .hidder_gray
 TABLE.url-diagnostic TD
 	{padding: 3px;}
 TABLE.url-diagnostic ul
-	{margin: 0 10px;}		
+	{margin: 0 10px;float: left;}
+TABLE.url-diagnostic ul li
+	{padding: 0 60px 0 0;position: relative;}		
 TABLE.url-diagnostic ul li input
 	{margin-right: 5px;}		
+TABLE.url-diagnostic ul li span
+	{position: absolute;margin-left: 5px;}	
+TABLE.url-diagnostic ul li span .show-check
+	{margin-top: 6px;}
 /*-----------------FOOTER------------------------------*/
 .subfooter-mini
 	{ width: 100%; height: 10px; clear: both; visibility: hidden; overflow: hidden; position: relative; }

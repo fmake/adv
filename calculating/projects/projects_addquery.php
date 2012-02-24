@@ -17,6 +17,8 @@ $arr = $excel->getFileInArray();
 */
 if($data){
 	$maxSeoPay = 0;
+	$maxSeoPayUser = 0;
+	$firstSearchSystem = true;
 	foreach ($data as $searchSystemID => $datainner){
 		$searchSystemParentID = $searchSystemID;
 		foreach ($datainner as $regionID => $datainner){
@@ -137,6 +139,9 @@ if($data){
 							//printAr($exPrice);
 							if($j==0){
 								$maxSeoPay += $datainner['price'][$i][$j];
+								if($firstSearchSystem){
+									$maxSeoPayUser += $datainner['price'][$i][$j];
+								}
 							}
 							
 							
@@ -167,11 +172,11 @@ if($data){
 					$searchSystemsUsed[] = $searchSystemID;
 				}
 
-				
+			$firstSearchSystem = false;	
 		}
 	}
 	//printAr($searchSystemsUsed);
 	$searchSystemAccess -> deleteWhereNotIn($itemObj -> id,$searchSystemsUsed);
 	$maxSeoPay = $maxSeoPay*$monthDay+$request -> abonement;
-	
+	$maxSeoPayUser = $maxSeoPayUser*$monthDay+$request -> abonement;
 }

@@ -119,7 +119,7 @@ class projects extends fmakeCore{
 		return $select -> queryDB();
 	}
 
-	/*
+	/**
 	* Все проекты с seo параметрами
 	*/
 	function getProjectsWithSeoParamsWithAccessUser($filds = false,$filter = array()){

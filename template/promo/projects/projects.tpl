@@ -7,6 +7,7 @@
 		<li><a [[if not request.getFilter('status')]]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}">Все</a></li>
 		<li><a [[if request.getFilter('status') == 'newproject']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=newproject" >Новые</a></li>
 		<li><a [[if request.getFilter('status') == 'important']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=important">Приоритетные</a></li>
+		<li><a [[if request.getFilter('status') == 'archive']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=archive">Архив</a></li>
 	</ul>
 	[[ if user.role == ID_ADMINISTRATOR]]
 	<br />
@@ -69,9 +70,11 @@
 </script>
 [[endraw]]
 		<div class="message">
-			Апдейт <img width="100" height="20" border="0" alt="Апдейты поисковых систем" src="http://promopark.ru/analytics/informer/update_ya_sm.gif">,
+			<img border="0" alt="Апдейты поисковых систем" src="/cron/update.php?key=55ef35a83bb24ac9b4d959a1f1239aea">
 			 <span style="padding: 0 30px;">{todayPercent}% [[if todayPercent - yesterdayPercent > 0]](+{todayPercent - yesterdayPercent})[[elseif (todayPercent - yesterdayPercent) < 0]]({todayPercent - yesterdayPercent})[[endif]]</span>
-			 <span style="padding: 0 30px;">{monthPay}([[if monthPay - lastMonthPay > 0]]+{monthPay - lastMonthPay}[[else]]{monthPay - lastMonthPay}[[endif]]) руб.</span>
+			 <span style="padding: 0 30px;">{monthPay}[[if monthPay - yesterdayMonthPay > 0]](+{monthPay - yesterdayMonthPay} руб.)[[elseif monthPay - yesterdayMonthPay < 0]]({monthPay - yesterdayMonthPay} руб.)[[endif]] руб.</span>
+			 <span style="padding: 0 30px;">{surpricepay} руб.</span>
+			 <span style="padding: 0 30px;font-size:22px;">{monthPay + surpricepay} руб.</span>
 		</div>
 
 
@@ -108,7 +111,7 @@
 						[[if pr['seo_percent'] - pr['seo_percent_yesterday'] > 0 ]]
 							<img width="14" height="16" border="0" alt="Повышение позиций на {pr['seo_percent'] - pr['seo_percent_yesterday']}" src="/images/up.gif"><span>{pr['seo_percent'] - pr['seo_percent_yesterday']}%</span>
 						[[elseif pr['seo_percent'] - pr['seo_percent_yesterday'] < 0]]
-							<img width="14" height="16" border="0" alt="Понижение позиций на {pr['seo_percent'] - pr['seo_percent_yesterday']}" src="/images/up.gif"><span>{pr['seo_percent'] - pr['seo_percent_yesterday']}%</span>
+							<img width="14" height="16" border="0" alt="Понижение позиций на {pr['seo_percent'] - pr['seo_percent_yesterday']}" src="/images/down.gif"><span>{pr['seo_percent'] - pr['seo_percent_yesterday']}%</span>
 						[[endif]]
 								
 					</td>

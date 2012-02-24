@@ -26,6 +26,7 @@ $globalTemplateParam->set('xajax',$xajax);
 $monthDay = 30;
 $filtr['date'] =  $request -> getFilter('date');
 $filtr['id_role'] = ID_OPTIMISATOR;
+$filtr['active'] = 1;
 
 if($request -> getFilter('status') == 'important'){
 	$filtr['important'] = 1;
@@ -33,11 +34,13 @@ if($request -> getFilter('status') == 'important'){
 	// 3 месяца назад
 	$l3firstdaymonth = strtotime('-2 month', strtotime(date('m/01/y')));
 	$filtr['newproject'] = $l3firstdaymonth;
+}else if($request -> getFilter('status') == 'archive'){
+	$filtr['active'] = 0;
 }
+
 if($request -> getFilter('id_user')){
 	$filtr['id_user'] = $request -> getFilter('id_user');
 }
-
 
 if($user->role != ID_ADMINISTRATOR){
 	$request -> setFilter("id_user", $user->id);
@@ -46,7 +49,7 @@ if($user->role != ID_ADMINISTRATOR){
 	$filtr['id_user'] = $request -> getFilter('id_user');
 }
 
-$userProjects = ( $projects -> getProjectsWithSeoParamsWithAccessUser("DISTINCT ".$projects ->table.".id_project,url,sape_money,max_seo_pay,pay_percent,important",$filtr)  );
+$userProjects = ( $projects -> getProjectsWithSeoParamsWithAccessUser("DISTINCT ".$projects ->table.".id_project,url,sape_money,max_seo_user_pay,pay_percent,important",$filtr)  );
 //printAr($userProjects);
 $index = sizeof($userProjects);
 $today = strtotime("today");
@@ -58,19 +61,19 @@ $days = ceil( ( strtotime('+1 month', strtotime(date('m/01/y'))) - $today) / (60
 $lfirstdaymonth = strtotime('-1 month', strtotime(date('m/01/y')));
 $lenddaymonth =  strtotime('-1 day', strtotime(date('m/01/y')));
 
-$monthPay = round($projectUserMoney -> getProjectUserDateMoney(false, $request -> getFilter('id_user'), ID_OPTIMISATOR, $firstmonthday, $today));
+$monthPayToday = round($projectUserMoney -> getProjectUserDateMoney(false, $request -> getFilter('id_user'), ID_OPTIMISATOR, $firstmonthday, $today));
 
 $todayPay = round($projectUserMoney -> getProjectUserDateMoney(false, $request -> getFilter('id_user'), ID_OPTIMISATOR, $today, $today));
-$monthPay += ($todayPay * $days); 
+$monthPay = $monthPayToday + ($todayPay * $days); 
 $yesterdayPay = round($projectUserMoney -> getProjectUserDateMoney(false, $request -> getFilter('id_user'), ID_OPTIMISATOR, $yesterday, $yesterday));
-$lastMonthPay = round($projectUserMoney -> getProjectUserDateMoney(false, $request -> getFilter('id_user'), ID_OPTIMISATOR, $lfirstdaymonth, $lenddaymonth));
-
+//$lastMonthPay = round($projectUserMoney -> getProjectUserDateMoney(false, $request -> getFilter('id_user'), ID_OPTIMISATOR, $lfirstdaymonth, $lenddaymonth));
+$yesterdayMonthPay =  ($monthPayToday - $todayPay) + ($yesterdayPay * ($days+1));
 $globalTemplateParam->set('monthPay',$monthPay);
-$globalTemplateParam->set('lastMonthPay',$lastMonthPay);
+$globalTemplateParam->set('yesterdayMonthPay',$yesterdayMonthPay);
 $maxseopay = 0;
 for ($i = 0; $i < $index; $i++) {
 	// максимальная премия
-	$userProjects[$i]['seo_pay'] = round($userProjects[$i]['max_seo_pay']*$userProjects[$i]['pay_percent']/100);
+	$userProjects[$i]['seo_pay'] = round($userProjects[$i]['max_seo_user_pay']*$userProjects[$i]['pay_percent']/100);
 	$maxseopay += $userProjects[$i]['seo_pay'];
 	// процент закупки сейп
 	$userProjects[$i]['sape_percent'] = $sape -> getMoneyDay($userProjects[$i][$projects -> idField],$yesterday);
@@ -105,10 +108,11 @@ if($maxseopay){
 	$globalTemplateParam->set('yesterdayPercent',$yesterdayPercent);
 }
 $globalTemplateParam->set('userProjects',$userProjects);
-if(!isset($_REQUEST[$request->filter]['active'])){
-	$request -> setFilter("active", 1);
-}
-$promos = $userObj -> getByRole(ID_OPTIMISATOR,$request -> getFilter('active'));
+$surpricepay =  round( $maxseopay * $configs -> promo_percent_surprise_default / 100 );
+$globalTemplateParam->set('surpricepay',$surpricepay);
+
+
+$promos = $userObj -> getByRole(ID_OPTIMISATOR,true);
 
 $globalTemplateParam->set('promos',$promos);
 $globalTemplateParam->setNonPointer('ID_ADMINISTRATOR',ID_ADMINISTRATOR);

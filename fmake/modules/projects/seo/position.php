@@ -56,7 +56,7 @@ class projects_seo_position extends fmakeCore{
 		$whereStr = "( 0 ";
 		$index = sizeof($date);
 		for ($i = 0; $i < $index; $i++) {
-			$whereStr .= "OR `date` = {$date[$i]} ";
+			$whereStr .= "OR `date` = {$date[$i]['date']} ";
 		}
 		$whereStr .= ")";
 		$where[] = $whereStr;
@@ -65,10 +65,10 @@ class projects_seo_position extends fmakeCore{
 		$index = sizeof($date);
 		for ($i = 0,$j=0; $i < $index; $i++) {
 			
-			if($arr[$j]['date'] == $date[$i]){
+			if($arr[$j]['date'] == $date[$i]['date']){
 				$ans[] = $arr[ $j++ ];
 			}else{
-				$ans[] = array('date' => $date[$i],'pos' => 0);
+				$ans[] = array('date' => $date[$i]['date'],'pos' => 0);
 			}
 		}
 		return $ans;
@@ -211,6 +211,19 @@ class projects_seo_position extends fmakeCore{
 		$select -> addWhere("(A.pos - B.pos) < 0");			
 		$mines = ($select -> queryDB());
 		return array('plus' => $plus[0]['change']?$plus[0]['change']:0,'mines' => $mines[0]['change']?$mines[0]['change']:0);
+	}
+	
+	/**
+	 * 
+	 * получить позиции без даты, для импорта из старой системы
+	 * @param unknown_type $id_project
+	 */
+	function getNullQueryPos($limit = 500){
+		$select = $this->dataBase->SelectFromDB( __LINE__);
+		$select -> addFrom($this->table);
+		$select -> addWhere("`date` =0");
+		$select -> addLimit(0, $limit);
+		return $select -> queryDB(); 
 	}
 	
 	/**

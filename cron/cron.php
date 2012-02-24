@@ -25,6 +25,19 @@ switch ($request -> action){
 		$money -> checkMoney($request -> date);
 		break;
 	/**
+	* подсчет денег
+	*/
+	case 'check_money_period':
+		$money = new projects_seo_money();
+		$today = strtotime("today");
+		$start = strtotime($request -> date);
+		while ($start <= $today){
+			$money -> checkMoney($start);
+			$start = strtotime("+1 day",$start);	
+		}
+		
+		break;
+	/**
 	* подсчет денег sape
 	*/
 	case 'check_money_sape':
@@ -37,7 +50,61 @@ switch ($request -> action){
 	case 'check_money_sape_all':
 		$sape = new sape_money();
 		$sape -> checkMoneyAll();
+		break;
+	/**
+	 * считаем max деньги для пользователя за проект
+	 */	
+	case 'seo_pay_add':
+		$projects = new projects();
+		$searcs = new projects_seo_searchSystemAccess();
+		$queryo = new projects_seo_query();
+		$exs = new projects_seo_searchSystemExs();
+		$exsPrice = new projects_seo_searchSystemExsPrice();
+		$pr = $projects -> getAll();
+		for ($i = 0; $i < sizeof($pr); $i++) {
+			$sum = 0;
+			$serc = ( $searcs->getProjectSystems($pr[$i]['id_project']) );
+			foreach ($serc as $s) {
+				$query =  $queryo -> getQueryProjectSystem($pr[$i]['id_project'],$s['id_seo_search_system']) ;
+				
+				$exsp = ($exs -> getExsProjectSystem($pr[$i]['id_project'],$s['id_seo_search_system']));
+				
+				foreach ($exsp as $ex) {
+					for ($j = 0; $j < sizeof($query); $j++) {
+						$tmp = $exsPrice -> getPriceExsSearch($ex['id_exs'],$query[$j]['id_seo_query']);
+						$sum += $tmp['price'];
+					}
+					break;
+				}
+				
+				
+				
+				
+				break;
+			}
+			$sum = $sum*30;
+			$projectSeo = new projects_seo_seoParams();
+			$projectSeo -> setId($pr[$i]['id_project']);
+			$projectSeo -> addParam("max_seo_user_pay", $sum);
+			$projectSeo -> update();
+			echo $sum;
+		}
+		
+		break;
+	/**
+	* подсчет апдейтов
+	*/
+	case 'update_period':
+		$update = new projects_update();
+		$today = strtotime("today");
+		$start = strtotime($request -> date);
+		while ($start <= $today){
+			$update -> getUpdate($start);
+			$start = strtotime("+1 day",$start);	
+		}
+		
 		break;	
+		
 	/**
 	 * выставляем все значения по умолчанию
 	 */	

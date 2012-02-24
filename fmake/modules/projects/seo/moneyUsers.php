@@ -17,7 +17,7 @@ class projects_seo_moneyUsers extends fmakeCore{
 		$acccess = ($acccessRole -> getProjectRols($id_project));
 		$index = sizeof($money);
 		$index1 = sizeof($acccess);
-		for ($i = 0; $i < $index; $i++) {
+		for ($i = 0; $i < $index && $acccess; $i++) {
 			foreach ($acccess as $j => $acccessChild){
 				if(!$acccess[$j]['pay_percent'])
 					continue;

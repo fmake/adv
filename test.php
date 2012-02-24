@@ -1,13 +1,24 @@
-<?php 
-header('Content-type: text/html; charset=utf-8'); 
-setlocale(LC_ALL, 'ru_RU.UTF-8');
-mb_internal_encoding('UTF-8');
-ini_set('display_errors',1);
-error_reporting(7);
-session_start();
-require './fmake/configs.php';
-require('./fmake/FController.php');
+<?php
 
+
+/*class projects_accessRoleTest extends PHPUnit_Framework_TestCase {
+
+	public function testUserAcces()
+	{
+		
+		$this->assertEquals(8, 50);
+	}
+}
+
+*/
+
+require('./fmake/FController.php');
+$update = new projects_update();
+printAr( $update -> genPic() ); 
+
+
+
+/*
 echo strtotime("yesterday");
 
 $sapeMoney = new sape_money();
@@ -19,3 +30,4 @@ $curl -> init();
 echo 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&id_seo_query=700';
 $curl -> get('http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&id_seo_query=700');
 echo $curl->data();
+*/

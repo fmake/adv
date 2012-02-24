@@ -71,13 +71,13 @@ if($user->role != ID_ADMINISTRATOR){
 	
 $filtr['date'] =  $request -> getFilter('date');
 $filtr['id_role'] = ID_FINANSE_ROLE;
-$userProjects = ( $projects -> getProjectsWithSeoParamsWithAccessUser("DISTINCT ".$projects ->table.".id_project,url,max_seo_pay,pay_percent",$filtr)  );
+$userProjects = ( $projects -> getProjectsWithSeoParamsWithAccessUser("DISTINCT ".$projects ->table.".id_project,url,max_seo_user_pay,pay_percent",$filtr)  );
 $index = sizeof($userProjects);
 //printAr($userProjects);
 $finalSum['max_money'] = 0;
 for ($i = 0; $i < $index; $i++) {
 	$userProjects[$i]['cur_money'] = round($userMoney -> getProjectUserDateMoney($userProjects[$i][$projects -> idField], $request -> getFilter('id_user'), ID_FINANSE_ROLE, $date_from, $date_to));
-	$userProjects[$i]['max_money'] = round( $userProjects[$i]['max_seo_pay'] * $userProjects[$i]['pay_percent'] / 100 );
+	$userProjects[$i]['max_money'] = round( $userProjects[$i]['max_seo_user_pay'] * $userProjects[$i]['pay_percent'] / 100 );
 	$userProjects[$i]['prognose_money'] = $userProjects[$i]['cur_money'] + round( $nextDays * $userMoney -> getProjectUserDateMoney($userProjects[$i][$projects -> idField], $request -> getFilter('id_user'), ID_FINANSE_ROLE,$date_to, $date_to) );
 	$finalSum['max_money'] += $userProjects[$i]['max_money'];
 	$finalSum['prognose_money'] += $userProjects[$i]['prognose_money'];

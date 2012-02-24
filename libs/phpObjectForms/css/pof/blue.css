@@ -1,0 +1,44 @@
+/* FormProcessor stylesheet */
+.edit-Table {  }
+
+.edit-Table TD
+	{padding: 2px 10px;vertical-align: middle;}
+.edit-Table .answer-icon
+	{cursor: help;}
+
+.edit-Table  select, .edit-Table input[type=text], .edit-Table textarea,.edit-Table input[type=password]
+	{width: 300px; padding: 3px 3px 2px 2px;color: #555;}
+.edit-Table  select
+	{border: 1px solid #C3C3C3 !important;margin-right: 4px;}
+
+
+.edit-item select.inputBox, .edit-item input, .edit-item textarea
+	{width: 300px; padding: 3px 3px 2px 2px;color: #555;}
+.edit-item select.inputBox
+	{border: 1px solid #C3C3C3 !important;margin-right: 4px;}
+
+.edit-Title
+	{ font:bold 12px arial; color:#555555; }
+.edit-ReqTitle 
+	{ font:bold 12px arial;color: #555555;font-weight: bold;}
+.edit-ReqStar
+	{ font:bold 12px arial; color:red; }
+.edit-LayoutTitle
+	{ font:bold 10pt arial; color:#0f62a2; }
+.edit-CheckBoxTitle  { font:bold 10pt arial; color:#0f62a2; }
+.edit-RadioTitle  { font:bold 10pt arial; color:#0f62a2; }
+.edit-Error { font:bold 10pt arial; color:#aa1020; }
+.edit-Comment { font:normal 8pt arial; color:#555555; }
+.edit-Button,
+.edit-Table .edit-SubmitButton 
+	{ font:bold 10pt arial;width: auto; /*height:27px;*/; }
+.edit-Text 
+	{ font:normal 9pt arial; color:#555555; padding-bottom: 5px;display: block;}
+.edit-FatalError { font:bold 11pt arial; color:#ff0000; }
+.edit-GroupTbl {}
+.edit-GroupTitleCell 
+	{ font:bold 10pt arial; color:#000000; text-align:left;color:#555555;}
+.edit-OuterTable
+	{}
+.edit-OuterTableHeaderCell { font:bold 10pt arial,helvetica; text-align:center; color:white; background-color:#0f62a2; }
+.edit-OuterTableContentCell { background-color:#f0f0f0; }

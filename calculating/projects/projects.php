@@ -356,6 +356,7 @@ switch ($request -> action){
 
 			if($maxSeoPay){
 				$projectSeo -> addParam("max_seo_pay", $maxSeoPay);
+				$projectSeo -> addParam("max_seo_user_pay", $maxSeoPayUser);
 				$projectSeo -> update();
 			}
 			
@@ -409,6 +410,7 @@ switch ($request -> action){
 			if($maxSeoPay){
 				$projectSeo -> setId($itemObj -> id);
 				$projectSeo -> addParam("max_seo_pay", $maxSeoPay);
+				$projectSeo -> addParam("max_seo_user_pay", $maxSeoPayUser);
 				$projectSeo -> update();
 			}
 			

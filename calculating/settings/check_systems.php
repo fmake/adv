@@ -68,6 +68,17 @@
 	                "wrapper" => &$leftWrapper,
 	            	"value" => $configs -> promo_percent_default,
 		)));
+		$layoutForm -> addElement(new FPTextField(
+		array(
+	                "name" => 'pay[promo_surprise]',
+	                "title" => 'Процент премии для оптимизатора',
+	                "required" => true,
+	                "size" => 33,
+	                "valid_RE" => FP_VALID_INTEGER,
+	                "max_length" => 256,
+	                "wrapper" => &$leftWrapper,
+	            	"value" => $configs -> promo_percent_surprise_default,
+		)));
 		$layoutForm -> addElement(new FPTextField(array(
 			                "name" => 'pay[accaunt]',
 			                "title" => 'Процент для аккаунта',
@@ -110,6 +121,7 @@
 		break;
 		case 'pay_update':
 			$configs -> udateByValue("promo_percent_default",$request -> getEscapeVal($request -> pay['promo']));
+			$configs -> udateByValue("promo_percent_surprise_default",$request -> getEscapeVal($request -> pay['promo_surprise']));
 			$configs -> udateByValue("accaunt_percent_dafault",$request -> getEscapeVal($request -> pay['accaunt']));
 			action_redir($action_url);
 		break;
