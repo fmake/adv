@@ -44,6 +44,9 @@
 				</div>
 			</div>
 		
+		[[ block bot ]]
+						
+		[[ endblock ]]
 		</div>
 	
 	</div>

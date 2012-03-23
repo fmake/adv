@@ -1,4 +1,5 @@
 <?php
+include("idna_convert.class.php");
 class searchSystems_Yandex extends searchSystems{
 	
 	public $query		= '';
@@ -18,11 +19,11 @@ class searchSystems_Yandex extends searchSystems{
 	}
 	
 	function setData($query, $host,$region = false){
+		$IDN = new idna_convert(array('idn_version' => '2008'));
 		$this->query = $query;
-		$this->host = trim(preg_replace("[^http://|www\.]", '', $host));
+		$this->host = $IDN->encode( trim(preg_replace("[^http://|www\.]", '', $host)) );
 		$this->region = $region;
 		$this->url = '';
-		
 	}
 	
 	function initCurl(){

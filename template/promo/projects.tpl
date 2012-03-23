@@ -5,11 +5,11 @@
 	<h2>Проекты</h2>
 	<ul>
 		<li><a [[if not request.getFilter('status')]]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}">Все</a></li>
-		<li><a [[if request.getFilter('status') == 'new']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=new" >Новые</a></li>
+		<li><a [[if request.getFilter('status') == 'newproject']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=newproject" >Новые</a></li>
 		<li><a [[if request.getFilter('status') == 'important']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=important">Приоритетные</a></li>
-		<li><a [[if request.getFilter('status') == 'archive']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=archive">Архив</a></li>
 	</ul>
 	[[ if user.role == ID_ADMINISTRATOR]]
+	<br />
 	<h4>Оптимизаторы</h4>
 	<ul>
 		<li><a [[if request.getFilter('id_user') == 0]]class="active"[[endif]] href="{action_url}?{request.writeFilter('id_user','userrole')}">Все</a></li>
@@ -25,51 +25,103 @@
 [[block content]]
 	
 	<div id="main-container">
+	<script type="text/javascript" src="/js/jquery.tablesorter.js"></script>
+	[[ raw ]]
+	<script type="text/javascript" >
+
+	function importantProject(project,obj){
+		if($(obj).hasClass("star")){
+			
+			 $(obj).stop().fadeTo("slow", 0, function() { 
+					$(obj).removeClass("star").addClass("star-hide");
+			 }).fadeTo("slow", 1);
+			 $(obj).find("img").attr("title","Сделать избранным");
+			xajax_importantProject(project,0);
+			//$("#group_caption").append( $("#"+captionId) );
+		}else if($(obj).hasClass("star-hide")){
+			 $(obj).stop().fadeTo("slow", 0, function() { 
+				 $(obj).removeClass("star-hide").addClass("star");
+			 }).fadeTo("slow", 1);
+			 $(obj).find("img").attr("title","Убрать из избранного");
+			xajax_importantProject(project,1);
+			//$("#group_caption").prepend( $("#"+captionId) );
+		}
+		
+	}
 	
+	function get_data(node){
+		var str = node.innerHTML;
+		return (jQuery.trim($(node).text()));
+	}
+	
+	$(document).ready(function(){ 
+	        $(".promo-table").tablesorter({
+				textExtraction: get_data,
+				selectorHeaders: "thead tr td",
+				cssAsc: 'asc',
+				cssDesc: 'desc',
+				cssHeader: 'sortable',
+				sortList: [[1,0]],
+			headers: {0: { sorter: false},3: {sorter: false},5: {sorter: false }}
+		});
+			
+});  
+</script>
+[[endraw]]
 		<div class="message">
-			Отработано за {monthDays[1]['name']} {finalSum['cur_money']} руб., прогноз {finalSum['prognose_money']} руб.
+			Апдейт <img width="100" height="20" border="0" alt="Апдейты поисковых систем" src="http://promopark.ru/analytics/informer/update_ya_sm.gif">,
+			Результат {todayPercent}% [[if todayPercent - yesterdayPercent > 0]](+{todayPercent - yesterdayPercent})[[elseif (todayPercent - yesterdayPercent) < 0]]({todayPercent - yesterdayPercent})[[endif]]
+			 прогноз {monthPay}([[if monthPay - lastMonthPay > 0]]+{monthPay - lastMonthPay}[[else]]{monthPay - lastMonthPay}[[endif]]) руб.
 		</div>
 
-		[[ for m in monthDays]]
-			[[ if loop.index == 1]]
-				<a href="{action_url}?{request.writeFilter()}&month={request.month-(2-loop.index)}" class="f14" style="padding: 0 10px;"><< {m.name}</a>
-			[[ elseif loop.index == 3]]
-				<a href="{action_url}?{request.writeFilter()}&month={request.month-(2-loop.index)}" class="f14" style="padding: 0 10px;">{m.name} >></a>
-			[[else]]
-				<span class="f14" style="padding: 0 10px;">{m.name}</span>	
-			[[endif]]
-		[[endfor]]
-		<table class="edit-table" style="width: 600px;">
+
+		<table class="edit-table promo-table" style="width: 900px;">
 			<colgroup>
+				<col width="25%">
+				<col width="15%">
+				<col width="10%">
+				<col width="10%">
 				<col>
-				<col width="15%">
-				<col width="15%">
-				<col width="15%">
+				<col>
+				<col>
+				<col>
 			</colgroup>
 			<thead>
 				<tr>
-					<td></td>
-					<td class="al-r">max</td>
-					<td class="al-r">факт</td>
-					<td class="al-r" style="padding-right: 15px;">прогноз</td>
+					<td>Проекты</td>
+					<td class="al-r" colspan="2">Результат</td>
+					<td class="al-c">L</td>
+					<td class="al-c" colspan="2">Позиции</td>
+					<td class="al-c">Премия</td>
+					<td class="al-r" style="padding-right: 15px;">Уведомления</td>
 				</tr>
 			</thead>
+			<tbody>
 			[[ for pr in userProjects]]
-				<tr  [[if loop.index is odd]]class="odd"[[endif]]>
-					<td>{pr['url']}</td>
-					<td class="al-r">{pr['max_money']}</td>
-					<td class="al-r">{pr['cur_money']}</td>
-					<td class="al-r" style="padding-right: 15px;">{pr['prognose_money']}</td>
+				<tr >
+					<td>
+						
+					<span class="important [[if pr['important']]]star[[else]]star-hide[[endif]]" onclick="importantProject({pr['id_project']},this)" ><img title="сделать избранным" src="/images/spacer.gif" /></span>{pr['url']}</td>
+					<td class="al-r">{pr['seo_percent']}%</td>
+					<td class="changes">
+						[[if pr['seo_percent'] - pr['seo_percent_yesterday'] > 0 ]]
+							<img width="14" height="16" border="0" alt="Повышение позиций на {pr['seo_percent'] - pr['seo_percent_yesterday']}" src="/images/up.gif"><span>{pr['seo_percent'] - pr['seo_percent_yesterday']}%</span>
+						[[elseif pr['seo_percent'] - pr['seo_percent_yesterday'] < 0]]
+							<img width="14" height="16" border="0" alt="Понижение позиций на {pr['seo_percent'] - pr['seo_percent_yesterday']}" src="/images/up.gif"><span>{pr['seo_percent'] - pr['seo_percent_yesterday']}%</span>
+						[[endif]]
+								
+					</td>
+					<td class="al-r"><span title="из {pr['sape_money']} руб.">{pr['sape_percent']}%</span></td>
+					<td class="al-r">{pr['change_mines']}</td>
+					<td class="al-r">[[if pr['change_plus']]]+{pr['change_plus']}[[else]]0[[endif]]</td>
+					<td class="al-r">{pr['seo_pay']}</td>
+					<td  style="padding-right: 15px;">
+						<img alt="WM_ID" title="WM_ID" src="/images/errors/3.gif">
+						<img alt="Liveinternet" title="Liveinternet" src="/images/errors/1.gif">
+					</td>
 				</tr>
 			[[endfor]]
-			<tfoot>
-				<tr >
-					<td></td>
-					<td class="al-r">{finalSum['max_money']}</td>
-					<td class="al-r">{finalSum['cur_money']}</td>
-					<td class="al-r" style="padding-right: 15px;">{finalSum['prognose_money']}</td>
-				</tr>
-			</tfoot>
+			</tbody>
 		</table>
 		
 	</div>

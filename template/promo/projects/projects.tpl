@@ -71,9 +71,9 @@
 [[endraw]]
 		<div class="message">
 			<img border="0" alt="Апдейты поисковых систем" src="/cron/update.php?key=55ef35a83bb24ac9b4d959a1f1239aea">
-			 <span style="padding: 0 30px;">{todayPercent}% [[if todayPercent - yesterdayPercent > 0]](+{todayPercent - yesterdayPercent})[[elseif (todayPercent - yesterdayPercent) < 0]]({todayPercent - yesterdayPercent})[[endif]]</span>
-			 <span style="padding: 0 30px;">{monthPay}[[if monthPay - yesterdayMonthPay > 0]](+{monthPay - yesterdayMonthPay} руб.)[[elseif monthPay - yesterdayMonthPay < 0]]({monthPay - yesterdayMonthPay} руб.)[[endif]] руб.</span>
-			 <span style="padding: 0 30px;">{surpricepay} руб.</span>
+			 <span style="padding: 0 30px;font-size:22px;">{todayPercent}% [[if todayPercent - yesterdayPercent > 0]](+{todayPercent - yesterdayPercent})[[elseif (todayPercent - yesterdayPercent) < 0]]({todayPercent - yesterdayPercent})[[endif]]</span>
+			 <span style="padding: 0 30px;" class="f14">{monthPay} [[if monthPay - yesterdayMonthPay > 0]](+{monthPay - yesterdayMonthPay})[[elseif monthPay - yesterdayMonthPay < 0]]({monthPay - yesterdayMonthPay})[[endif]] руб.</span>
+			 <span style="padding: 0 30px;" class="f14">{surpricepay} руб.</span>
 			 <span style="padding: 0 30px;font-size:22px;">{monthPay + surpricepay} руб.</span>
 		</div>
 

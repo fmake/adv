@@ -55,6 +55,7 @@ $globalTemplateParam->set('accaunt',$accaunt);
 
 if($user->role != ID_ADMINISTRATOR){
 	$request -> setFilter("id_user", $user->id);
+	$filtr['id_user'] = $user->id;
 	define("ID_FINANSE_ROLE", $user->role);
 }else if($request -> getFilter('id_user')){
 	$userObj -> setId($request -> getFilter('id_user'));
@@ -82,6 +83,11 @@ for ($i = 0; $i < $index; $i++) {
 	$finalSum['max_money'] += $userProjects[$i]['max_money'];
 	$finalSum['prognose_money'] += $userProjects[$i]['prognose_money'];
 }
+if(ID_FINANSE_ROLE == ID_OPTIMISATOR){
+// премия
+	$finalSum['surpricepay'] =  round( $finalSum['max_money'] * $configs -> promo_percent_surprise_default / 100 );
+}
+
 // чтобы учесть бывшие проекты
 $finalSum['cur_money'] = round($userMoney -> getProjectUserDateMoney(false, $request -> getFilter('id_user'),ID_FINANSE_ROLE, $date_from, $date_to));
 $globalTemplateParam->set('finalSum',$finalSum);

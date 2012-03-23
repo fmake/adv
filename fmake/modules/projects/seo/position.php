@@ -62,7 +62,7 @@ class projects_seo_position extends fmakeCore{
 		$where[] = $whereStr;
 		$arr = ($this -> getWhere($where));
 		$ans = array();
-		$index = sizeof($date);
+		/*$index = sizeof($date);
 		for ($i = 0,$j=0; $i < $index; $i++) {
 			
 			if($arr[$j]['date'] == $date[$i]['date']){
@@ -70,6 +70,20 @@ class projects_seo_position extends fmakeCore{
 			}else{
 				$ans[] = array('date' => $date[$i]['date'],'pos' => 0);
 			}
+		}*/
+		$index = sizeof($date);
+		$index2 = sizeof($arr); 
+		for ($i = 0; $i < $index; $i++) {
+			$date_flag = false;
+			for ($j = 0; $j < $index2; $j++) {
+				if($arr[$j]['date'] == $date[$i]['date']){
+					$ans[] = $arr[ $j ];
+					$date_flag = true;
+					break;
+				}
+			}
+			if(!$date_flag)
+				$ans[] = array('date' => $date[$i]['date'],'pos' => 0);
 		}
 		return $ans;
 	}

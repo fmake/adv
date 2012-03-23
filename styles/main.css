@@ -304,7 +304,7 @@ TABLE.project TD
 	{padding: 4px;}
 TABLE.project TD.hidden-td
 	{display: none;}
-TABLE.project .query-checkbox
+TABLE.project .query-checkbox,TABLE.project .query-checkbox-group
 	{position: absolute;margin: 2px 0 0 -17px}
 TABLE.project .url
 	{color: #000000;font-size: 16px;}
@@ -331,6 +331,47 @@ TABLE.url-diagnostic ul li span
 	{position: absolute;margin-left: 5px;}	
 TABLE.url-diagnostic ul li span .show-check
 	{margin-top: 6px;}
+	
+	
+/*-------------------*/
+.group-checkbox-form {
+    background: none repeat scroll 0 0 #52ACD1;
+    bottom: 0;
+    display: none;
+    height: 100px;
+    left: 0;
+    padding: 0 10px;
+    position: fixed;
+    width: 380px;
+}
+.group-checkbox-form .caption-check 
+	{ margin: 4px 0;font-weight: bold;}
+	
+.close-action {
+    background: url("/images/close-action.gif") repeat scroll 0 0 transparent;
+    cursor: pointer;
+    height: 18px;
+    position: absolute;
+    right: 0;
+    width: 18px;
+}
+#group-select {
+    display: none;
+}
+.group-checkbox-form #sumbit-group {
+    bottom: 10px;
+    margin: 0;
+    position: absolute;
+    right: 5px;
+}
+.group-checkbox-form #group-action-add {
+    display: none;
+}
+.group-checkbox-form .select {
+    padding: 2px;
+    width: 250px;
+}
+	
 /*-----------------FOOTER------------------------------*/
 .subfooter-mini
 	{ width: 100%; height: 10px; clear: both; visibility: hidden; overflow: hidden; position: relative; }

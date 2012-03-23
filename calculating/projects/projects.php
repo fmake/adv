@@ -36,7 +36,7 @@ function initMainForm($itemObj,$context = array()){
 			                    'Только цифрами и латинскими буквами',
 			                "required" => true,
 			                "size" => 25, 
-			                "valid_RE" => FP_VALID_NAME,
+			                "valid_RE" => FP_VALID_NAME_RUS,
 			                "max_length" => 36,
 			                "wrapper" => &$leftWrapper,
 			 				"value" => $context['item']['url'],

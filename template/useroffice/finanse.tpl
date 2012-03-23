@@ -35,7 +35,7 @@
 	<div id="main-container">
 	
 		<div class="message">
-			Отработано за {monthDays[1]['name']} {finalSum['cur_money']} руб., прогноз {finalSum['prognose_money']} руб.
+			Отработано за {monthDays[1]['name']} {finalSum['cur_money']} руб., прогноз {finalSum['prognose_money']} руб.,[[if finalSum['surpricepay']]] премия {finalSum['surpricepay']} руб., зарплата {finalSum['prognose_money'] + finalSum['surpricepay']}[[endif]]
 		</div>
 
 		[[ for m in monthDays]]
