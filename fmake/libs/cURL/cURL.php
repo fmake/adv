@@ -18,7 +18,7 @@
 		
 		var $data;
 		
-		var $user_cookie_file = '';
+		var $user_cookie_file = '/images/cookies.txt';
 		var $cookie_in_file;
 		var $user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.0.8) Gecko/2009032609 Firefox/3.0.8';
 			
@@ -49,6 +49,7 @@
 			//$this->set_opt(CURLOPT_COOKIEFILE,'cookiefile');
 			//echo $this->user_cookie_file;
 			if($this->cookie_in_file){
+				$this->user_cookie_file = $_SERVER['DOCUMENT_ROOT'].'/images/cookies.txt';
 				$this->set_opt(CURLOPT_COOKIEFILE, $this->user_cookie_file); 
 				$this->set_opt(CURLOPT_COOKIEJAR,  $this->user_cookie_file);
 			}else{

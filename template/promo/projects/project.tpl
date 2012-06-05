@@ -1,5 +1,5 @@
 [[ extends  TEMPLATE_PATH ~ "base/main.tpl" ]] 
-
+[[ import TEMPLATE_PATH ~"macro/search_system_url.tpl" as urlMacro ]]
 
 [[block left]]
 	<h2>Страницы</h2>
@@ -257,7 +257,7 @@ $(document).ready(function(){
 								<input type="checkbox" value="{query['id_seo_query']}" class="query-checkbox query-checkbox-group-{url['id_project_url']}">
 								<div class="long_link_box">							
 									<div class="long_link">
-										<a href="" target="_blank" class="f14" title="{query['query']}">{query['query']}</a>															
+										<a href="{urlMacro.getUrl(query['query'],query['id_seo_search_system'])}" target="_blank" class="f14" title="{query['query']}">{query['query']}</a>															
 									</div>
 									<div class="long_link_hidder hidder_gray">&nbsp;</div>
 								</div>

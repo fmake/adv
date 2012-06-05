@@ -1,4 +1,4 @@
 <?php
 
-	$modul->template = "text/text.tpl";
+	$modul->template = "text/text_left.tpl";
 	

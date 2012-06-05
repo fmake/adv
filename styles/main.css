@@ -265,7 +265,7 @@ table.querys input.query
 .userquerys TD
 	{width: 200px;}
 .userquerys TD div
-	{overflow: hidden;width: 200px;height: 22px;}	
+	{overflow: hidden;width: 200px;height: 22px;white-space: nowrap;}	
 .userquerys-pos TD
 	{text-align: center;}	
 .userquerys TD,.userquerys-pos TD
@@ -347,31 +347,28 @@ TABLE.url-diagnostic ul li span .show-check
 .group-checkbox-form .caption-check 
 	{ margin: 4px 0;font-weight: bold;}
 	
-.close-action {
-    background: url("/images/close-action.gif") repeat scroll 0 0 transparent;
-    cursor: pointer;
-    height: 18px;
-    position: absolute;
-    right: 0;
-    width: 18px;
-}
-#group-select {
-    display: none;
-}
-.group-checkbox-form #sumbit-group {
-    bottom: 10px;
-    margin: 0;
-    position: absolute;
-    right: 5px;
-}
-.group-checkbox-form #group-action-add {
-    display: none;
-}
-.group-checkbox-form .select {
-    padding: 2px;
-    width: 250px;
-}
+.close-action 
+	{background: url("/images/close-action.gif") repeat scroll 0 0 transparent;cursor: pointer;height: 18px;position: absolute;right: 0;width: 18px;}
+
+#group-select 
+	{display: none;}
+.group-checkbox-form #sumbit-group 
+	{bottom: 10px;margin: 0;position: absolute;right: 5px;}
+.group-checkbox-form #group-action-add 
+	{display: none;}
+.group-checkbox-form .select 
+	{padding: 2px;width: 250px;}
 	
+
+.checkrow,.checkrow A
+	{font-size:18px;}
+
+.price_val
+	{width:45px;}
+.pult TD
+	{height:25px;padding: 0 12px;}
+
+
 /*-----------------FOOTER------------------------------*/
 .subfooter-mini
 	{ width: 100%; height: 10px; clear: both; visibility: hidden; overflow: hidden; position: relative; }

@@ -122,6 +122,61 @@ class projects_seo_position extends fmakeCore{
 	}
 	
 	/**
+	* Проверить позицию сайта и пересчитать премии для запросов которые стали 0 сегодня
+	*/
+	function checkPositionFail($date = false){
+		/*
+			SELECT A.`id_seo_query` , A.`pos` , B.`pos`
+			FROM `projects_seo_query_position` A
+			LEFT JOIN (
+
+			SELECT *
+			FROM `projects_seo_query_position`
+			WHERE `date` =1333224000
+			)B ON A.`id_seo_query` = B.`id_seo_query`
+			WHERE A.`date` =1333310400
+			AND (
+			A.`pos` - B.`pos`
+			) !=0
+			AND A.`pos` = 0
+		*/
+		$seoQuery = new projects_seo_query();
+		$curl = new cURL();
+		$curl -> init();
+		global $hostname,$cronKey;
+		if(!$date)
+			$date = strtotime("today");
+		$yesterday = strtotime("-1 days",$date);
+		$select = $this->dataBase->SelectFromDB( __LINE__);		
+		$select -> addWhere("A.`date` ={$date}");
+		$select -> addWhere("(A.`pos` - B.`pos`) !=0");
+		$select -> addWhere("B.`pos` > 0");
+		$select -> addWhere("B.`pos` < 21");
+		$select -> addWhere("A.`pos` = 0");
+		$select -> addFild("A.`id_seo_query` , A.`pos` as `today` , B.`pos` as `yesterday`");
+		$select
+				-> addFrom("`{$this -> table}` A
+							LEFT JOIN (SELECT *	FROM `projects_seo_query_position` WHERE `date` ={$yesterday}) B
+							ON A.`id_seo_query` = B.`id_seo_query`");
+	
+		$querys = ( $select -> queryDB() );
+		//printAr($querys);
+		$sizeQ = sizeof($querys);
+		$url_query = 'http://'.$hostname.'/cron/querys_check_position.php?key='.$cronKey.'&checkIfExist=1&id_seo_query=';
+		for ($i = 0; $i < $sizeQ; $i++) {
+			//echo $url_query.$querys[$i][$seoQuery->idField];
+			//echo "<br />";
+			$curl -> get($url_query.$querys[$i][$seoQuery->idField]);
+			//echo $curl -> data;
+			$this -> setPosition($url_query.$querys[$i][$seoQuery->idField], $curl -> data, array(), $date);
+		}
+		$price_query = 'http://'.$hostname.'/cron/cron.php?key='.$cronKey.'&action=check_money';
+		// считаем премии
+		$curl -> get($price_query);
+
+	}
+
+	/**
 	* Проверить позицию сайта
 	*/
 	function checkPosition($id_seo_query,$checkIfExist = false){
@@ -142,7 +197,7 @@ class projects_seo_position extends fmakeCore{
 		$system = $seoSearchSystem -> getInfo();
 		$class = searchSystems::$parentClassName.'_'.$system['class'];
 		$searchSystem = new $class;
-		$searchSystem -> setData($query['query'], $project['url'], 213);
+		$searchSystem -> setData($query['query'], $project['url'], $system['lr']);
 		$arrPos = $searchSystem -> getPositionWhithData();
 		$arrPos['id_seo_query'] = $id_seo_query;
 		return $arrPos;

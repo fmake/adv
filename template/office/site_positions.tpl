@@ -1,4 +1,5 @@
 [[ extends "base/main_all_content.tpl" ]]
+[[ import TEMPLATE_PATH ~"macro/search_system_url.tpl" as urlMacro ]]
 
 [[ block content ]]
 	<div id="main-container">
@@ -33,7 +34,7 @@
 						[[ for query in searh['querys'] ]]
 							<tr>
 								<td>
-									<div>{query['query']}</div>
+									<div><a href="{urlMacro.getUrl(query['query'],query['id_seo_search_system'])}" target="_blank" class="f12" title="{query['query']}">{query['query']}</a></div>
 								</td>
 							</tr>
 						[[endfor]]	

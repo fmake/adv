@@ -115,3 +115,4 @@ return false;xajax.debug.writeMessage('Retry count exceeded.');return false;}
 }
 xajax.debug.isLoaded=true;xjx={}
 xjx.$=xajax.tools.$;xjx.getFormValues=xajax.tools.getFormValues;xjx.call=xajax.call;xjx.request=xajax.request;xajax.$=xajax.tools.$;xajax.getFormValues=xajax.tools.getFormValues;}catch(e){alert(e.name+': '+e.message);}
+

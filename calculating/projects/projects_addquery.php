@@ -170,9 +170,10 @@ if($data){
 					$searchSystemAccess -> addParam("position", $position - $positionRegion);
 					$searchSystemAccess -> addSystemAccess();
 					$searchSystemsUsed[] = $searchSystemID;
+					$firstSearchSystem = false;	
 				}
 
-			$firstSearchSystem = false;	
+			
 		}
 	}
 	//printAr($searchSystemsUsed);

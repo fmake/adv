@@ -18,6 +18,13 @@ switch ($request -> action){
 		$pos -> checkAllPosition($request -> checkIfExist );
 	break;
 	/**
+	* проверка позиций не пробитых
+	*/
+	case 'check_positions_fail':
+		$pos = new projects_seo_position();
+		$pos -> checkPositionFail($request -> date );
+	break;
+	/**
 	* подсчет денег
 	*/
 	case 'check_money':

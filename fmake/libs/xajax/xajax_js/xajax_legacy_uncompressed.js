@@ -67,3 +67,4 @@ try
 } catch (e) {
 	alert(e.name + ': ' + e.message);
 }
+

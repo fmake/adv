@@ -82,3 +82,4 @@ if ('undefined' != typeof xajax.config) {
 		}
 	}
 }
+

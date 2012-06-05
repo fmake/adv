@@ -8,3 +8,4 @@ onComplete:function(){window.status='Готово.';}
 }
 }
 }
+

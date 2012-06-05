@@ -526,3 +526,4 @@ installTableUpdater = function() {
 }
 
 installTableUpdater();
+

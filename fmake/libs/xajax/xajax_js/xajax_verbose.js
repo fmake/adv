@@ -16,3 +16,4 @@ xajax.debug.verbose.hook=function(x,base){for(var m in x){if('function'==typeof(
 }
 }
 xajax.debug.verbose.hook(xajax,'xajax.');xajax.debug.verbose.hook(xajax.callback,'xajax.callback.');xajax.debug.verbose.hook(xajax.css,'xajax.css.');xajax.debug.verbose.hook(xajax.dom,'xajax.dom.');xajax.debug.verbose.hook(xajax.events,'xajax.events.');xajax.debug.verbose.hook(xajax.forms,'xajax.forms.');xajax.debug.verbose.hook(xajax.js,'xajax.js.');xajax.debug.verbose.hook(xajax.tools,'xajax.tools.');xajax.debug.verbose.hook(xajax.tools.queue,'xajax.tools.queue.');xajax.debug.verbose.hook(xajax.command,'xajax.command.');xajax.debug.verbose.hook(xajax.command.handler,'xajax.command.handler.');xajax.debug.verbose.isLoaded=true;}catch(e){alert(e.name+': '+e.message);}
+

@@ -103,6 +103,14 @@
 							<label title="Премия будет рассчитываться по порядку поисковых систем, перетащите их в нужном порядке" for="posl-ras">последовательный расчет</label>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							<input title="Отметьте, если клиент платит только абонемент" type="checkbox" value="1" name="only_abonement" id="only-abonement" [[if item.only_abonement]]checked[[endif]]>
+						</td>
+						<td>
+							<label title="Отметьте, если клиент платит только абонемент" for="only-abonement">только абонемент</label>
+						</td>
+					</tr>
 					</tbody></table>
 				</td>
 			</tr>

@@ -28,5 +28,3 @@ $template = $twig->loadTemplate($modul->template);
 $template->display($globalTemplateParam->get());
 
 
-
-// tetetetete

@@ -12,3 +12,4 @@ oOpt.callback={}
 oOpt.callback.onComplete=xajax.doneLoadingFunction;}
 return xajax.legacy.call(sFunction,oOpt);}
 xajax.legacy.isLoaded=true;}catch(e){alert(e.name+': '+e.message);}
+

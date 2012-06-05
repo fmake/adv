@@ -331,7 +331,10 @@ switch ($request -> action){
 				$projectSeo -> addParam("consecutive_calculation", 1);
 			else 
 				$projectSeo -> addParam("consecutive_calculation", "0");
-			
+			if(isset($_REQUEST['only_abonement']))
+				$projectSeo -> addParam("only_abonement", 1);
+			else
+				$projectSeo -> addParam("only_abonement", "0");
 			$projectSeo -> update();
 			
 			$projectAcess -> addParam("id_project", $itemObj -> id);
@@ -385,6 +388,10 @@ switch ($request -> action){
 				$projectSeo -> addParam("consecutive_calculation", 1);
 			else
 				$projectSeo -> addParam("consecutive_calculation", "0");
+			if(isset($_REQUEST['only_abonement']))
+				$projectSeo -> addParam("only_abonement", 1);
+			else
+				$projectSeo -> addParam("only_abonement", "0");
 			$projectSeo -> newItem();
 			
 			
