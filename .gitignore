@@ -5,3 +5,4 @@ template/cache/*
 *~
 !.gitignore
 !*.example
+/nbproject/private/
