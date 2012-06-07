@@ -4,7 +4,7 @@
 [[block left]]
 <h2>Проекты</h2>
 <ul>
-    <li><a [[if not request.getFilter('status')]]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}">Все</a></li>
+	<li><a [[if not request.getFilter('status')]]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}">Все</a></li>
     <li><a [[if request.getFilter('status') == 'newproject']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=newproject" >Новые</a></li>
     <li><a [[if request.getFilter('status') == 'important']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=important">Приоритетные</a></li>
     <li><a [[if request.getFilter('status') == 'archive']]class="active"[[endif]] href="{action_url}?{request.writeFilter('status')}&filter[status]=archive">Архив</a></li>
@@ -51,9 +51,14 @@
     }
 	
     function get_data(node){
-            var str = node.innerHTML;
-            return (jQuery.trim($(node).text()));
-        }
+		var str = node.innerHTML;
+		return (jQuery.trim($(node).text()));
+     }
+
+    function projectValue(id_project,id_value,value,obj){
+        xajax_projectValue(id_project,id_value,value);
+        $(obj).remove();
+    }
 	
     $(document).ready(function(){ 
             $(".promo-table").tablesorter({
@@ -63,7 +68,7 @@
                             cssDesc: 'desc',
                             cssHeader: 'sortable',
                             sortList: [[1,0]],
-                    headers: {0: { sorter: false},3: {sorter: false},5: {sorter: false }}
+                    headers: {0: { sorter: false},1: {sorter: false},3: {sorter: false }}
             });
 			
 });  
@@ -92,20 +97,31 @@
         <thead>
             <tr>
                 <td>Проекты</td>
+                <td class="al-r" style="padding-right: 15px;">Уведомления</td>
                 <td class="al-r" colspan="2">Результат</td>
                 <td class="al-c">L</td>
                 <td class="al-c" >Позиции</td>
                 <td class="al-c">Премия</td>
-                <td class="al-r" style="padding-right: 15px;">Уведомления</td>
             </tr>
         </thead>
         <tbody>
             [[ for pr in userProjects]]
             <tr >
-                <td>
-
-                    <span class="important [[if pr['important']]]star[[else]]star-hide[[endif]]" onclick="importantProject({pr['id_project']},this)" ><img title="сделать избранным" src="/images/spacer.gif" /></span>
-                    <a href="{action_url}?id_project={pr['id_project']}">{pr['url']}</a></td>
+             	<td>	
+                	<span class="important [[if pr['important']]]star[[else]]star-hide[[endif]]" onclick="importantProject({pr['id_project']},this)" ><img title="сделать избранным" src="/images/spacer.gif" /></span>
+                    <a href="{action_url}?id_project={pr['id_project']}">{pr['url']}</a>
+                </td>
+                <td  style="padding-right: 15px;">
+                	[[ for val in pr['params_value'] ]]
+	                		[[if val['value'] ]]
+	                			[[ if val['id_projects_seo_param'] == 1]]
+		                			<a href="#" onclick="if(confirm('Вирус удален ?'))projectValue({pr['id_project']},{val['id_projects_seo_param']},0,this);">
+		                				<img alt="{params[ val['id_projects_seo_param'] ]['name']}" title="{params[ val['id_projects_seo_param'] ]['name']} - {val['date']|date('d.m.y')}" src="{projectsParam.imageFolder}/{params[ val['id_projects_seo_param'] ]['img']}" />
+		                			</a>
+		                		[[endif]]
+	                		[[endif]]
+	                [[endfor]]	
+                </td>
                 <td class="al-r">{pr['seo_percent']}%</td>
                 <td class="changes">
                     [[if pr['seo_percent'] - pr['seo_percent_yesterday'] > 0 ]]
@@ -121,10 +137,6 @@
                         ([[if (pr['change']['yesterday']-pr['change']['today']) > 0]]+[[endif]]{pr['change']['yesterday']-pr['change']['today']}) 
                     [[endif]]</td>
                 <td class="al-r">{pr['seo_pay']}</td>
-                <td  style="padding-right: 15px;">
-                    <img alt="WM_ID" title="WM_ID" src="/images/errors/3.gif">
-                    <img alt="Liveinternet" title="Liveinternet" src="/images/errors/1.gif">
-                </td>
             </tr>
             [[endfor]]
         </tbody>

@@ -13,17 +13,35 @@ function importantProject($id_project, $important) {
     return $objResponse;
 }
 
+function projectValue($id_project,$id_value,$value){
+	$projectsParamValue = new projects_seo_paramsValue();
+	$projectsParamValue -> addParam("id_projects_seo_param", $id_value);
+	$projectsParamValue -> addParam("id_project", $id_project);
+	$projectsParamValue -> addParam("value", $value);
+	$projectsParamValue -> addParam("date", strtotime("now"));
+	$projectsParamValue -> update();
+	
+	$objResponse = new xajaxResponse();
+    return $objResponse;
+}
+
+
 $userObj = $modul->getUserObj();
 $sape = new sape_money();
 $projects = new projects();
 $projectsPos = new projects_seo_position();
 $projectUserMoney = new projects_seo_moneyUsers();
+$projectsParam = new projects_seo_params();
+$projectsParamValue = new projects_seo_paramsValue();
+
 include_once ROOT . '/fmake/libs/xajax/xajax_core/xajax.inc.php';
 $xajax = new xajax($action_url);
 $xajax->configure('javascript URI', '/fmake/libs/xajax/');
 $xajax->register(XAJAX_FUNCTION, "importantProject");
+$xajax->register(XAJAX_FUNCTION, "projectValue");
 $xajax->processRequest();
 $globalTemplateParam->set('xajax', $xajax);
+
 $monthDay = 30;
 $filtr['date'] = $request->getFilter('date');
 $filtr['id_role'] = ID_OPTIMISATOR;
@@ -59,6 +77,17 @@ $firstmonthday = strtotime(date('m/01/y'));
 // осталось дней в месяце
 $days = ceil(( strtotime('+1 month', strtotime(date('m/01/y'))) - $today) / (60 * 60 * 24) - 1);
 
+/**
+ * 
+ * параметры сео проекта
+ */
+$paramsTmp = $projectsParam->getAll();
+for ($i = 0; $i < sizeof($paramsTmp); $i++) {
+	$params[$paramsTmp[$i][$projectsParam->idField]] = $paramsTmp[$i];
+}
+$globalTemplateParam->set('params', $params);
+$globalTemplateParam->set('projectsParam', $projectsParam);
+
 $lfirstdaymonth = strtotime('-1 month', strtotime(date('m/01/y')));
 $lenddaymonth = strtotime('-1 day', strtotime(date('m/01/y')));
 
@@ -90,7 +119,7 @@ for ($i = 0; $i < $index; $i++) {
     $userProjects[$i]['change'] = $projectsPos->getMiddleQueryPos($userProjects[$i][$projects->idField], $today) ;
     $userProjects[$i]['change']['today'] = round($userProjects[$i]['change'][0]['today']);
     $userProjects[$i]['change']['yesterday'] = round($userProjects[$i]['change'][0]['yesterday']);
-    
+    $userProjects[$i]['params_value'] = $projectsParamValue -> getValue($userProjects[$i][$projects->idField]);
     if ($userProjects[$i]['seo_pay']) {
         $userProjects[$i]['seo_percent'] = round($projectUserMoney->
                         getProjectUserDateMoney($userProjects[$i][$projects->idField], $request->getFilter('id_user'), ID_OPTIMISATOR, $today, $today)
