@@ -27,6 +27,23 @@ function setParamUrl($id_param,$id_url,$value,$callback){
 	return $objResponse;
 }
 
+function setName($id_param,$name){
+	global $user;
+	if(!$user -> id){
+		return;
+	}
+	$id_param = intval( $id_param);
+
+	$projectSeoUrl = new projects_seo_url();
+                $projectSeoUrl->setId($id_param);
+	$projectSeoUrl -> addParam('name', $name);
+                $projectSeoUrl->update();
+
+	$objResponse = new xajaxResponse();
+	
+	return $objResponse;
+}
+
 function setParamQuery($id_param,$id_query,$value,$callback){
 	global $user;
 	if(!$user -> id){
@@ -60,6 +77,7 @@ $xajax = new xajax($action_url);
 $xajax->configure('javascript URI','/fmake/libs/xajax/');
 $xajax->register(XAJAX_FUNCTION,"setParamUrl");
 $xajax->register(XAJAX_FUNCTION,"setParamQuery");
+$xajax->register(XAJAX_FUNCTION,"setName");
 $xajax->processRequest();
 $globalTemplateParam->set('xajax',$xajax);
 
@@ -94,6 +112,7 @@ switch ($request -> action_group){
 		}
 		$projectSeoUrl -> addParam("id_project", $id_project);
 		$projectSeoUrl -> addParam("url", $request -> group_param[url]);
+                                $projectSeoUrl -> addParam("name", $request -> group_param[name]);
 		$projectSeoUrl -> newItem();
 		$request -> group_param[url] = $projectSeoUrl -> id;
 		$_REQUEST['group_param']['url'] = $projectSeoUrl -> id;
