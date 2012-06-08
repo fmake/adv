@@ -1,17 +1,5 @@
-[[ extends  TEMPLATE_PATH ~ "base/main.tpl" ]] 
+[[ extends  TEMPLATE_PATH ~ "base/main_all_content.tpl" ]] 
 [[ import TEMPLATE_PATH ~"macro/search_system_url.tpl" as urlMacro ]]
-
-[[block left]]
-<h2>Страницы</h2>
-<ul>
-    <li><a href="{action_url}?id_project={request.id_project}" [[if not request.id_project_url]]class="active"[[endif]]>Все</a></li>
-    [[ for url in projectUrls ]]
-    <li><a href="{action_url}?id_project={request.id_project}&id_project_url={url['id_project_url']}" [[if request.id_project_url==url['id_project_url']]]class="active"[[endif]]>{url['name']?url['name']:url['url']}</a></li>
-    [[endfor]]
-</ul>
-
-
-[[endblock]]
 
 [[block content]]
 
@@ -19,6 +7,14 @@
 <!--
 colspanPlus = {updateCount - viewCount + nonUpdateCount - 1};
 [[raw]]
+function addFormParam(name,value){
+	$("<input/>").attr({
+						type: "hidden",
+						name: name
+						}).val(value) 
+									.appendTo("#action_form");
+}
+
 function checkGroup(obj,cl){
 if($(obj).attr("checked") != undefined ){
         $("."+cl).attr("checked", "checked"); 
@@ -78,18 +74,6 @@ $(id+ ' input[type=checkbox]:checked').attr("checked", false).click().attr("chec
 
 querysCheckbox = [];
 
-function addFormParam(name,value){
-//$("#main_form");
-	
-//alert(name + " = "+ value);
-$("<input/>")
-        .attr({
-                type: "hidden",
-                name: name
-    }).val(value) 
-        .appendTo("#action_form");
-}
-
 function submitAction(action){
 action = parseInt ($("#group-action").val());
 $("#action_form").html(''); 
@@ -124,7 +108,6 @@ switch (action) {
 $("#action_form").submit(); 
 
 }
-
 
 function deleteUrl(id_url){
 $("#action_form").html('');
@@ -216,28 +199,34 @@ $('.dialog_unique, .dialog_speed').dialog({
 $(".query-checkbox").click(checkboxClick);
 	
 });
+
 //-->
 </script>
 [[endraw]]
 <a href="{action_url}" class="f12">Все проекты</a> > {projectSeo['url']}
 [[include "promo/projects/tabs.tpl"]]
 <div id="main-container" class="tab-content" style="display:block;">
-
-
-    [[for url in projectUrls]]
+	<form method="get" id="action_form_optimizer" style="padding: 20px 30px;">
+		<input type="hidden" name="action" value="change_optimizer" />
+		<select name="id_user" onchange="$('#action_form_optimizer').submit();">
+			[[ for optimizer in optimiziers ]]
+				<option  [[if optimizator.id_user == optimizer.id_user]]selected[[endif]] value="{optimizer.id_user}">{optimizer.name}</option>
+			[[endfor]]
+		</select>
+		<select name="id_project" onchange="$('#action_form_optimizer').submit();">
+			[[ for current_project in current_projects ]]
+			<option [[if request.id_project == current_project.id_project]]selected[[endif]] value="{current_project.id_project}">{current_project.url}</option>
+			[[endfor]]
+		</select>
+	</form>
+			
+	    [[for url in projectUrls]]
     [[if not request.id_project_url or request.id_project_url == url['id_project_url']]]
 
     <table class="project">
         <tr>
             <td class="query">
-                    <a href="javascript: void(0)" onclick="changeNameUrl('{url['id_project_url']}');" title="Редактировать" >
-                        <img style="margin: 2px 0 0 -46px;position:absolute;" src="/images/edit-icon.gif">
-                    </a>
-                <a href="javascript: void(0)" onclick="if(confirm('Удалить?'))deleteUrl({url['id_project_url']})" title="Удалить Урл" ><img style="margin: 4px 0 0 -28px;position:absolute;" src="/images/delete_doc.gif"></a>
-                <input type="checkbox"  class="query-checkbox-group" onclick="checkGroup(this,'query-checkbox-group-{url['id_project_url']}')"/>
-                <div id="edit_block_{url['id_project_url']}">
                     <a id="a_{url['id_project_url']}" href="{url.url}" target="_blank" class="url">{url.name ? url.name : url.url }</a>
-                </div>
             </td>
             <td>
             </td>
@@ -251,7 +240,7 @@ $(".query-checkbox").click(checkboxClick);
             [[endif]]
 
             [[endfor]]
-            <td colspan="2">
+            <!--td colspan="2">
                 [[ if url['id_project_url'] != -1]]
                 <a style="margin-right:10px;" href="javascript: void(0)" onclick="$('#dialog_unique_{url['id_project_url']}').dialog('open');return false;" >
                     [[for param in urlParams]]
@@ -269,12 +258,11 @@ $(".query-checkbox").click(checkboxClick);
                     [[endfor]]
                 </a>
                 [[endif]]
-            </td>
+            </td-->
         </tr>
         [[for query in url['query']]]
         <tr>
             <td>
-                <input type="checkbox" value="{query['id_seo_query']}" class="query-checkbox query-checkbox-group-{url['id_project_url']}">
                 <div class="long_link_box">							
                     <div class="long_link">
                         <a href="{urlMacro.getUrl(query['query'],query['id_seo_search_system'])}" target="_blank" class="f14" title="{query['query']}">{query['query']}</a>															
@@ -322,51 +310,13 @@ $(".query-checkbox").click(checkboxClick);
             <td>
             </td>
             <td colspan="{viewCount}" class="al-r position-colspan">
-                <a href="javascript: void(0);" class="view-update">еще >></a>	
+                <!--a href="javascript: void(0);" class="view-update">еще >></a-->	
             </td>
             <td colspan="2">
             </td>
         </tr>
     </table>
     [[ if url['id_project_url'] != -1]]
-    <table class="url-diagnostic" id="url-diagnostic-{url['id_project_url']}">
-        <tr>
-            <td colspan="2">
-                <ul>
-                    [[for param in urlParams]]
-                    [[if param.checkbox]]
-                    <li>
-                        <input type="checkbox" class="url_checkbox" id="chechbox_{url['id_project_url']}_{param['id_projects_seo_url_param']}_title" onclick="setParamUrl({param['id_projects_seo_url_param']},{url['id_project_url']},this.checked)" [[if url['params'][param['id_projects_seo_url_param']]['value'] ]]checked="checked" [[endif]]/>
-                               <label for="chechbox_{url['id_project_url']}_{param['id_projects_seo_url_param']}_title">{param['caption']}</label><span id="date_title_{url['id_project_url']}_{param['id_projects_seo_url_param']}">
-                            <i>[[if url['params'][param['id_projects_seo_url_param']] ]]{ url['params'][param['id_projects_seo_url_param']]['date'] | date('d.m.y')}[[endif]]</i>
-                            <img class="show-check" src="/images/load-checkbox.gif">
-                        </span>
-                    </li>
-                    [[if not loop.last and loop.index%4 == 0]]
-                </ul>
-                <ul>		
-                    [[endif]]
-                    [[endif]]	
-                    [[endfor]]
-
-                </ul>
-
-            </td>
-            <td>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a href="" target="_blank" class="f12"></a>
-            </td>
-            <td>
-            </td>
-            <td class="al-c">
-                <a href="javascript: void(0)" onclick="defaultAll('#url-diagnostic-{url['id_project_url']}')" class="f14">сбросить данные</a>	
-            </td>
-        </tr>
-    </table>
-    <!-- ui-dialog -->
     <div class="dialog_unique" id="dialog_unique_{url['id_project_url']}" title="Уникальность страницы" style="display:none;">
         <p align="center">
             <input type="text" size="5" name="" width="100px" id="dialog_unique_value_{url['id_project_url']}" /><br /><br />
@@ -387,12 +337,11 @@ $(".query-checkbox").click(checkboxClick);
     [[endif]]
     [[endif]]	
     [[endfor]]
-
 </div>
+			
 <div id="main-container" class="tab-content">
 </div>
 [[endblock]]
-
 
 [[ block bot ]]
 <div id="group-checkbox-form-1" class="group-checkbox-form" >

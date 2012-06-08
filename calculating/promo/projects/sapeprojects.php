@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 function setParamUrl($id_param,$id_url,$value,$callback){
 	global $user;
 	if(!$user -> id){
@@ -82,9 +86,9 @@ $xajax->processRequest();
 $globalTemplateParam->set('xajax',$xajax);
 
 
-
 $id_project = intval($request -> id_project);
 $project = new projects($id_project);
+$projects = new projects();
 $projectSeoUrl = new projects_seo_url();
 $projectQuery = new projects_seo_query();
 $projectQueryPosition = new projects_seo_position();
@@ -96,76 +100,51 @@ $projectsUpdate = new projects_update();
 $action_url = "/".$request->parents."/".$request->modul;
 $globalTemplateParam->set('action_url',$action_url);
 
+///////////////////////////////////////////////////////////////////////////////////
+
+$users = new fmakeSiteModule_users();
+$optimiziers = $users->getByRole(ID_OPTIMISATOR, true);
+
+$projects_accessRole = new projects_accessRole();
+$roles = $projects_accessRole->getProjectRols($id_project);
+//printAr($roles);
+//printAr($optimiziers);
+foreach($optimiziers as $key => $value){
+	if($roles[4]['id_user'] == $value['id_user'])
+		$optimizator = $optimiziers[$key];
+}
+
+
+
+if($request -> action == "change_optimizer"){
+	//printAr($_REQUEST);
+	$optimizer = intval($request -> id_user);
+	foreach($optimiziers as $value){
+		if($value['id_user'] == $optimizer){
+			$optimizator = $value;
+		}
+	}
+}
+
+$filtr['id_user'] = $optimizator['id_user'];
+$filtr['date'] = $request->getFilter('date');
+$filtr['id_role'] = ID_OPTIMISATOR;
+$filtr['active'] = 1;
+
+$current_projects = ( $projects->getProjectsWithSeoParamsWithAccessUser("DISTINCT " . $projects->table . ".id_project,url,sape_money,max_seo_user_pay,pay_percent,important", $filtr) );
+
 $today = strtotime("today");
 $yesterday = strtotime("-1 day",$today);
-//echo $yesterday;
+
+if($request -> action == "change_optimizer"){
+	//printAr($current_projects);
+	$id_project = $current_projects[0]['id_project'];
+}
 
 $projectSeo = $project -> getProjectWithSeoParams();
-//printAr($projectSeo);
-//printAr( $projectSeoUrlParamsValue->getValue(754) );
-
-
-switch ($request -> action_group){
-	case 2:
-		if(!preg_match("/^http:\/\/(www\.)?{$projectSeo['url']}/i", $request -> group_param[url])){
-			break;
-		}
-		$projectSeoUrl -> addParam("id_project", $id_project);
-		$projectSeoUrl -> addParam("url", $request -> group_param[url]);
-                                $projectSeoUrl -> addParam("name", $request -> group_param[name]);
-		$projectSeoUrl -> newItem();
-		$request -> group_param[url] = $projectSeoUrl -> id;
-		$_REQUEST['group_param']['url'] = $projectSeoUrl -> id;
-	case 1:
-		$id_url = intval( $request -> group_param[url] );
-		$querys = ( $request -> group_param[querys] );
-		if(!$id_url || !$querys){
-			break;
-		}
-		$projectSeoUrl -> setId($id_url);
-		$url = ( $projectSeoUrl -> getInfo() );
-		if( $url['id_project'] !=  $id_project){
-			break;
-		}
-		$index = sizeof($querys);
-		for ($i = 0; $i < $index; $i++) {
-			$projectQuery -> setId( $querys[$i] );
-			$query = ($projectQuery -> getInfo());
-			if($query['id_project'] == $id_project){
-				$projectQuery -> addParam("id_project_url", $id_url);
-				$projectQuery -> update();
-			}
-		}
-		
-		break;
-}
-
-
-// удаляем урл
-if($request -> action == "deleteurl"){
-	$id_url = intval( $request -> id_url );
-	$projectSeoUrl -> setId($id_url);
-	$url = ( $projectSeoUrl -> getInfo() );
-	if( $url['id_project'] !=  $id_project){
-		break;
-	}
-	$tmpQuery = ( $projectQuery -> getQueryByUrl($id_project, $id_url,true) );
-	$index = sizeof($tmpQuery);
-	for ($i = 0; $i < $index; $i++) {
-		$projectQuery -> setId( $tmpQuery[$i][$projectQuery ->idField ] );
-		$projectQuery -> addParam("id_project_url",0);
-		$projectQuery -> update();;
-	}
-
-	$projectSeoUrl -> delete();
-
-}
-
 
 $urlParams = $projectSeoUrlParams->getAll();
 $globalTemplateParam->set('urlParams',$urlParams);
-
-
 
 $updateCount = 8;
 $viewCount = 8;
@@ -175,8 +154,6 @@ $globalTemplateParam->set('viewCount',$viewCount);
 $globalTemplateParam->set('nonUpdateCount',$nonUpdateCount);
 
 
-
-//$updateDate = array('1324929600','1324843200','1324584000','1324497600','1323720000','1323633600','1323374400');
 $updateDate = ( $projectsUpdate -> getByLimit(5, $updateCount) );
 $updateDate = array_reverse($updateDate);
 if($updateDate[sizeof($updateDate) - 1]['date'] != $today){
@@ -219,9 +196,11 @@ else{
 	}
 }
 
-
-
-//printAr($projectUrls);
-$globalTemplateParam->set('projectUrls',$projectUrls);
+$globalTemplateParam->set('action_url',$action_url);
+$globalTemplateParam->set('optimizator',$optimizator);
+$globalTemplateParam->set('optimiziers',$optimiziers);
+$globalTemplateParam->set('current_projects',$current_projects);
 $globalTemplateParam->set('projectSeo',$projectSeo);
-$modul->template = "promo/projects/project.tpl";
+$globalTemplateParam->set('projectUrls',$projectUrls);
+$modul->template = "promo/projects/sapeprojects.tpl";
+?>
