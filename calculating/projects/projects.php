@@ -112,14 +112,14 @@ function initMainForm($itemObj,$context = array()){
 		)));
 		
 		$layoutProjectForm -> addElement(new FPTextField(array(
-							                "name" => 'id_sape',
+							                "name" => 'id_sape_project',
 							                "title" => 'SAPE ID',
 							            	"comment" =>
 							                    'Только цифрами',
 							                "size" => 25, 
 							                "max_length" => 36,
 							                "wrapper" => &$leftWrapper,
-							 				"value" => $context['item']['id_sape'],
+							 				"value" => $context['item']['id_sape_project'],
 							 				"align" => "left"
 		)));
 		
@@ -322,7 +322,7 @@ switch ($request -> action){
 			$projectSeo -> addParam("liveinternet_password", $request -> getEscape('liveinternet_password'));
 			$projectSeo -> addParam("metrika", $request -> getEscape('metrika'));
 			$projectSeo -> addParam("id_webmaster", $request -> getEscape('id_webmaster'));
-			$projectSeo -> addParam("id_sape", $request -> getEscape('id_sape'));
+			$projectSeo -> addParam("id_sape_project", $request -> getEscape('id_sape_project'));
 			if(isset($_REQUEST['sape_money']))
 				$projectSeo -> addParam("sape_money", $request -> getEscape('sape_money'));
 			if(isset($_REQUEST['abonement']))
@@ -381,7 +381,7 @@ switch ($request -> action){
 			$projectSeo -> addParam("liveinternet_password", $request -> getEscape('liveinternet_password'));
 			$projectSeo -> addParam("metrika", $request -> getEscape('metrika'));
 			$projectSeo -> addParam("id_webmaster", $request -> getEscape('id_webmaster'));
-			$projectSeo -> addParam("id_sape", $request -> getEscape('id_sape'));
+			$projectSeo -> addParam("id_sape_project", $request -> getEscape('id_sape_project'));
 			$projectSeo -> addParam("sape_money", $request -> getEscape('sape_money'));
 			$projectSeo -> addParam("abonement", $request -> getEscape('abonement'));
 			if(isset($_REQUEST['consecutive_calculation']))

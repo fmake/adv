@@ -86,7 +86,7 @@ class sape_money extends sape{
 		for ($i = 0; $i < $index; $i++) {
 			for ($j = 0; $j < $index2; $j++) {
 				// сумма по текущему проекту
-				if($projectsSeo[$j]['id_sape'] == $projectStat[$i]['project_id']){
+				if($projectsSeo[$j]['id_sape_project'] == $projectStat[$i]['project_id']){
 					$this -> addParam('id_project', $projectsSeo[$j][$projects -> idField]);
 					$this -> addParam('date', $date);
 					$this -> addParam('sum', abs($projectStat[$i]['sum']));
@@ -111,7 +111,7 @@ class sape_money extends sape{
 		for ($i = 0; $i < $index; $i++) {
 			for ($j = 0; $j < $index2; $j++) {
 				// сумма по текущему проекту
-				if($projectsSeo[$j]['id_sape'] == $projectStat[$i]['project_id']){
+				if($projectsSeo[$j]['id_sape_project'] == $projectStat[$i]['project_id']){
 					$this -> addParam('id_project', $projectsSeo[$j][$projects -> idField]);
 					$this -> addParam('date',
 						strtotime("{$projectStat[$i]['date_logged']->year}-{$projectStat[$i]['date_logged']->month}-{$projectStat[$i]['date_logged']->day}"));
