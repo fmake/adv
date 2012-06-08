@@ -97,6 +97,7 @@ $projectSeoUrlParamsValue = new projects_seo_urlParamsValue();
 $projectSeoQueryParams = new projects_seo_queryParams();
 $projectSeoQueryParamsValue = new projects_seo_queryParamsValue();
 $projectsUpdate = new projects_update();
+$sapeProject = new sape_project();
 $action_url = "/".$request->parents."/".$request->modul;
 $globalTemplateParam->set('action_url',$action_url);
 
@@ -144,7 +145,8 @@ switch($request -> action){
 		}
 		break;
 		
-	case "add_project_to_sape": echo 111;
+	case "add_project_to_sape": 
+		$sapeProject -> addSapeProject(intval($request -> id_project));
 		break;
 }
 
