@@ -219,7 +219,7 @@ $(".query-checkbox").click(checkboxClick);
 			[[endfor]]
 		</select>
 		<br/>
-		<input type="submit" name="" onclick="$('#hid_field').val('add_project_to_sape');$('#action_form_optimizer').submit();return false;" value="Добавить проект в sape" />
+		<input type="submit" name="" onclick="$('#hid_field').val('add_project_to_sape');$('#action_form_optimizer').submit();return false;" value="Добавить проект в sape" style="margin-top:20px" />
 	</form>
 			
 	    [[for url in projectUrls]]

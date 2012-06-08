@@ -98,8 +98,8 @@ $projectSeoQueryParams = new projects_seo_queryParams();
 $projectSeoQueryParamsValue = new projects_seo_queryParamsValue();
 $projectsUpdate = new projects_update();
 $sapeProject = new sape_project();
-$action_url = "/".$request->parents."/".$request->modul;
-$globalTemplateParam->set('action_url',$action_url);
+$action_url = "/".$request->parents."/prmprojects";
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -142,6 +142,7 @@ switch($request -> action){
 		}
 		if(!$check){
 			$id_project = $current_projects[0]['id_project'];
+			$project = new projects($id_project);
 		}
 		break;
 		
