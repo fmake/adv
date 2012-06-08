@@ -207,7 +207,7 @@ $(".query-checkbox").click(checkboxClick);
 [[include "promo/projects/tabs.tpl"]]
 <div id="main-container" class="tab-content" style="display:block;">
 	<form method="get" id="action_form_optimizer" style="padding: 20px 30px;">
-		<input type="hidden" name="action" value="change_optimizer" />
+		<input id="hid_field" type="hidden" name="action" value="change_optimizer" />
 		<select name="id_user" onchange="$('#action_form_optimizer').submit();">
 			[[ for optimizer in optimiziers ]]
 				<option  [[if optimizator.id_user == optimizer.id_user]]selected[[endif]] value="{optimizer.id_user}">{optimizer.name}</option>
@@ -218,6 +218,8 @@ $(".query-checkbox").click(checkboxClick);
 			<option [[if request.id_project == current_project.id_project]]selected[[endif]] value="{current_project.id_project}">{current_project.url}</option>
 			[[endfor]]
 		</select>
+		<br/>
+		<input type="submit" name="" onclick="$('#hid_field').val('add_project_to_sape');$('#action_form_optimizer').submit();return false;" value="Добавить проект в sape" />
 	</form>
 			
 	    [[for url in projectUrls]]

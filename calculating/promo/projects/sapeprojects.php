@@ -114,15 +114,10 @@ foreach($optimiziers as $key => $value){
 		$optimizator = $optimiziers[$key];
 }
 
-
-
-if($request -> action == "change_optimizer"){
-	//printAr($_REQUEST);
-	$optimizer = intval($request -> id_user);
-	foreach($optimiziers as $value){
-		if($value['id_user'] == $optimizer){
-			$optimizator = $value;
-		}
+$optimizer = intval($request -> id_user);
+foreach($optimiziers as $value){
+	if($value['id_user'] == $optimizer){
+		$optimizator = $value;
 	}
 }
 
@@ -132,13 +127,25 @@ $filtr['id_role'] = ID_OPTIMISATOR;
 $filtr['active'] = 1;
 
 $current_projects = ( $projects->getProjectsWithSeoParamsWithAccessUser("DISTINCT " . $projects->table . ".id_project,url,sape_money,max_seo_user_pay,pay_percent,important", $filtr) );
-
+//printAr($current_projects);
 $today = strtotime("today");
 $yesterday = strtotime("-1 day",$today);
 
-if($request -> action == "change_optimizer"){
-	//printAr($current_projects);
-	$id_project = $current_projects[0]['id_project'];
+switch($request -> action){
+	case "change_optimizer":
+		$check = false;
+		foreach($current_projects as $cur_proj){
+			if($cur_proj['id_project'] == $id_project){
+				$check = true;
+			}
+		}
+		if(!$check){
+			$id_project = $current_projects[0]['id_project'];
+		}
+		break;
+		
+	case "add_project_to_sape": echo 111;
+		break;
 }
 
 $projectSeo = $project -> getProjectWithSeoParams();
