@@ -1,7 +1,7 @@
 <?php
 class sape_url extends sape{
 	public $table = "projects_seo_query_sape_urls";	
-	public $idField = "id_projects_seo_query_urls";
+	public $idField = "id_projects_seo_query_sape_urls";
 
 	/**
 	 * 
@@ -10,7 +10,7 @@ class sape_url extends sape{
 	 * @param int $date
 	 */
 	function getUrlsByQuery($id_query){
-		$where[] = "`id_query` = '{$id_query}'";
+		$where[] = "`id_seo_query` = '{$id_query}'";
 		return ($this -> getWhere($where));
 	}
 	

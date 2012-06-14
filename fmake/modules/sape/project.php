@@ -1,7 +1,8 @@
 <?php
 class sape_project extends sape{
 	public $table = "projects_seo_query_sape_urls";
-
+	public $addWord = " тк";
+	
 	/**
 	 * 
 	 * Получить все проекты из sape
@@ -64,6 +65,50 @@ class sape_project extends sape{
 	
 	/**
 	 * 
+	 * проверить связь запросов и url в sape
+	 */
+	function checkQueryUrl($id_project){
+		$project = new projects($id_project);
+		$projectUrl = new projects_seo_url();
+		$query = $projectQuery = new projects_seo_query();
+		$sapeUrl = new sape_url();
+		
+		$curProject = ( $project -> getProjectWithSeoParams() );
+		if($curProject['id_sape_project']){
+			$urls = $this -> getUrlsProject($curProject['id_sape_project']);
+			printAr($urls);
+			$curUrlTmp = $projectUrl -> getUrlProject($curProject[$project -> idField]) ;
+			for ($i = 0; $i < sizeof($curUrlTmp); $i++) {
+				$curUrl[$curUrlTmp[$i][$projectUrl -> idField]] = $curUrlTmp[$i];
+			}
+			printAr($curUrl);
+			$querys = $query -> getUniqueQueryProject($id_project);
+			printAr($querys);
+			
+			for ($i = 0; $i < sizeof($querys); $i++) {
+				for ($j = 0; $j < sizeof($urls); $j++) {
+					//echo mb_strtolower( $urls[$j]['name'] );
+					$urls[$j]['name'] = trim( mb_strtolower( $urls[$j]['name'] ) );
+					if($urls[$j]['name'] == $querys[$i]['query'] || $urls[$j]['name'] . $this -> addWord == $querys[$i]['query']){
+						$sapeUrl -> addParam("id_seo_query", $querys[$i]['id_seo_query']);
+						$sapeUrl -> addParam("url_id", $urls[$j]['id']);
+						$sapeUrl -> addParam("name", $urls[$j]['name']);
+						$sapeUrl -> addParam("url", $urls[$j]['url']);
+						$sapeUrl -> addParam("id_sape_project", $urls[$j]['project_id']);
+						$sapeUrl -> addParam("id_project", $id_project);
+						$sapeUrl -> newItem();
+						
+					}
+				}
+			}
+			
+		}
+		
+		exit;
+	}
+	
+	/**
+	 * 
 	 * Создать проект в sape c урлами
 	 * @param INT $id_project проект в системе
 	 */
@@ -95,9 +140,14 @@ class sape_project extends sape{
 			}
 		}
 		
+		/**
+		 * находим связь запросов и урлов
+		 */
+		$this -> checkQueryUrl($id_project);
 		
 		for ($i = 0; $i < sizeof($curUrl); $i++) {
 			$querys = ( $projectQuery -> getQueryByUrl($curProject[$project -> idField], $curUrl[$i][$projectUrl -> idField],true) );
+			printAr($querys);
 			for ($j = 0; $j < sizeof($querys); $j++) {
 				$urls = $sapeUrl -> getUrlsByQuery($querys[$j][$projectQuery -> idField]);
 				printAr($urls);

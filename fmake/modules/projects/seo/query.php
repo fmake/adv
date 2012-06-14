@@ -17,6 +17,17 @@ class projects_seo_query extends fmakeCore{
 	}
 	
 	/**
+	* уникальные запросы для проекта
+	*/
+	function getUniqueQueryProject($id_project, $active = 1){
+		$where[] = "`id_project` = '{$id_project}'";
+		if($active)
+			$where[] = "`active` = '{$active}'";
+		$field[] = "DISTINCT `query`, {$this -> idField},id_project_url";		
+		return ($this -> getFieldWhere($field,$where));
+	}
+	
+	/**
 	* получаем запись по проекту системе и запросу
 	*/
 	function getItemProjectSystemQuery($id_project,$id_seo_search_system,$query, $active = 1){
