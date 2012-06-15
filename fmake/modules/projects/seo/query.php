@@ -17,14 +17,21 @@ class projects_seo_query extends fmakeCore{
 	}
 	
 	/**
-	* уникальные запросы для проекта
+	* уникальные запросы для проекта из первой поисковой системы
 	*/
 	function getUniqueQueryProject($id_project, $active = 1){
-		$where[] = "`id_project` = '{$id_project}'";
-		if($active)
-			$where[] = "`active` = '{$active}'";
-		$field[] = "DISTINCT `query`, {$this -> idField},id_project_url";		
-		return ($this -> getFieldWhere($field,$where));
+		if(! isset($this -> projectSearchSystem[$id_project])){
+			$projectSeoSearchSystem = new projects_seo_searchSystemAccess();
+			$id_seo_search_system = $projectSeoSearchSystem -> getProjectSearchSystems($id_project);
+			$id_seo_search_system = $id_seo_search_system[0][$projectSeoSearchSystem ->idField[1]];
+			$this -> projectSearchSystem[$id_project] = $id_seo_search_system;
+		}else{
+			$id_seo_search_system = $this -> projectSearchSystem[$id_project];
+		}
+		if(!$id_seo_search_system ){
+			return;
+		}
+		return $this -> getQueryProjectSystem($id_project, $id_seo_search_system);
 	}
 	
 	/**

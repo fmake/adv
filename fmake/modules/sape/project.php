@@ -1,7 +1,7 @@
 <?php
 class sape_project extends sape{
 	public $table = "projects_seo_query_sape_urls";
-	public $addWord = " тк";
+	public $addWord = "( тк| нтк)?";
 	
 	/**
 	 * 
@@ -58,9 +58,12 @@ class sape_project extends sape{
 		if( !$this -> loginDefault() )
 			return 0;
 		$irxClient = $this -> getIrxClient();
-		$year = date("Y",($date));
 		$irxClient -> query('sape.get_urls',$id_sape_project);
 		return ($irxClient -> getResponse());
+	}
+	
+	function cmpNameQuery($name,$query){
+		return preg_match("#^{$query}{$this -> addWord}$#is", $name);
 	}
 	
 	/**
@@ -76,20 +79,25 @@ class sape_project extends sape{
 		$curProject = ( $project -> getProjectWithSeoParams() );
 		if($curProject['id_sape_project']){
 			$urls = $this -> getUrlsProject($curProject['id_sape_project']);
-			printAr($urls);
 			$curUrlTmp = $projectUrl -> getUrlProject($curProject[$project -> idField]) ;
+			if(!$curUrlTmp){
+				return;
+			}
 			for ($i = 0; $i < sizeof($curUrlTmp); $i++) {
 				$curUrl[$curUrlTmp[$i][$projectUrl -> idField]] = $curUrlTmp[$i];
 			}
-			printAr($curUrl);
 			$querys = $query -> getUniqueQueryProject($id_project);
-			printAr($querys);
 			
 			for ($i = 0; $i < sizeof($querys); $i++) {
 				for ($j = 0; $j < sizeof($urls); $j++) {
 					//echo mb_strtolower( $urls[$j]['name'] );
 					$urls[$j]['name'] = trim( mb_strtolower( $urls[$j]['name'] ) );
-					if($urls[$j]['name'] == $querys[$i]['query'] || $urls[$j]['name'] . $this -> addWord == $querys[$i]['query']){
+					/**
+					 * проверяем на совпадение имени, так же не должен присутствовать в таблице
+					 */
+					//printAr($urls[$j]);
+					if( $this->cmpNameQuery($urls[$j]['name'],$querys[$i]['query']) && !$sapeUrl -> getUrlsByQueryUrl($querys[$i]['id_seo_query'], $urls[$j]['id'])){
+						
 						$sapeUrl -> addParam("id_seo_query", $querys[$i]['id_seo_query']);
 						$sapeUrl -> addParam("url_id", $urls[$j]['id']);
 						$sapeUrl -> addParam("name", $urls[$j]['name']);
@@ -103,8 +111,25 @@ class sape_project extends sape{
 			}
 			
 		}
+	}
+	
+	/**
+	 * 
+	 * Добавить урлы для запроса
+	 * @param INT $id_project проект в системе
+	 */
+	function addSapeQueryUrl($id_sape_project,$id_seo_query){
+		$projectUrl = new projects_seo_url();
+		$projectQuery = new projects_seo_query($id_seo_query);
+		$query = $projectQuery -> getInfo();
+		if(!$query['id_project_url']){
+			return;
+		}
+		$projectUrl -> setId( $query['id_project_url'] );
+		$url = $projectUrl -> getInfo();
 		
-		exit;
+		$this -> addUrlProject($id_sape_project, $url['url'], $query['query']);
+		$this -> addUrlProject($id_sape_project, $url['url'], $query['query']." тк");
 	}
 	
 	/**
@@ -118,15 +143,18 @@ class sape_project extends sape{
 		$projectUrl = new projects_seo_url();
 		$projectQuery = new projects_seo_query();
 		$sapeUrl = new sape_url();
+		
 		$curProject = ( $project -> getProjectWithSeoParams() );
 		$curUrl = $projectUrl -> getUrlProject($curProject[$project -> idField]) ;
-		
-		/*
+		/**
+		 * преобразуем массив url ов
+		 
 		for ($i = 0; $i < sizeof($curUrlTmp); $i++) {
 			$curUrl[$curUrlTmp[$i][$projectUrl -> idField]] = $curUrlTmp[$i];
 		}
-		printAr($curUrl);
+		//printAr($curUrl);
 		*/
+		
 		if( !$curProject['id_sape_project'] ){
 			$id_sape_project = $this -> addProject($curProject['url']);
 			if(is_int($id_sape_project)){
@@ -138,19 +166,20 @@ class sape_project extends sape{
 				echo "Не удалось создать проект";
 				return;
 			}
+		}else{
+			/**
+			 * находим связь запросов и урлов
+			 */
+			$this -> checkQueryUrl($id_project);
+			return;
 		}
-		
-		/**
-		 * находим связь запросов и урлов
-		 */
-		$this -> checkQueryUrl($id_project);
-		
+		printAr($curUrl);
+		echo $curProject['id_sape_project'];
 		for ($i = 0; $i < sizeof($curUrl); $i++) {
 			$querys = ( $projectQuery -> getQueryByUrl($curProject[$project -> idField], $curUrl[$i][$projectUrl -> idField],true) );
 			printAr($querys);
 			for ($j = 0; $j < sizeof($querys); $j++) {
-				$urls = $sapeUrl -> getUrlsByQuery($querys[$j][$projectQuery -> idField]);
-				printAr($urls);
+				$this->addSapeQueryUrl($curProject['id_sape_project'], $querys[$j]['id_seo_query']);
 			}
 		}
 		

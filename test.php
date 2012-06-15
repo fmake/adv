@@ -16,4 +16,4 @@ require('./fmake/FController.php');
 $sape = new sape_project();
 //printAr( $sape -> getProjects() );
 
-printAr( $sape -> getUrlsProject(545340) );
+echo preg_match("#^такси( тк| нтк)?$#is", "такси тк");
