@@ -133,6 +133,13 @@ $current_projects = ( $projects->getProjectsWithSeoParamsWithAccessUser("DISTINC
 $today = strtotime("today");
 $yesterday = strtotime("-1 day",$today);
 
+
+
+$projectSeo = $project -> getProjectWithSeoParams();
+$urlParams = $projectSeoUrlParams->getAll();
+$globalTemplateParam->set('urlParams',$urlParams);
+
+
 switch($request -> action){
 	case "change_optimizer":
 		$check = false;
@@ -152,13 +159,9 @@ switch($request -> action){
 		break;
 	
 	case "add_query_to_sape": 
-		
+		$sapeProject -> addSapeQueryUrl($projectSeo['id_sape_project'], $request -> id_seo_query);
 		break;
 }
-
-$projectSeo = $project -> getProjectWithSeoParams();
-$urlParams = $projectSeoUrlParams->getAll();
-$globalTemplateParam->set('urlParams',$urlParams);
 
 $updateCount = 8;
 $viewCount = 8;
@@ -192,8 +195,9 @@ for ($i = 0; $i < $index; $i++) {
 	
 	for($k = 0, $cnt = count($projectUrls[$i]['query']); $k < $cnt; $k++){
 		$res = $sape_url->getUrlsByQuery($projectUrls[$i]['query'][$k]['id_seo_query']);
-		if($res)
+		if(!$res){
 			$projectUrls[$i]['query'][$k]['sape_url'] = true;
+		}
 		//echo $projectUrls[$i]['query'][$k]['id_seo_query'];
 		//printAr($projectUrls[$i]['query'][$k]);
 	}

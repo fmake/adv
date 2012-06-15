@@ -111,7 +111,17 @@ switch ($request -> action){
 		}
 		
 		break;	
-		
+	/**
+	* связь запросов и урлов
+	*/
+	case 'check_sape_urls':
+		$sape = new sape_project();
+		$projects = new projects();
+		$pr = $projects -> getAll();
+		for ($i = 0; $i < sizeof($pr); $i++) {
+			$sape -> checkQueryUrl($pr[$i]['id_project']);
+		}
+		break;
 	/**
 	 * выставляем все значения по умолчанию
 	 */	

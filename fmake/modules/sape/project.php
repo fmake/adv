@@ -59,7 +59,11 @@ class sape_project extends sape{
 			return 0;
 		$irxClient = $this -> getIrxClient();
 		$irxClient -> query('sape.get_urls',$id_sape_project);
-		return ($irxClient -> getResponse());
+		$ans = ($irxClient -> getResponse());
+		if($ans['faultCode']){
+			return array();
+		}
+		return $ans;
 	}
 	
 	function cmpNameQuery($name,$query){
@@ -87,7 +91,8 @@ class sape_project extends sape{
 				$curUrl[$curUrlTmp[$i][$projectUrl -> idField]] = $curUrlTmp[$i];
 			}
 			$querys = $query -> getUniqueQueryProject($id_project);
-			
+			printAr($urls);
+			printAr($querys);
 			for ($i = 0; $i < sizeof($querys); $i++) {
 				for ($j = 0; $j < sizeof($urls); $j++) {
 					//echo mb_strtolower( $urls[$j]['name'] );
@@ -128,8 +133,26 @@ class sape_project extends sape{
 		$projectUrl -> setId( $query['id_project_url'] );
 		$url = $projectUrl -> getInfo();
 		
-		$this -> addUrlProject($id_sape_project, $url['url'], $query['query']);
-		$this -> addUrlProject($id_sape_project, $url['url'], $query['query']." тк");
+		$urlId = $this -> addUrlProject($id_sape_project, $url['url'], $query['query']);
+		if(is_int($urlId)){
+			$sapeUrl -> addParam("id_seo_query", $id_seo_query);
+			$sapeUrl -> addParam("url_id", $urlId);
+			$sapeUrl -> addParam("name", $query['query']);
+			$sapeUrl -> addParam("url", $url['url']);
+			$sapeUrl -> addParam("id_sape_project", $id_sape_project);
+			$sapeUrl -> addParam("id_project", $query['id_project']);
+			$sapeUrl -> newItem();
+		}
+		$urlId = $this -> addUrlProject($id_sape_project, $url['url'], $query['query']." тк");
+		if(is_int($urlId)){
+			$sapeUrl -> addParam("id_seo_query", $id_seo_query);
+			$sapeUrl -> addParam("url_id", $urlId);
+			$sapeUrl -> addParam("name", $query['query']." тк");
+			$sapeUrl -> addParam("url", $url['url']);
+			$sapeUrl -> addParam("id_sape_project", $id_sape_project);
+			$sapeUrl -> addParam("id_project", $query['id_project']);
+			$sapeUrl -> newItem();
+		}
 	}
 	
 	/**
