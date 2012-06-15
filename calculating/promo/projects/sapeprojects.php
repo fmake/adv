@@ -99,6 +99,7 @@ $projectSeoQueryParamsValue = new projects_seo_queryParamsValue();
 $projectsUpdate = new projects_update();
 $sapeProject = new sape_project();
 $action_url = "/".$request->parents."/prmprojects";
+$sape_url = new sape_url();
 
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -149,10 +150,13 @@ switch($request -> action){
 	case "add_project_to_sape": 
 		$sapeProject -> addSapeProject(intval($request -> id_project));
 		break;
+	
+	case "add_query_to_sape": 
+		
+		break;
 }
 
 $projectSeo = $project -> getProjectWithSeoParams();
-
 $urlParams = $projectSeoUrlParams->getAll();
 $globalTemplateParam->set('urlParams',$urlParams);
 
@@ -185,6 +189,15 @@ $projectUrls = ( $projectSeoUrl->getUrlProject($id_project) );
 $index = sizeof($projectUrls);
 for ($i = 0; $i < $index; $i++) {
 	$projectUrls[$i]['query'] = ( $projectQuery -> getQueryByUrl($id_project, $projectUrls[$i][$projectSeoUrl->idField],true) );
+	
+	for($k = 0, $cnt = count($projectUrls[$i]['query']); $k < $cnt; $k++){
+		$res = $sape_url->getUrlsByQuery($projectUrls[$i]['query'][$k]['id_seo_query']);
+		if($res)
+			$projectUrls[$i]['query'][$k]['sape_url'] = true;
+		//echo $projectUrls[$i]['query'][$k]['id_seo_query'];
+		//printAr($projectUrls[$i]['query'][$k]);
+	}
+	
 	$index2 = sizeof($projectUrls[$i]['query']);
 	for ($j = 0; $j < $index2; $j++) {
 		$projectUrls[$i]['query'][$j]['position'] = $projectQueryPosition -> getPositionsByQueryInDate($projectUrls[$i]['query'][$j][$projectQuery->idField], $updateDate);

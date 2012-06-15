@@ -200,6 +200,11 @@ $(".query-checkbox").click(checkboxClick);
 	
 });
 
+function addQuery(action, id_seo_query){
+	$('#hid_field').val(action);
+	$('input[name="id_seo_query"]').val(id_seo_query);
+	$('#action_form_optimizer').submit();
+}
 //-->
 </script>
 [[endraw]]
@@ -208,6 +213,7 @@ $(".query-checkbox").click(checkboxClick);
 <div id="main-container" class="tab-content" style="display:block;">
 	<form method="get" id="action_form_optimizer" style="padding: 20px 30px;">
 		<input id="hid_field" type="hidden" name="action" value="change_optimizer" />
+		<input id="" type="hidden" name="id_seo_query" value="" />
 		<select name="id_user" onchange="$('#action_form_optimizer').submit();">
 			[[ for optimizer in optimiziers ]]
 				<option  [[if optimizator.id_user == optimizer.id_user]]selected[[endif]] value="{optimizer.id_user}">{optimizer.name}</option>
@@ -218,8 +224,10 @@ $(".query-checkbox").click(checkboxClick);
 			<option [[if request.id_project == current_project.id_project]]selected[[endif]] value="{current_project.id_project}">{current_project.url}</option>
 			[[endfor]]
 		</select>
+		[[if not projectSeo['id_sape_project'] ]]
 		<br/>
 		<input type="submit" name="" onclick="$('#hid_field').val('add_project_to_sape');$('#action_form_optimizer').submit();return false;" value="Добавить проект в sape" style="margin-top:20px" />
+		[[endif]]
 	</form>
 			
 	    [[for url in projectUrls]]
@@ -303,6 +311,11 @@ $(".query-checkbox").click(checkboxClick);
             [[endfor]]
             <td>/*<a onclick="javascript: get_analitic(54);return false;" href="javascript: //"><img border="0" src="/images/analitic.gif" alt="анализ текста"></a>*/</td>
             <td id="query_check_{query['id_seo_query']}_1" >/*<input type="checkbox" id="{query['id_seo_query']}" onclick="setParamQuery(1,{query['id_seo_query']},this.checked);" [[if query['params'][1]['value'] ]]checked="checked"[[endif]] /> <label for="{query['id_seo_query']}"><i>{ query['params'][1]['date'] | date('d.m')}</i></label> <img style="margin: 4px 0px 0 10px;" src="/images/load-checkbox.gif" class="show-check">*/</td>
+			[[if query['sape_url'] ]]
+			<td>
+				<a href="#" onclick="addQuery('add_query_to_sape', '{query['id_seo_query']}');return false;">создать url в sape</a>
+			</td>
+			[[endif]]
         </tr>
         [[endfor]]
         <tr>
