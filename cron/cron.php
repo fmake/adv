@@ -4,6 +4,7 @@ ini_set('display_errors',1);
 error_reporting(7);
 ini_set ('max_execution_time',3500);
 ini_set("memory_limit","128M");
+mb_internal_encoding('UTF-8');
 
 require '../fmake/configs.php';
 if($_GET['key'] != $cronKey)exit;
@@ -118,6 +119,9 @@ switch ($request -> action){
 		$sape = new sape_project();
 		$projects = new projects();
 		$pr = $projects -> getAll();
+		//echo $sape -> cmpNameQuery("сборный груз из италии тк ", "сборный груз из италии");
+		//exit;
+		//printAr($pr);
 		for ($i = 0; $i < sizeof($pr); $i++) {
 			$sape -> checkQueryUrl($pr[$i]['id_project']);
 		}

@@ -91,8 +91,8 @@ class sape_project extends sape{
 				$curUrl[$curUrlTmp[$i][$projectUrl -> idField]] = $curUrlTmp[$i];
 			}
 			$querys = $query -> getUniqueQueryProject($id_project);
-			printAr($urls);
-			printAr($querys);
+			//printAr($urls);
+			//printAr($querys);
 			for ($i = 0; $i < sizeof($querys); $i++) {
 				for ($j = 0; $j < sizeof($urls); $j++) {
 					//echo mb_strtolower( $urls[$j]['name'] );
@@ -127,6 +127,7 @@ class sape_project extends sape{
 		$projectUrl = new projects_seo_url();
 		$projectQuery = new projects_seo_query($id_seo_query);
 		$query = $projectQuery -> getInfo();
+		$sapeUrl = new sape_url();
 		if(!$query['id_project_url']){
 			return;
 		}
@@ -196,11 +197,11 @@ class sape_project extends sape{
 			$this -> checkQueryUrl($id_project);
 			return;
 		}
-		printAr($curUrl);
-		echo $curProject['id_sape_project'];
+		//printAr($curUrl);
+		//echo $curProject['id_sape_project'];
 		for ($i = 0; $i < sizeof($curUrl); $i++) {
 			$querys = ( $projectQuery -> getQueryByUrl($curProject[$project -> idField], $curUrl[$i][$projectUrl -> idField],true) );
-			printAr($querys);
+			//printAr($querys);
 			for ($j = 0; $j < sizeof($querys); $j++) {
 				$this->addSapeQueryUrl($curProject['id_sape_project'], $querys[$j]['id_seo_query']);
 			}
