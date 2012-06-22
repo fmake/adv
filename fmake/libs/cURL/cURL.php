@@ -40,6 +40,8 @@
 			$this->set_opt(CURLOPT_CONNECTTIMEOUT,30);
 			$this->set_opt(CURLOPT_USERAGENT,$this->user_agent);
 			$this->set_opt(CURLOPT_HEADER,false);
+			$this->set_opt(CURLINFO_HEADER_OUT, true);
+
 			$this->set_opt(CURLOPT_ENCODING,'gzip,deflate');
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////
 			$this->set_opt(CURLOPT_FOLLOWLOCATION,true);
@@ -147,7 +149,7 @@
 				$this->error = curl_error($this->curl);
 				return false;
 			} 
-			
+			//var_dump(curl_getinfo($this->curl,CURLINFO_HEADER_OUT));
 			return true;
 		}
 		

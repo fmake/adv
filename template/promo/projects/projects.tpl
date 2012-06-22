@@ -67,7 +67,7 @@
                             cssAsc: 'asc',
                             cssDesc: 'desc',
                             cssHeader: 'sortable',
-                            sortList: [[1,0]],
+                            sortList: [[2,0]],
                     headers: {0: { sorter: false},1: {sorter: false},3: {sorter: false }}
             });
 			

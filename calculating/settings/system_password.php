@@ -83,7 +83,16 @@
 		 				"value" => $configs -> webmaster_password,
           				"valid_RE" => FP_VALID_EMPTY,
           				"required" => true,
-		            )));          
+		            )));     
+          $layoutForm -> addElement(new FPTextField(array(
+		                "name" => 'webmaster[yandex_api_token]',
+		                "title" => 'Токен для API',
+		                "size" => 25,
+		                "wrapper" => &$leftWrapper,
+		 				"value" => $configs -> yandex_api_token,
+          				"valid_RE" => FP_VALID_EMPTY,
+          				"required" => true,
+		            )));        
 		$layoutForm -> addElement(new FPRowLayout(array(
 	            "table_align" => "left",
 	            "table_padding" => 20,
@@ -96,6 +105,7 @@
 	                )),
 	            )
 	            )));
+
 		$myForm->setBaseLayout($layoutForm);
 		return $myForm;
 	}
@@ -166,6 +176,7 @@
 			if ($request -> webmaster['login'] && $request -> webmaster['password']) {	
 				$configs -> udateByValue("webmaster_login",$request -> getEscapeVal($request -> webmaster['login']));
 				$configs -> udateByValue("webmaster_password",$request -> getEscapeVal($request -> webmaster['password']));
+				$configs -> udateByValue("yandex_api_token",$request -> getEscapeVal($request -> webmaster['yandex_api_token']));
 			}
 			action_redir($action_url);
 		break;

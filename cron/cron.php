@@ -127,6 +127,15 @@ switch ($request -> action){
 		}
 		break;
 	/**
+	* проверка вирусов через вебмастер
+	*/
+	case 'check_virused':
+		$param = new projects_seo_params();
+		$param -> webmasterCheck();
+		break;
+
+
+	/**
 	 * выставляем все значения по умолчанию
 	 */	
 	case 'default_value':
