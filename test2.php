@@ -21,6 +21,5 @@ require('./fmake/FController.php');
 //$serviceDocument = $webmaster -> getSiteInfo();
 //printAr($serviceDocument);
 
-$param = new yandex_webmaster;
-$x = $param -> getSiteInfo();
-printAr($x);
+$report = new projects_seo_report();
+$report -> makeReport(1);

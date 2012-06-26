@@ -207,9 +207,19 @@ class sape_project extends sape{
 			}
 		}
 		
+	}
+	
+	/**
+	 * 
+	 * Получить все ссылки проекта из sape
+	 */
+	function getProjectsLinks($id_sape_project,$status = "OK"){
 		
-		
-		
+		if( !$this -> loginDefault() )
+			return 0;
+		$irxClient = $this -> getIrxClient();
+		$irxClient -> query('sape.get_project_links',$id_sape_project,$status);
+		return ($irxClient -> getResponse());
 	}
 	 
 }

@@ -87,8 +87,8 @@ $globalTemplateParam->set('xajax',$xajax);
 
 
 $id_project = intval($request -> id_project);
-$project = new projects($id_project);
-$projects = new projects();
+//$project = new projects($id_project);
+$projects = new projects($id_project);
 $projectSeoUrl = new projects_seo_url();
 $projectQuery = new projects_seo_query();
 $projectQueryPosition = new projects_seo_position();
@@ -135,7 +135,7 @@ $yesterday = strtotime("-1 day",$today);
 
 
 
-$projectSeo = $project -> getProjectWithSeoParams();
+$projectSeo = $projects -> getProjectWithSeoParams();
 $urlParams = $projectSeoUrlParams->getAll();
 $globalTemplateParam->set('urlParams',$urlParams);
 

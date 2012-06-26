@@ -14,6 +14,12 @@ for($i = 0, $cnt = count($sites_api_info['host']); $i < $cnt; $i++){
 		printAr($sites_api->getExternalLinks($sites_api_info['host'][$i]['@attributes']['href']));
 	}
 }
+
+
+
+$users = new fmakeSiteModule_users();
+$optimiziers = $users->getByRole(ID_OPTIMISATOR, true);
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
