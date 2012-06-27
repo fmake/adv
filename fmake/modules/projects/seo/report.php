@@ -36,6 +36,15 @@ class projects_seo_report extends fmakeCore{
 		$where[] = "status = '{$status}'";
 		return $this -> getWhere($where);
 	}
+	
+	/**
+	 * Получить все отчеты кроме данного
+	 */
+	function getForeignReport($id_project, $status){
+		$where[] = "id_project = '{$id_project}'";
+		$where[] = "status != '{$status}'";
+		return $this -> getWhere($where);
+	}
 
 	/**
 	 * 

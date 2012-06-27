@@ -7,84 +7,26 @@
 <!--
 [[raw]]
 
-var chart;
+			var chart;
 
-            var chartData = [{
-                country: "USA",
-                visits: 4025,
-                color: "#FF0F00"
-            }, {
-                country: "China",
-                visits: 1882,
-                color: "#FF6600"
-            }, {
-                country: "Japan",
-                visits: 1809,
-                color: "#FF9E01"
-            }, {
-                country: "Germany",
-                visits: 1322,
-                color: "#FCD202"
-            }, {
-                country: "UK",
-                visits: 1122,
-                color: "#F8FF01"
-            }, {
-                country: "France",
-                visits: 1114,
-                color: "#B0DE09"
-            }, {
-                country: "India",
-                visits: 984,
-                color: "#04D215"
-            }, {
-                country: "Spain",
-                visits: 711,
-                color: "#0D8ECF"
-            }, {
-                country: "Netherlands",
-                visits: 665,
-                color: "#0D52D1"
-            }, {
-                country: "Russia",
-                visits: 580,
-                color: "#2A0CD0"
-            }, {
-                country: "South Korea",
-                visits: 443,
-                color: "#8A0CCF"
-            }, {
-                country: "Canada",
-                visits: 441,
-                color: "#CD0D74"
-            }, {
-                country: "Brazil",
-                visits: 395,
-                color: "#754DEB"
-            }, {
-                country: "Italy",
-                visits: 386,
-                color: "#DDDDDD"
-            }, {
-                country: "Australia",
-                visits: 384,
-                color: "#999999"
-            }, {
-                country: "Taiwan",
-                visits: 338,
-                color: "#333333"
-            }, {
-                country: "Poland",
-                visits: 5328,
-                color: "#000000"
-            }];
-
+            var chartData = [
+[[endraw]]
+			[[for item in pr]]
+			{'{'}
+                count: "{item.count}",
+                pr: {item.pr},
+                color: "#FF0F0{loop.index}"
+			{'},'}
+			[[endfor]]
+			
+[[raw]]
+			]
 
             AmCharts.ready(function () {
-                // SERIAL CHART
+            // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.dataProvider = chartData;
-                chart.categoryField = "country";
+                chart.categoryField = "count";
                 // the following two lines makes chart 3D
                 chart.depth3D = 20;
                 chart.angle = 30;
@@ -98,13 +40,13 @@ var chart;
 
                 // value
                 var valueAxis = new AmCharts.ValueAxis();
-                valueAxis.title = "Visitors";
+                valueAxis.title = "PR";
                 valueAxis.dashLength = 5;
                 chart.addValueAxis(valueAxis);
 
                 // GRAPH            
                 var graph = new AmCharts.AmGraph();
-                graph.valueField = "visits";
+                graph.valueField = "pr";
                 graph.colorField = "color";
                 graph.balloonText = "[[category]]: [[value]]";
                 graph.type = "column";
@@ -114,8 +56,58 @@ var chart;
 
                 // WRITE
                 chart.write("chartdiv");
+
             });
 
+			var chart_tyc;
+
+            var chartData_tyc = [
+[[endraw]]
+			[[for item in tyc]]
+			{'{'}
+                count: "{item.count}",
+                cy: {item.cy},
+                color: "#FF0F0{loop.index}"
+			{'},'}
+			[[endfor]]
+			
+[[raw]]
+			]
+			
+			AmCharts.ready(function () {
+				chart_tyc = new AmCharts.AmSerialChart();
+                chart_tyc.dataProvider = chartData_tyc;
+                chart_tyc.categoryField = "count";
+                // the following two lines makes chart 3D
+                chart_tyc.depth3D = 20;
+                chart_tyc.angle = 30;
+
+                // AXES
+                // category
+                var categoryAxis_tyc = chart_tyc.categoryAxis;
+                categoryAxis_tyc.labelRotation = 90;
+                categoryAxis_tyc.dashLength = 5;
+                categoryAxis_tyc.gridPosition = "start";
+
+                // value
+                var valueAxis_tyc = new AmCharts.ValueAxis();
+                valueAxis_tyc.title = "ТИЦ";
+                valueAxis_tyc.dashLength = 5;
+                chart_tyc.addValueAxis(valueAxis_tyc);
+
+                // GRAPH            
+                var graph_tyc = new AmCharts.AmGraph();
+                graph_tyc.valueField = "cy";
+                graph_tyc.colorField = "color";
+                graph_tyc.balloonText = "[[category]]: [[value]]";
+                graph_tyc.type = "column";
+                graph_tyc.lineAlpha = 0;
+                graph_tyc.fillAlphas = 1;
+                chart_tyc.addGraph(graph_tyc);
+                // WRITE
+                chart_tyc.write("chart_tycdiv");
+			});
+			
 //-->
 [[endraw]]
 </script>
@@ -123,7 +115,44 @@ var chart;
 <a href="{action_url}" class="f12">Все проекты</a> > {projectSeo['url']}
 [[include "promo/projects/tabs.tpl"]]
 <div id="main-container" class="tab-content" style="display:block;">
-	<div id="chartdiv" style="width: 640px; height: 400px;"></div>
+	
+	<form method="get" id="action_form_optimizer" style="padding: 20px 30px;">
+		<select name="id_user" onchange="$('#action_form_optimizer').submit();">
+			[[ for optimizer in optimiziers ]]
+				<option  [[if optimizator.id_user == optimizer.id_user]]selected[[endif]] value="{optimizer.id_user}">{optimizer.name}</option>
+			[[endfor]]
+		</select>
+		<select name="id_project" onchange="$('#action_form_optimizer').submit();">
+			[[ for current_project in current_projects ]]
+			<option [[if request.id_project == current_project.id_project]]selected[[endif]] value="{current_project.id_project}">{current_project.url}</option>
+			[[endfor]]
+		</select>
+		<br/>
+		[[if not current_report]]
+		<input type="submit" name="" onclick="$('#hid_field').val('make_order');$('#action_form_optimizer').submit();return false;" value="Создать отчет" style="margin-top:20px" />
+		[[if reports]]
+		<br/>
+		<p>Ранее созданные отчеты:</p>
+		[[ for report in reports ]]
+		<p><a href="report?id_user={request.id_user}&id_project={request.id_project}&id_report={report.id_project_seo_report}">Отчет {report.date|date("d.m.Y")}</a></p>
+		[[endfor]]
+		[[endif]]
+		[[else]]
+		<p>Отчет создается... (дата начала { current_report[0]['date']|date("d.m.Y") })</p>
+		[[endif]]
+	</form>
+	[[if pr and tyc]]
+	<table>
+		<tr>
+			<td>
+				<div id="chart_tycdiv" style="width: 640px; height: 400px;"></div>
+			</td>
+			<td>
+				<div id="chartdiv" style="width: 640px; height: 400px;"></div>
+			</td>
+		</tr>
+	</table>
+	[[endif]]
 </div>
 			
 <div id="main-container" class="tab-content">
