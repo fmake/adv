@@ -6,6 +6,7 @@
 define("REPORT_CREATE",1);
 define("REPORT_START",2);
 define("REPORT_LINK",10);
+define("REPORT_ANCHORS",20);
 define("REPORT_DONE",100);
 /**
  * 
@@ -65,12 +66,16 @@ class projects_seo_report extends fmakeCore{
 		$reportLinks = new projects_seo_reportLinks();
 		$project = ( $projects -> getProjectWithSeoParams() );
 		$projectUrl = new projects_seo_url();
+		$projectAnchors = new projects_seo_reportAnchors();
 		
 		if($report['status'] == REPORT_CREATE){
 			$this -> addParam("status", REPORT_START);
 			$this -> update();
 		}
 		
+		/**
+		 * получаем ссылки
+		 */
 		if($report['status'] < REPORT_LINK){
 			$links = ($sapeProject -> getProjectsLinks($project['id_sape_project']));
 			$sizeLinks = sizeof($links);
@@ -91,6 +96,29 @@ class projects_seo_report extends fmakeCore{
 			$this -> addParam("status", REPORT_LINK);
 			$this -> update();
 		}
+		
+		
+		/**
+		 * 
+		 * формирование приведенного анкор файла
+		 */
+		if($report['status'] < REPORT_ANCHORS){
+			$links = $reportLinks -> getLinks($id_project_seo_report);
+			$sizeLinks = sizeof($links);
+			//printAr($links);
+			for ($i = 0; $i < $sizeLinks; $i++) {
+				$arr = ( explode(" ", $links[$i]['anchor'] ) );
+				for ($j = 0; $j < sizeof($arr); $j++) {
+					$projectAnchors -> addWord($id_project_seo_report,$arr[$j]);
+				}
+				
+			}
+			
+			$this -> addParam("status", REPORT_ANCHORS);
+			$this -> update();
+		}
+		
+		
 		
 		$urls = ( $projectUrl -> getUrlProject($report['id_project']) );
 		$sizeUrl = sizeof($urls);
