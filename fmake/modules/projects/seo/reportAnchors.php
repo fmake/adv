@@ -7,6 +7,8 @@
 class projects_seo_reportAnchors extends fmakeCore{
 	public $table = "projects_seo_report_anchorsword";
 	public $idField = "id_project_seo_report_anchorsword";
+	public $order = "count";
+	public $order_as = "desc";
 	
 	
 	/**
@@ -16,6 +18,13 @@ class projects_seo_reportAnchors extends fmakeCore{
 	function getWords($id_project_seo_report){
 		$where[] = "id_project_seo_report = '{$id_project_seo_report}'";
 		return $this -> getWhere($where);
+	}
+	
+	function getCount($id_project_seo_report){
+		$select = $this->dataBase->SelectFromDB( __LINE__);
+		$arr = $select -> addFrom($this->table) ->addFild("COUNT(count) as cnt") -> addWhere("`id_project_seo_report` = '{$id_project_seo_report}' ") -> queryDB();
+		
+		return $arr[0];
 	}
 	
 	/**

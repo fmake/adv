@@ -90,8 +90,41 @@ if($id_report){
 	//$current_report = $report->getInfo();
 	$tyc = $report->getCyData($id_report);
 	$pr = $report->getPrData($id_report);
+	
+	$projects_seo_reportAnchors_obj = new projects_seo_reportAnchors();
+	$words = $projects_seo_reportAnchors_obj->getWords($id_report);
+	$count = $projects_seo_reportAnchors_obj->getCount($id_report);
+	$count = $count['cnt'];
+	//printAr($count);
+	// считаем коэфициент Ципфа для первого и второго элемента массива
+	//$c_max = $words[0]['count'] * 1;
+	//$c_min = $words[count($words) - 1]['count'] * (count($words) - 1);
+	//$c = ($c_max + $c_min) / 2;
+	$cnt = 0;
+	foreach($words as $key => $value){
+		//echo (float)$value['count'] . ' * ' . $c . "<br>";
+		$cnt += $value['count'];
+	}
+	
+	//printAr($c_max);
+	//printAr($c_min);
+	//printAr($c);
 	//unset($pr[0]);
-	//printAr($tyc);
+
+	//$c = $cnt / count($words);
+	$c = $words[0]['count'];
+	//echo $c;$c = 80;
+	foreach($words as $rang => &$value){
+		//echo (float)$value['count'] . ' * ' . $c . "<br>";
+		//$c *= 0.8;
+		$value['ideal_count'] = round($c / pow(($rang + 1), 0.25));
+	}
+	
+	//printAr($words);
+	//printAr($ideal_words);
+	
+	$globalTemplateParam->set('words',$words);
+	$globalTemplateParam->set('ideal_words',$ideal_words);
 	$globalTemplateParam->set('tyc',$tyc);
 	$globalTemplateParam->set('pr',$pr);
 	//printAr($pr);

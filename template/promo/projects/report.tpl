@@ -107,6 +107,52 @@
                 // WRITE
                 chart_tyc.write("chart_tycdiv");
 			});
+				
+				
+			var chart_words;
+			
+			var chartData_words = [
+[[endraw]]
+			[[for item in words]]
+			{'{'}
+                count: {item.count},
+				rang: "{loop.index}",
+                ideal_count: {item.ideal_count}
+			{'},'}
+			[[endfor]]
+			
+[[raw]]
+			]
+
+            AmCharts.ready(function () { 
+                chart_words = new AmCharts.AmSerialChart();
+                chart_words.dataProvider = chartData_words;
+                chart_words.categoryField = "rang";
+                chart_words.startDuration = 1;
+
+                var categoryAxis_words = chart_words.categoryAxis;
+                categoryAxis_words.gridPosition = "start";
+
+                var graph1 = new AmCharts.AmGraph();
+                graph1.type = "line";
+                graph1.title = "Count";
+                graph1.valueField = "count";
+                graph1.lineThickness = 0;
+                graph1.bullet = "round";
+                chart_words.addGraph(graph1);
+
+                // line
+                var graph2 = new AmCharts.AmGraph();
+                graph2.type = "line";
+                graph2.title = "Count_ideal";
+                graph2.valueField = "ideal_count";
+                graph2.lineThickness = 0;
+                graph2.bullet = "round";
+                chart_words.addGraph(graph2);
+
+                // WRITE
+                chart_words.write("chart_wordsdiv");
+            });
 			
 //-->
 [[endraw]]
@@ -149,6 +195,14 @@
 			</td>
 			<td>
 				<div id="chartdiv" style="width: 640px; height: 400px;"></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id="chart_wordsdiv" style="width: 640px; height: 400px;"></div>
+			</td>
+			<td>
+				&nbsp;
 			</td>
 		</tr>
 	</table>
