@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors',1);
 require('./fmake/FController.php');
 //$curl = new cURL();
 
@@ -21,5 +21,16 @@ require('./fmake/FController.php');
 //$serviceDocument = $webmaster -> getSiteInfo();
 //printAr($serviceDocument);
 
-$report = new projects_seo_report();
-$report -> makeReport(1);
+//$report = new projects_seo_report();
+//$report -> makeReport(1);
+
+$reportF = new projects_seo_reportFunction();
+//echo $reportF->getDateCreated("promo-venta.ru");
+//echo $reportF->pageIndexYandex("promo-venta.ru");
+//echo $reportF->inYaca("promo-venta.ru");
+//echo $reportF->inDmoz("yandex.ru");
+//echo $reportF->inMail("promo-venta.ru");
+//echo $reportF->inRambler("promo-venta.ru");
+//echo $reportF->tic("promo-venta.ru");
+//echo $reportF->pr("promo-venta.ru");
+//echo $reportF->getCountWord("promo-venta.ru");
