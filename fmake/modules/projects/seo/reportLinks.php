@@ -32,6 +32,15 @@ class projects_seo_reportLinks extends fmakeCore{
 	
 	/**
 	 * 
+	 * получить Ссылки
+	 */
+	function getLinks($id_project_seo_report){
+		$where[] = "id_project_seo_report = '{$id_project_seo_report}'";
+		return $this -> getWhere($where);
+	}
+	
+	/**
+	 * 
 	 * получить ссылку
 	 */
 	function getLink($id_project_seo_report,$id_link){
