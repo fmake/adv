@@ -7,6 +7,9 @@ define("REPORT_CREATE",1);
 define("REPORT_START",2);
 define("REPORT_LINK",10);
 define("REPORT_ANCHORS",20);
+define("REPORT_ADDQUERY",30);
+define("REPORT_CHECKQUERY",40);
+define("REPORT_ADDSITE",50);
 define("REPORT_DONE",100);
 /**
  * 
@@ -76,6 +79,10 @@ class projects_seo_report extends fmakeCore{
 		$project = ( $projects -> getProjectWithSeoParams() );
 		$projectUrl = new projects_seo_url();
 		$projectAnchors = new projects_seo_reportAnchors();
+		$projectQuery = new projects_seo_query();
+		$projectReportQuery = new projects_seo_reportQuerys();
+		$wordstat = new yandex_wordstat();
+		$yandex = new searchSystems_Yandex();
 		
 		if($report['status'] == REPORT_CREATE){
 			$this -> addParam("status", REPORT_START);
@@ -128,14 +135,63 @@ class projects_seo_report extends fmakeCore{
 		}
 		
 		
-		
-		$urls = ( $projectUrl -> getUrlProject($report['id_project']) );
-		$sizeUrl = sizeof($urls);
-		
-		for ($i = 0; $i < $sizeUrl; $i++) {
-			$urls[$i][$projectUrl -> idField];
+		/**
+		 * 
+		 * добавление запросов
+		 */
+		if($report['status'] < REPORT_ADDQUERY){
+			
+			$urls = ( $projectUrl -> getUrlProject($report['id_project']) );
+			$sizeUrl = sizeof($urls);
+			
+			for ($i = 0; $i < $sizeUrl; $i++) {
+				$query = ( $projectQuery -> getQueryByUrl($report['id_project'], $urls[$i][$projectUrl -> idField]) );
+				for ($j = 0; $j < sizeof($query); $j++) {
+					//$query[$j][];
+					$projectReportQuery -> addParam("id_project_seo_report",$id_project_seo_report);
+					$projectReportQuery -> addParam("id_project_url",$query[$j]['id_project_url']);
+					$projectReportQuery -> addParam("id_seo_query",$query[$j]['id_seo_query']);
+					$projectReportQuery -> newItem();
+				}
+				
+			}
+			$this -> addParam("status", REPORT_ANCHORS);
+			$this -> update();
 		}
 		
+		/**
+		 * 
+		 * проверка запросов
+		 */
+		if($report['status'] < REPORT_CHECKQUERY){
+			$query = ( $projectReportQuery -> getNonCheckQuery($id_project_seo_report) );
+			for ($i = 0; $i < sizeof($query); $i++) {
+				$projectReportQuery -> addParam("id_project_seo_report",$id_project_seo_report);
+				$projectReportQuery -> addParam("id_seo_query",$query[$i]['id_seo_query']);
+				$projectReportQuery -> addParam("wordstat",$wordstat -> getWordTotalCount($query[$i]['query']));
+				$projectReportQuery -> addParam("check","1");
+				$projectReportQuery -> update();
+			}
+			$this -> addParam("status", REPORT_CHECKQUERY);
+			$this -> update();
+		}
+		
+		/**
+		 * 
+		 * Выбор конкурентов по запросам запросов
+		 */
+		if($report['status'] < REPORT_ADDSITE){
+			$urls = ( $projectUrl -> getUrlProject($report['id_project']) );
+			$sizeUrl = sizeof($urls);
+			for ($i = 0; $i < $sizeUrl; $i++) {
+				$query = ( $projectReportQuery -> getPollQuery($id_project_seo_report, $urls[$i][$projectUrl -> idField]) );
+				$projectQuery -> setId($query[0]['id_seo_query']);
+				$query = ($projectQuery -> getInfo() );
+				$yandex -> setData($query['query'], '');
+				printAr($yandex->getNumSite(10));
+				exit;
+			}
+		}
 	}
 	
 }

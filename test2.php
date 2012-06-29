@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors',1);
+//ini_set('display_errors',1);
 require('./fmake/FController.php');
 //$curl = new cURL();
 
@@ -21,8 +21,8 @@ require('./fmake/FController.php');
 //$serviceDocument = $webmaster -> getSiteInfo();
 //printAr($serviceDocument);
 
-//$report = new projects_seo_report();
-//$report -> makeReport(1);
+$report = new projects_seo_report();
+$report -> makeReport(1);
 
 $reportF = new projects_seo_reportFunction();
 //echo $reportF->getDateCreated("promo-venta.ru");
